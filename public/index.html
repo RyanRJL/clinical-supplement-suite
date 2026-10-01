@@ -511,7 +511,7 @@ h1.page-title{font-family:var(--font-display);font-size:clamp(24px,4vw,32px);fon
 .lib-arrow{opacity:1;font-size:13px;margin-left:5px;color:var(--ink)}
 .lib-arrow.on{color:var(--accent);font-weight:700}
 .lib-sort:hover .lib-arrow{color:var(--accent)}
-.lib-list{--libcols:minmax(140px,1.3fr) 92px minmax(150px,1.7fr) minmax(100px,1fr) minmax(86px,0.85fr) minmax(118px,1fr) 28px;
+.lib-list{--libcols:minmax(190px,1.35fr) minmax(90px,.65fr) minmax(180px,1.8fr) minmax(110px,1fr) minmax(100px,.9fr) minmax(110px,.9fr) 22px;
   border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface,var(--paper-raised))}
 .lib-row{display:grid;grid-template-columns:var(--libcols);align-items:center;gap:14px;width:100%;
   text-align:left;background:none;border:none;border-top:1px solid var(--line);
@@ -522,7 +522,6 @@ h1.page-title{font-family:var(--font-display);font-size:clamp(24px,4vw,32px);fon
   letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint)}
 .lib-row-head:hover{background:var(--paper)}
 .lib-c-name{font-weight:600;font-size:14px;display:flex;align-items:center;min-width:0}
-.lib-c-cat{display:flex}
 .lib-c-full{font-size:13px;color:var(--ink-soft);line-height:1.35}
 .lib-c-resp{font-size:12.5px;color:var(--ink-faint)}
 .lib-c-age{font-size:12.5px;color:var(--ink-faint);white-space:nowrap}
@@ -535,15 +534,79 @@ h1.page-title{font-family:var(--font-display);font-size:clamp(24px,4vw,32px);fon
 .lib-chev{flex:0 0 13px;width:13px;text-align:center;margin-right:7px;color:var(--ink-faint);font-size:11px;transition:transform .12s}
 .lib-chev-spacer{visibility:hidden}
 .lib-row-fam.open .lib-chev{transform:rotate(90deg)}
-.lib-forms{margin-left:8px;font-size:11px;font-weight:600;color:var(--ink-soft);background:var(--line);border-radius:99px;padding:1px 8px;white-space:nowrap}
+.lib-forms{flex:none;margin-left:8px;font-size:11.5px;font-weight:500;color:var(--ink-faint);white-space:nowrap}
 .lib-row-child{background:var(--paper)}
 .lib-row-child:hover{background:var(--accent-wash)}
 .lib-row-child .lib-c-name{padding-left:32px;font-weight:500;font-size:13.5px;color:var(--ink-soft);position:relative}
 .lib-row-child .lib-c-name::before{content:"";position:absolute;left:18px;top:50%;width:7px;height:1px;background:var(--line-strong)}
-@media(max-width:860px){
-  .lib-list{--libcols:minmax(120px,1.5fr) 84px 78px minmax(92px,1fr) 24px}
+@media(max-width:1000px){
+  .lib-list{--libcols:minmax(120px,1.4fr) minmax(80px,.8fr) minmax(90px,1fr) minmax(100px,1fr) 22px}
   .lib-c-full,.lib-c-resp{display:none}
 }
+/* Test library UI audit (Oct 2026) */
+/* the band's search lines up with the cards below it (same gutters as .cc-section) */
+@media(min-width:901px){#cc-app[data-sec="library"] .cc-topbar{padding-left:max(22px,calc((100% - 1280px) / 2));padding-right:max(22px,calc((100% - 1280px) / 2))}}
+/* desktop: every condition chip on view (they wrapped off the right edge, "Trauma" cut in half) */
+@media(min-width:901px){.lib-catbar{flex-wrap:wrap;overflow:visible}}
+/* phone/tablet: chips scroll sideways, so fade the right edge to show there is more */
+@media(max-width:900px){.lib-catbar{-webkit-mask-image:linear-gradient(to right,#000 85%,transparent);mask-image:linear-gradient(to right,#000 85%,transparent);padding-right:28px}}
+/* the band sits under the brand bar on smaller screens (it was hidden behind it, so
+   phones had no search, layout toggle or reference links) */
+@media(max-width:900px){#cc-app.cc-hasband .cc-topbar{top:calc(64px + env(safe-area-inset-top));flex-wrap:wrap;row-gap:10px}
+  #cc-app.cc-hasband .cc-topbar-main{flex:1 1 100%}
+  #cc-app.cc-hasband .lib-topsearch{max-width:none}
+  #cc-app.cc-hasband .cc-topbar-state{margin-left:0;justify-content:flex-start}}
+@media(max-width:600px){#cc-app.cc-hasband .cc-topbar{margin-top:calc(64px + env(safe-area-inset-top))}}
+/* grid cards: clamp on an inner span (a -webkit-box flex item is blockified, so a clamp
+   on .card-desc itself showed an ellipsis mid-card with the text running on below it) */
+.lib-clamp{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.lib-grid .card-full .lib-clamp,.lib-grid .card-family .card-desc .lib-clamp{-webkit-line-clamp:2}
+.lib-grid .card-full,.lib-grid .card-desc{display:block;flex:none}
+/* list: every row one line high (long text ends in "…", full text on hover) */
+.lib-row{min-height:44px;padding-top:9px;padding-bottom:9px}
+.lib-row > span,.lib-row > .lib-sort{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lib-c-name{overflow:hidden}
+.lib-nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lib-c-full{line-height:1.3}
+/* category as plain text, not a pill */
+.lib-c-cat{font-size:12.5px;color:var(--ink-soft)}
+@media(max-width:600px){
+  .lib-list{--libcols:minmax(0,1fr) minmax(0,110px)}
+  .lib-c-cat{display:none}
+  .lib-forms{display:none}   /* the chevron already marks a family */
+  .lib-row{gap:10px;padding:9px 12px}
+  .lib-c-age,.lib-c-go{display:none}
+  .lib-row-child .lib-c-name{padding-left:24px}
+  .lib-row-child .lib-c-name::before{left:12px}
+}
+/* Test library tidy-up: compact chips that fit one row on a laptop */
+.lib-catbar{gap:6px}
+.lib-catbar .cf-chip{padding:5px 10px}
+.lib-catbar .lib-chip-n{margin-left:5px;padding:1px 6px}
+/* grid cards: tags left, form count right (never wrapped); facts in a tidy 2-column
+   grid; the call to action pinned to the bottom so every card's divider lines up */
+.lib-grid .lib-card{display:flex;flex-direction:column;text-align:left}
+.lib-grid .lib-card .card-top{gap:8px;margin-bottom:12px;align-items:flex-start}
+.lib-card-tags{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;min-width:0}
+.lib-grid .card-versions{flex:none;white-space:nowrap}
+.lib-forms-list{display:flex;flex-wrap:wrap;gap:6px}
+.lib-form-chip{font-size:12px;line-height:1.3;color:var(--ink-soft);background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.lib-meta{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px 12px;margin-top:auto;padding-top:14px;font-size:12.5px;color:var(--ink-faint)}
+.lib-meta > span{display:flex;align-items:flex-start;gap:6px;min-width:0;line-height:1.35}
+.lib-meta svg{width:14px;height:14px;flex:none;opacity:.7;margin-top:1px}
+.lib-meta > .lib-meta-w{grid-column:1/-1}
+.lib-meta-t{min-width:0;overflow-wrap:anywhere}   /* wrap, never cut: "Clinician-sc…" hid the facts */
+.lib-grid .lib-card .card-cta{margin-top:12px;padding-top:11px;border-top:1px solid var(--line)}
+.lib-grid .lib-card:hover .card-cta svg{transform:translateX(3px)}
+/* list header: one type size, and only the active sort arrow until you hover */
+.lib-row-head > *{font-size:11px;font-weight:700;color:var(--ink-faint);line-height:1.3}
+.lib-row-head .lib-arrow{opacity:0;color:var(--ink-faint);font-size:9px}
+.lib-row-head .lib-arrow.on{opacity:1;color:var(--accent)}
+.lib-row-head .lib-sort:hover .lib-arrow{opacity:1}
+/* practice runs say so on the runner itself, not only in the header */
+.runner-practice{flex:none;font-size:11.5px;font-weight:600;color:var(--amber);background:var(--amber-wash);border:1px solid var(--c-e6d3a8);border-radius:99px;padding:3px 10px;white-space:nowrap}
+/* the brand never wraps to three lines when the header is busy */
+.brand-text b,.brand-text span{white-space:nowrap}
 .sandbox-banner{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--amber-wash);border:1px solid var(--c-e6d3a8);border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:13.5px;color:var(--ink-soft)}
 .sb-rrow{display:flex;gap:12px;justify-content:space-between;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
 .sb-rrow:first-of-type{border-top:none}
@@ -3809,6 +3872,30 @@ details.rep-sec-collapsible[open] > summary::after{content:'▾'}
 .cp2-diverge{font-size:12px;color:var(--ink-soft);background:var(--amber-wash);border:1px solid var(--c-e8d3ab);border-radius:var(--radius-sm);padding:9px 13px;margin:10px 0 8px;line-height:1.5}
 .cp2-diverge b{color:var(--amber-deep)}
 .cp2-conv-diff{border-color:var(--c-d9d2e8);background:var(--cb-faf9fd)}
+/* Self vs others: same instrument, different raters, side by side */
+.cp2-cmp{margin:14px 0 12px}
+.cp2-cmp-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--paper)}
+.cp2-cmp-t{width:100%;border-collapse:collapse;font-size:12.5px}
+.cp2-cmp-t th,.cp2-cmp-t td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.cp2-cmp-t tbody tr:last-child th,.cp2-cmp-t tbody tr:last-child td{border-bottom:none}
+.cp2-cmp-t thead th{font-weight:600;background:var(--paper-raised);min-width:140px}
+.cp2-cmp-t tbody th{font-weight:600;color:var(--ink-soft);min-width:150px}
+.cp2-cmp-t tr.is-diff td,.cp2-cmp-t tr.is-diff th{background:var(--amber-wash)}
+.cp2-cmp-who{display:block;font-size:13px;font-weight:700;color:var(--ink)}
+.cp2-cmp-who.is-other{color:var(--accent-deep)}
+.cp2-cmp-rel{display:block;font-size:11.5px;font-weight:500;color:var(--ink-soft)}
+.cp2-cmp-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11px;font-weight:500;color:var(--ink-faint);margin-top:3px}
+.cp2-cmp-v{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.cp2-cmp-band{display:block;font-size:11px;color:var(--ink-soft)}
+.cp2-cmp-na{color:var(--ink-faint)}
+.cp2-cmp-flag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--amber-deep);border:1px solid var(--c-e8d3ab);border-radius:99px;padding:0 6px;margin-left:4px}
+.cp-ev-who{display:block;font-size:11.5px;font-weight:500;color:var(--ink-faint);overflow:hidden;text-overflow:ellipsis}
+.cp-ev-who.is-other{color:var(--accent-deep)}
+/* clinician-administered informant form: who is answering */
+.adm-resp-picks{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 14px}
+.adm-resp-picks-h{width:100%;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint)}
+.adm-resp-pick{font:inherit;font-size:12.5px;color:var(--ink);background:var(--paper);border:1px solid var(--line-strong);border-radius:99px;padding:4px 12px;cursor:pointer}
+.adm-resp-pick:hover{border-color:var(--accent)}
 .cp2-gap{display:flex;align-items:center;gap:12px;padding:8px 11px;border:1px solid var(--c-e8d3ab);background:var(--amber-wash);border-radius:var(--radius-sm);margin-bottom:6px}
 .cp2-gap-t{flex:1;font-size:12.5px;color:var(--ink-soft);line-height:1.45}
 .cp2-gap-go{font:inherit;font-size:11.5px;font-weight:700;color:var(--accent-deep);background:var(--paper);border:1px solid var(--line-strong);border-radius:99px;padding:3px 12px;cursor:pointer;white-space:nowrap;transition:border-color .12s}
@@ -5822,6 +5909,9 @@ body.pt-shell #topbarMeta{display:none}
 .ask-go2{width:100%;justify-content:center;margin-top:8px;min-height:44px}
 .ask-bubble{background:var(--paper);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:12px 14px;font-size:14px;line-height:1.5;color:var(--ink);margin-bottom:14px;overflow-wrap:anywhere}
 .ask-bubble u{color:var(--accent-deep)}
+.ask-link{margin:0 0 14px}
+.ask-link-row{display:flex;gap:8px;align-items:center}
+.ask-link-row input{flex:1;min-width:0;font-size:13px}
 .ask-meta{display:flex;flex-direction:column;gap:7px;margin:0 0 14px;font-size:13.5px;color:var(--ink-soft)}
 .ask-meta div{display:flex;gap:8px;align-items:center}
 .ask-meta svg{width:16px;height:16px;color:var(--accent);flex:0 0 auto}
@@ -6900,6 +6990,11 @@ html[data-theme="dark"]:not(:has(.view.active .runner-rmet, .dsi-taskview)) .spq
 .pd-warn{margin:10px 0 12px;padding:10px 14px;border:1px solid var(--amber);background:var(--amber-wash);border-radius:var(--radius-sm);font-size:14px;color:var(--ink)}
 .pd-warn p{margin:4px 0 0}
 .pd-ack{display:flex;align-items:baseline;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
+
+/* interview informant picker (DIVA-5, DASI-2, ADI-R) + link tag in results */
+.iinf-pick{margin-bottom:10px}
+.iinf-pick .iinf-select{width:100%;box-sizing:border-box;font:inherit;font-size:14px;padding:9px 11px;border:1px solid var(--line-strong);border-radius:8px;background:var(--paper);color:var(--ink)}
+.iinf-tag{display:inline-block;margin-left:4px;padding:1px 7px;border:1px solid var(--line-strong);border-radius:999px;font-size:11px;font-weight:600;color:var(--ink-soft);vertical-align:1px}
 
 </style>
 </head>
@@ -8061,6 +8156,18 @@ const GAD7_NORMS = {
 
 const REGISTRY = {};
 
+/* Informant / observer forms that BORROW the self-report form's cut-off.
+   Such a test carries `borrowedCutoff:{from, cutoff}` (the self-report form
+   the threshold comes from, and what the threshold is). No observer-specific
+   cut-off is invented here; the classification is shown with one consistent
+   caveat instead (rendered by Results.caveatLine, readable by any consumer via
+   informantCutoffCaveat). Pending clinical sign-off: BAND_DESCRIPTOR_AUDIT.md. */
+function informantCutoffCaveat(t){
+  const b = t && t.borrowedCutoff;
+  if(!b) return '';
+  return 'Cut-off taken from the self-report form: '+b.cutoff+' ('+b.from+'). It has not been validated for informant report, so treat the classification as indicative.';
+}
+
 Object.assign(REGISTRY, {"aq_adolescent":{"id":"aq_adolescent","name":"AQ (Adolescent)","fullName":"Autism-Spectrum Quotient (Adolescent)","verified":{"date":"2026-07-20","note":"50 items, the four-point binary response set, the five subscale allocations and every scored direction verified as an exact third-person parity match to the already-verified AQ Adult (the 2006 adolescent form rewords the adult items for a parent/carer rater and does NOT adopt the Child form's content changes). Cut-offs (>=30 recommended, 0% of controls at/above; >=32 adult-equivalent) and the AS/HFA (n=52), Autism (n=79) and Control (n=50) group + subscale norms match Baron-Cohen, Hoekstra, Knickmeyer & Wheelwright (2006) and the verified norms log cell-by-cell. Reliability (test-retest r=0.92, per-subscale alphas) from the same paper."},"category":"autism","status":"live","respondent":"Parent / carer report","informantKind":"childhood","informantHelp":"An autism-traits questionnaire for a parent or carer to complete about {subject}.","ageRange":"12–16 years","estMinutes":"8–10 min","description":"Quantifies autistic traits across five domains. A widely used screening supplement.","citation":"Baron-Cohen, Hoekstra, Knickmeyer & Wheelwright (2006). J Autism Dev Disord 36(3):343–350.","report":{},"higherMeans":"more autistic traits","scoring":{"type":"binary","options":[{"label":"Definitely agree","agree":true},{"label":"Slightly agree","agree":true},{"label":"Slightly disagree","agree":false},{"label":"Definitely disagree","agree":false}],"totalMax":50,"subscaleMax":10},"items":[{"n":1,"text":"S/he prefers to do things with others rather than on her/his own.","subscale":"social_skill","scoredDirection":"disagree"},{"n":2,"text":"S/he prefers to do things the same way over and over again.","subscale":"attention_switching","scoredDirection":"agree"},{"n":3,"text":"If s/he tries to imagine something, s/he finds it very easy to create a picture in her/his mind.","subscale":"imagination","scoredDirection":"disagree"},{"n":4,"text":"S/he frequently gets so strongly absorbed in one thing that s/he loses sight of other things.","subscale":"attention_switching","scoredDirection":"agree"},{"n":5,"text":"S/he often notices small sounds when others do not.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":6,"text":"S/he usually notices car number plates or similar strings of information.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":7,"text":"Other people frequently tell her/him that what s/he has said is impolite, even though s/he thinks it is polite.","subscale":"communication","scoredDirection":"agree"},{"n":8,"text":"When s/he is reading a story, s/he can easily imagine what the characters might look like.","subscale":"imagination","scoredDirection":"disagree"},{"n":9,"text":"S/he is fascinated by dates.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":10,"text":"In a social group, s/he can easily keep track of several different people's conversations.","subscale":"attention_switching","scoredDirection":"disagree"},{"n":11,"text":"S/he finds social situations easy.","subscale":"social_skill","scoredDirection":"disagree"},{"n":12,"text":"S/he tends to notice details that others do not.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":13,"text":"S/he would rather go to a library than a party.","subscale":"social_skill","scoredDirection":"agree"},{"n":14,"text":"S/he finds making up stories easy.","subscale":"imagination","scoredDirection":"disagree"},{"n":15,"text":"S/he finds her/himself drawn more strongly to people than to things.","subscale":"social_skill","scoredDirection":"disagree"},{"n":16,"text":"S/he tends to have very strong interests, which s/he gets upset about if s/he can't pursue.","subscale":"attention_switching","scoredDirection":"agree"},{"n":17,"text":"S/he enjoys social chit-chat.","subscale":"communication","scoredDirection":"disagree"},{"n":18,"text":"When s/he talks, it isn't always easy for others to get a word in edgeways.","subscale":"communication","scoredDirection":"agree"},{"n":19,"text":"S/he is fascinated by numbers.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":20,"text":"When s/he is reading a story, s/he finds it difficult to work out the characters' intentions.","subscale":"imagination","scoredDirection":"agree"},{"n":21,"text":"S/he doesn't particularly enjoy reading fiction.","subscale":"imagination","scoredDirection":"agree"},{"n":22,"text":"S/he finds it hard to make new friends.","subscale":"social_skill","scoredDirection":"agree"},{"n":23,"text":"S/he notices patterns in things all the time.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":24,"text":"S/he would rather go to the theatre than a museum.","subscale":"imagination","scoredDirection":"disagree"},{"n":25,"text":"It does not upset him/her if his/her daily routine is disturbed.","subscale":"attention_switching","scoredDirection":"disagree"},{"n":26,"text":"S/he frequently finds that s/he doesn't know how to keep a conversation going.","subscale":"communication","scoredDirection":"agree"},{"n":27,"text":"S/he finds it easy to “read between the lines” when someone is talking to her/him.","subscale":"communication","scoredDirection":"disagree"},{"n":28,"text":"S/he usually concentrates more on the whole picture, rather than the small details.","subscale":"attention_to_detail","scoredDirection":"disagree"},{"n":29,"text":"S/he is not very good at remembering phone numbers.","subscale":"attention_to_detail","scoredDirection":"disagree"},{"n":30,"text":"S/he doesn't usually notice small changes in a situation, or a person's appearance.","subscale":"attention_to_detail","scoredDirection":"disagree"},{"n":31,"text":"S/he knows how to tell if someone listening to him/her is getting bored.","subscale":"communication","scoredDirection":"disagree"},{"n":32,"text":"S/he finds it easy to do more than one thing at once.","subscale":"attention_switching","scoredDirection":"disagree"},{"n":33,"text":"When s/he talks on the phone, s/he is not sure when it's her/his turn to speak.","subscale":"communication","scoredDirection":"agree"},{"n":34,"text":"S/he enjoys doing things spontaneously.","subscale":"attention_switching","scoredDirection":"disagree"},{"n":35,"text":"S/he is often the last to understand the point of a joke.","subscale":"communication","scoredDirection":"agree"},{"n":36,"text":"S/he finds it easy to work out what someone is thinking or feeling just by looking at their face.","subscale":"social_skill","scoredDirection":"disagree"},{"n":37,"text":"If there is an interruption, s/he can switch back to what s/he was doing very quickly.","subscale":"attention_switching","scoredDirection":"disagree"},{"n":38,"text":"S/he is good at social chit-chat.","subscale":"communication","scoredDirection":"disagree"},{"n":39,"text":"People often tell her/him that s/he keeps going on and on about the same thing.","subscale":"communication","scoredDirection":"agree"},{"n":40,"text":"When s/he was younger, s/he used to enjoy playing games involving pretending with other children.","subscale":"imagination","scoredDirection":"disagree"},{"n":41,"text":"S/he likes to collect information about categories of things (e.g. types of car, types of bird, types of train, types of plant, etc.).","subscale":"imagination","scoredDirection":"agree"},{"n":42,"text":"S/he finds it difficult to imagine what it would be like to be someone else.","subscale":"imagination","scoredDirection":"agree"},{"n":43,"text":"S/he likes to plan any activities s/he participates in carefully.","subscale":"attention_switching","scoredDirection":"agree"},{"n":44,"text":"S/he enjoys social occasions.","subscale":"social_skill","scoredDirection":"disagree"},{"n":45,"text":"S/he finds it difficult to work out people's intentions.","subscale":"social_skill","scoredDirection":"agree"},{"n":46,"text":"New situations make him/her anxious.","subscale":"attention_switching","scoredDirection":"agree"},{"n":47,"text":"S/he enjoys meeting new people.","subscale":"social_skill","scoredDirection":"disagree"},{"n":48,"text":"S/he is a good diplomat.","subscale":"social_skill","scoredDirection":"disagree"},{"n":49,"text":"S/he is not very good at remembering people's date of birth.","subscale":"attention_to_detail","scoredDirection":"disagree"},{"n":50,"text":"S/he finds it very easy to play games with children that involve pretending.","subscale":"imagination","scoredDirection":"disagree"}],"subscales":{"social_skill":{"name":"Social Skill","items":[1,11,13,15,22,36,44,45,47,48],"max":10},"attention_switching":{"name":"Attention Switching","items":[2,4,10,16,25,32,34,37,43,46],"max":10},"attention_to_detail":{"name":"Attention to Detail","items":[5,6,9,12,19,23,28,29,30,49],"max":10},"communication":{"name":"Communication","items":[7,17,18,26,27,31,33,35,38,39],"max":10},"imagination":{"name":"Imagination","items":[3,8,14,20,21,24,40,41,42,50],"max":10}},"cutoffs":[{"score":30,"recommended":true,"note":"recommended adolescent cut-off; 0% of controls scored >=30","pct_at_or_above":{"control_all":0,"as_hfa_boys":86.8,"as_hfa_girls":100,"autism_boys":90.5,"autism_girls":81.3}},{"score":32,"recommended":false,"note":"adult-equivalent cut-off","pct_at_or_above":{"control_all":0,"as_hfa_all":80.8,"as_hfa_boys":73.7,"as_hfa_girls":100,"autism_all":83.5,"autism_boys":87.3,"autism_girls":68.8}}],"_raw_version":"adolescent","norms":[{"group":"AS/HFA","sex":"all","n":52,"total":{"mean":37.3,"sd":5.8},"subscales":{"communication":{"mean":8.2,"sd":1.6},"social":{"mean":7.8,"sd":1.8},"imagination":{"mean":6.7,"sd":2.2},"attention_to_detail":{"mean":6.1,"sd":2.4},"attention_switching":{"mean":8.5,"sd":1.7}}},{"group":"AS/HFA","sex":"male","n":38,"total":{"mean":36.4,"sd":6.0},"subscales":{"communication":{"mean":7.9,"sd":1.6},"social":{"mean":7.4,"sd":1.7},"imagination":{"mean":6.8,"sd":2.3},"attention_to_detail":{"mean":6.1,"sd":2.5},"attention_switching":{"mean":8.2,"sd":1.9}}},{"group":"AS/HFA","sex":"female","n":14,"total":{"mean":39.8,"sd":4.3},"subscales":{"communication":{"mean":9.0,"sd":1.4},"social":{"mean":8.8,"sd":1.4},"imagination":{"mean":6.8,"sd":2.0},"attention_to_detail":{"mean":6.1,"sd":2.4},"attention_switching":{"mean":9.0,"sd":1.0}}},{"group":"Autism","sex":"all","n":79,"total":{"mean":38.3,"sd":6.0},"subscales":{"communication":{"mean":8.0,"sd":1.5},"social":{"mean":8.0,"sd":1.9},"imagination":{"mean":7.6,"sd":2.0},"attention_to_detail":{"mean":6.5,"sd":2.1},"attention_switching":{"mean":8.3,"sd":1.6}}},{"group":"Autism","sex":"male","n":63,"total":{"mean":39.0,"sd":5.9},"subscales":{"communication":{"mean":8.1,"sd":1.5},"social":{"mean":8.2,"sd":1.8},"imagination":{"mean":7.7,"sd":2.0},"attention_to_detail":{"mean":6.6,"sd":2.2},"attention_switching":{"mean":8.3,"sd":1.6}}},{"group":"Autism","sex":"female","n":16,"total":{"mean":35.7,"sd":6.1},"subscales":{"communication":{"mean":7.6,"sd":1.6},"social":{"mean":7.3,"sd":2.0},"imagination":{"mean":6.8,"sd":2.1},"attention_to_detail":{"mean":5.9,"sd":1.9},"attention_switching":{"mean":8.1,"sd":1.8}}},{"group":"Control","sex":"all","n":50,"total":{"mean":17.7,"sd":5.7},"subscales":{"communication":{"mean":2.7,"sd":1.7},"social":{"mean":2.0,"sd":1.9},"imagination":{"mean":3.2,"sd":2.3},"attention_to_detail":{"mean":5.3,"sd":2.4},"attention_switching":{"mean":4.5,"sd":2.0}}},{"group":"Control","sex":"male","n":25,"total":{"mean":20.2,"sd":4.8},"subscales":{"communication":{"mean":2.9,"sd":1.8},"social":{"mean":2.2,"sd":1.9},"imagination":{"mean":4.4,"sd":2.2},"attention_to_detail":{"mean":5.8,"sd":2.6},"attention_switching":{"mean":5.0,"sd":1.7}}},{"group":"Control","sex":"female","n":25,"total":{"mean":15.3,"sd":5.7},"subscales":{"communication":{"mean":2.6,"sd":1.6},"social":{"mean":1.8,"sd":1.9},"imagination":{"mean":2.0,"sd":1.8},"attention_to_detail":{"mean":4.8,"sd":2.2},"attention_switching":{"mean":4.1,"sd":2.1}}}],"reliability":{"test_retest_r":0.92,"cronbach_alpha":{"whole":0.79,"communication":0.82,"social":0.88,"imagination":0.81,"attention_to_detail":0.66,"attention_switching":0.76}}},"aq_adult":{"id":"aq_adult","name":"AQ (Adult)","fullName":"Autism-Spectrum Quotient (Adult, AQ-50)","verified":{"date":"2026-07-20","note":"50 items, the five subscale allocations and binary scoring verified against the AQ-50; AQ-10 subset and NICE >=6 referral cutoff confirmed; group norms (Ruzich et al. 2015 and Baron-Cohen et al. 2001) 42/42 in the log; total-score thresholds rebuilt as a source-attributed ladder (Woodbury-Smith 2005 >=26, Broadbent 2013 >=30, Baron-Cohen 2001 >=32), each with its study sensitivity/specificity and sample, checked against the original papers. Re-checked 2026-08-04: the six adultNorms ci95 pairs are Ruzich's 95% confidence intervals around each meta-analysed mean, all six exact against the paper; Ruzich reports no observed min-max score range for any group, so range_low/range_high stay empty for this instrument in the norms log."},"category":"autism","status":"live","respondent":"Self-report","ageRange":"16+ years","estMinutes":"8–10 min","description":"Quantifies autistic traits across five domains. A widely used screening supplement.","citation":"Baron-Cohen, Wheelwright, Skinner, Martin & Clubley (2001). J Autism Dev Disord 31:5–17.","higherMeans":"more autistic traits","scoring":{"type":"binary","options":[{"label":"Definitely agree","agree":true},{"label":"Slightly agree","agree":true},{"label":"Slightly disagree","agree":false},{"label":"Definitely disagree","agree":false}],"totalMax":50,"subscaleMax":10},"items":[{"n":1,"text":"I prefer to do things with others rather than on my own.","subscale":"social_skill","scoredDirection":"disagree"},{"n":2,"text":"I prefer to do things the same way over and over again.","subscale":"attention_switching","scoredDirection":"agree"},{"n":3,"text":"If I try to imagine something, I find it very easy to create a picture in my mind.","subscale":"imagination","scoredDirection":"disagree"},{"n":4,"text":"I frequently get so strongly absorbed in one thing that I lose sight of other things.","subscale":"attention_switching","scoredDirection":"agree"},{"n":5,"text":"I often notice small sounds when others do not.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":6,"text":"I usually notice car number plates or similar strings of information.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":7,"text":"Other people frequently tell me that what I've said is impolite, even though I think it is polite.","subscale":"communication","scoredDirection":"agree"},{"n":8,"text":"When I'm reading a story, I can easily imagine what the characters might look like.","subscale":"imagination","scoredDirection":"disagree"},{"n":9,"text":"I am fascinated by dates.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":10,"text":"In a social group, I can easily keep track of several different people's conversations.","subscale":"attention_switching","scoredDirection":"disagree"},{"n":11,"text":"I find social situations easy.","subscale":"social_skill","scoredDirection":"disagree"},{"n":12,"text":"I tend to notice details that others do not.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":13,"text":"I would rather go to a library than a party.","subscale":"social_skill","scoredDirection":"agree"},{"n":14,"text":"I find making up stories easy.","subscale":"imagination","scoredDirection":"disagree"},{"n":15,"text":"I find myself drawn more strongly to people than to things.","subscale":"social_skill","scoredDirection":"disagree"},{"n":16,"text":"I tend to have very strong interests, which I get upset about if I can't pursue.","subscale":"attention_switching","scoredDirection":"agree"},{"n":17,"text":"I enjoy social chit-chat.","subscale":"communication","scoredDirection":"disagree"},{"n":18,"text":"When I talk, it isn't always easy for others to get a word in edgeways.","subscale":"communication","scoredDirection":"agree"},{"n":19,"text":"I am fascinated by numbers.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":20,"text":"When I'm reading a story, I find it difficult to work out the characters' intentions.","subscale":"imagination","scoredDirection":"agree"},{"n":21,"text":"I don't particularly enjoy reading fiction.","subscale":"imagination","scoredDirection":"agree"},{"n":22,"text":"I find it hard to make new friends.","subscale":"social_skill","scoredDirection":"agree"},{"n":23,"text":"I notice patterns in things all the time.","subscale":"attention_to_detail","scoredDirection":"agree"},{"n":24,"text":"I would rather go to the theatre than a museum.","subscale":"imagination","scoredDirection":"disagree"},{"n":25,"text":"It does not upset me if my daily routine is disturbed.","subscale":"attention_switching","scoredDirection":"disagree"},{"n":26,"text":"I frequently find that I don't know how to keep a conversation going.","subscale":"communication","scoredDirection":"agree"},{"n":27,"text":"I find it easy to “read between the lines” when someone is talking to me.","subscale":"communication","scoredDirection":"disagree"},{"n":28,"text":"I usually concentrate more on the whole picture, rather than the small details.","subscale":"attention_to_detail","scoredDirection":"disagree"},{"n":29,"text":"I am not very good at remembering phone numbers.","subscale":"attention_to_detail","scoredDirection":"disagree"},{"n":30,"text":"I don't usually notice small changes in a situation, or a person's appearance.","subscale":"attention_to_detail","scoredDirection":"disagree"},{"n":31,"text":"I know how to tell if someone listening to me is getting bored.","subscale":"communication","scoredDirection":"disagree"},{"n":32,"text":"I find it easy to do more than one thing at once.","subscale":"attention_switching","scoredDirection":"disagree"},{"n":33,"text":"When I talk on the phone, I'm not sure when it's my turn to speak.","subscale":"communication","scoredDirection":"agree"},{"n":34,"text":"I enjoy doing things spontaneously.","subscale":"attention_switching","scoredDirection":"disagree"},{"n":35,"text":"I am often the last to understand the point of a joke.","subscale":"communication","scoredDirection":"agree"},{"n":36,"text":"I find it easy to work out what someone is thinking or feeling just by looking at their face.","subscale":"social_skill","scoredDirection":"disagree"},{"n":37,"text":"If there is an interruption, I can switch back to what I was doing very quickly.","subscale":"attention_switching","scoredDirection":"disagree"},{"n":38,"text":"I am good at social chit-chat.","subscale":"communication","scoredDirection":"disagree"},{"n":39,"text":"People often tell me that I keep going on and on about the same thing.","subscale":"communication","scoredDirection":"agree"},{"n":40,"text":"When I was young, I used to enjoy playing games involving pretending with other children.","subscale":"imagination","scoredDirection":"disagree"},{"n":41,"text":"I like to collect information about categories of things (e.g. types of car, types of bird, types of train, types of plant, etc.).","subscale":"imagination","scoredDirection":"agree"},{"n":42,"text":"I find it difficult to imagine what it would be like to be someone else.","subscale":"imagination","scoredDirection":"agree"},{"n":43,"text":"I like to plan any activities I participate in carefully.","subscale":"attention_switching","scoredDirection":"agree"},{"n":44,"text":"I enjoy social occasions.","subscale":"social_skill","scoredDirection":"disagree"},{"n":45,"text":"I find it difficult to work out people's intentions.","subscale":"social_skill","scoredDirection":"agree"},{"n":46,"text":"New situations make me anxious.","subscale":"attention_switching","scoredDirection":"agree"},{"n":47,"text":"I enjoy meeting new people.","subscale":"social_skill","scoredDirection":"disagree"},{"n":48,"text":"I am a good diplomat.","subscale":"social_skill","scoredDirection":"disagree"},{"n":49,"text":"I am not very good at remembering people's date of birth.","subscale":"attention_to_detail","scoredDirection":"disagree"},{"n":50,"text":"I find it very easy to play games with children that involve pretending.","subscale":"imagination","scoredDirection":"disagree"}],"subscales":{"social_skill":{"name":"Social Skill","items":[1,11,13,15,22,36,44,45,47,48],"max":10},"attention_switching":{"name":"Attention Switching","items":[2,4,10,16,25,32,34,37,43,46],"max":10},"attention_to_detail":{"name":"Attention to Detail","items":[5,6,9,12,19,23,28,29,30,49],"max":10},"communication":{"name":"Communication","items":[7,17,18,26,27,31,33,35,38,39],"max":10},"imagination":{"name":"Imagination","items":[3,8,14,20,21,24,40,41,42,50],"max":10}},"cutoffs":[{"score":26,"source":"Woodbury-Smith et al. 2005","sens":0.945,"spec":0.519,"ppv":0.84,"npv":0.78,"correct":0.83,"sample":"CLASS clinic: 100 consecutive suspected-Asperger referrals (73 ASD / 27 not; 73% base rate). The non-ASD group were referrals with elevated pre-test probability (mean AQ 26.2), not healthy controls - so the low specificity and the PPV/NPV are clinic-sample values, not transferable operating characteristics.","note":"High-sensitivity referral threshold"},{"score":30,"source":"Broadbent et al. 2013 (printed as >29)","sens":0.856,"spec":0.992,"sample":"104 clinically-diagnosed ASD (IQ>70) vs 128 community typically-developing adults (Australia).","note":"Balanced; aligns with the AQ-Adolescent cut of 30"},{"score":32,"source":"Baron-Cohen et al. 2001","sens":0.793,"spec":0.977,"sexSplit":{"female":{"sens":0.923,"spec":0.99},"male":{"sens":0.756,"spec":0.961}},"sample":"58 AS/HFA vs 174 general-population volunteers (postal survey, mean age 37). Sensitivity = % of the 58 scoring 32+; specificity = 100 - 2.3% of controls. The abstract rounds sensitivity to 80%.","note":"Original clinical threshold"}],"_raw_version":"adult","adultMeans":[{"sample":"general_population_male","scale":"AQ-50","mean":17.8,"sd":6.8,"source":"restated in Auyeung et al. 2008, citing Baron-Cohen et al. 2001"},{"sample":"general_population_female","scale":"AQ-50","mean":15.4,"sd":5.7,"source":"restated in Auyeung et al. 2008, citing Baron-Cohen et al. 2001"},{"sample":"clinical_referral_suspected_ASD","scale":"AQ-50","mean":34.9,"sd":8.2,"n":476,"source":"Ashwood et al. 2016 (clinical, not population)"},{"sample":"clinical_referral_suspected_ASD","scale":"AQ-10","mean":7.2,"sd":2.3,"n":476,"source":"Ashwood et al. 2016 (clinical, not population)"}],"adultNorms":{"source":"Ruzich et al. (2015), Molecular Autism 6:2, systematic review/meta-analysis of 78 studies, N≈6,900 adults.","scale":"AQ-50 total","pooledSD":{"nonclinical":5.59,"asc":6.27,"note":"No sex-specific SDs are reported; pooled SDs used for z-score/percentile estimation (assumes approx. normality)."},"groups":{"nonclinical":{"male":{"mean":17.89,"ci95":[16.7,19.1],"nStudies":10,"n":872},"female":{"mean":14.88,"ci95":[13.3,16.5],"nStudies":10,"n":1378},"overall":{"mean":16.94,"ci95":[16.4,17.4],"nStudies":72,"n":4931}},"asc":{"male":{"mean":36.40,"ci95":[33.1,39.7],"nStudies":6,"n":363},"female":{"mean":38.83,"ci95":[36.3,41.4],"nStudies":6,"n":298},"overall":{"mean":35.19,"ci95":[34.5,35.9],"nStudies":39,"n":1374}}},"sexDifference":{"hedges_g":0.40,"direction":"males higher in non-clinical samples; small/reversed in ASC"}},"norms":[{"group":"Control","sex":"all","n":174,"total":{"mean":16.4,"sd":6.3},"subscales":{"communication":{"mean":2.4,"sd":1.9},"social":{"mean":2.6,"sd":2.3},"imagination":{"mean":2.3,"sd":1.7},"attention_to_detail":{"mean":5.3,"sd":2.3},"attention_switching":{"mean":3.9,"sd":1.9}}},{"group":"Control","sex":"male","n":76,"total":{"mean":17.8,"sd":6.8},"subscales":{"communication":{"mean":2.8,"sd":2.0},"social":{"mean":2.8,"sd":2.5},"imagination":{"mean":2.7,"sd":1.9},"attention_to_detail":{"mean":5.2,"sd":2.3},"attention_switching":{"mean":4.3,"sd":1.9}}},{"group":"Control","sex":"female","n":98,"total":{"mean":15.4,"sd":5.7},"subscales":{"communication":{"mean":2.1,"sd":1.8},"social":{"mean":2.3,"sd":2.2},"imagination":{"mean":1.9,"sd":1.5},"attention_to_detail":{"mean":5.4,"sd":2.3},"attention_switching":{"mean":3.6,"sd":1.8}}},{"group":"Autism","sex":"all","n":58,"total":{"mean":35.8,"sd":6.5},"subscales":{"communication":{"mean":7.2,"sd":2.0},"social":{"mean":7.5,"sd":1.9},"imagination":{"mean":6.4,"sd":2.1},"attention_to_detail":{"mean":6.7,"sd":2.3},"attention_switching":{"mean":8.0,"sd":1.8}}},{"group":"Autism","sex":"male","n":45,"total":{"mean":35.1,"sd":6.9},"subscales":{"communication":{"mean":7.2,"sd":2.0},"social":{"mean":7.4,"sd":2.0},"imagination":{"mean":6.2,"sd":2.2},"attention_to_detail":{"mean":6.6,"sd":2.3},"attention_switching":{"mean":7.7,"sd":1.9}}},{"group":"Autism","sex":"female","n":13,"smallSample":true,"total":{"mean":38.1,"sd":4.4},"subscales":{"communication":{"mean":7.3,"sd":2.1},"social":{"mean":7.9,"sd":1.4},"imagination":{"mean":7.0,"sd":1.5},"attention_to_detail":{"mean":6.9,"sd":2.1},"attention_switching":{"mean":8.9,"sd":1.0}}}],"subscaleNormsSource":"Baron-Cohen et al. (2001), J Autism Dev Disord 31:5–17, Table I, UK sample (n=174 controls, n=58 AS/HFA; female AS/HFA cell n=13 is small).","aq10":{"total_min":0,"total_max":10,"items":[5,20,27,28,31,32,36,37,41,45],"agree_scored_items":[5,20,41,45],"disagree_scored_items":[27,28,31,32,36,37],"cutoffs":[{"score":6,"note":"Allison et al. 2012; endorsed by NICE for referral triage"}]},"report":{"caveat":"In clinical samples the AQ has high sensitivity but low specificity, many people scoring below cut-off are later diagnosed, and generalised anxiety can inflate scores. Use as one data point only."}},"aq_child":{"id":"aq_child","name":"AQ (Child)","fullName":"Autism-Spectrum Quotient (Child, AQ-Child)","verified":{"date":"2026-07-20","note":"50 items and the 0-3 Likert scoring (definitely agree=0 ... definitely disagree=3; total 0-150, subscale max 30) verified against Auyeung, Baron-Cohen, Wheelwright & Allison (2008). Five subscale allocations are identical to the verified AQ Adult; every per-item reverse flag is internally consistent (reverse=true exactly where the autism-consistent answer is 'agree'). The seven genuine AQ-Child item rewordings (items 6 house numbers, 7 polite-behaviour rules, 13 birthday party, 24 cinema, 26 peers, 40 preschool, 48 not hurting feelings) confirmed. Cut-offs 66/76(recommended)/86 with their sens/spec, and the Control (1225), AS/HFA (348) and Autism (192) group + subscale norms match the paper and the verified norms log. The Autism-all attention-switching mean is corrected to 22.8 (source misprints 10.9, the Control mean); independently re-derived by pooling boys 22.9 (n156) + girls 22.4 (n36) = 22.81, pooled SD 4.4."},"category":"autism","status":"live","respondent":"Parent report","informantKind":"childhood","informantHelp":"An autism-traits questionnaire for a parent or carer to complete about {subject}.","ageRange":"4–11 years","estMinutes":"8–10 min","description":"Parent-report measure of autistic traits in children, using a four-point scale.","citation":"Auyeung, Baron-Cohen, Wheelwright & Allison (2008). J Autism Dev Disord 38:1230–1240.","report":{},"higherMeans":"more autistic traits","scoring":{"type":"likert","options":[{"label":"Definitely agree","base":0},{"label":"Slightly agree","base":1},{"label":"Slightly disagree","base":2},{"label":"Definitely disagree","base":3}],"totalMax":150,"subscaleMax":30},"items":[{"n":1,"text":"S/he prefers to do things with others rather than on her/his own.","subscale":"social_skill","reverse":false},{"n":2,"text":"S/he prefers to do things the same way over and over again.","subscale":"attention_switching","reverse":true},{"n":3,"text":"If s/he tries to imagine something, s/he finds it very easy to create a picture in her/his mind.","subscale":"imagination","reverse":false},{"n":4,"text":"S/he frequently gets so strongly absorbed in one thing that s/he loses sight of other things.","subscale":"attention_switching","reverse":true},{"n":5,"text":"S/he often notices small sounds when others do not.","subscale":"attention_to_detail","reverse":true},{"n":6,"text":"S/he usually notices house numbers or similar strings of information.","subscale":"attention_to_detail","reverse":true},{"n":7,"text":"S/he has difficulty understanding rules for polite behaviour.","subscale":"communication","reverse":true},{"n":8,"text":"When s/he is reading a story, s/he can easily imagine what the characters might look like.","subscale":"imagination","reverse":false},{"n":9,"text":"S/he is fascinated by dates.","subscale":"attention_to_detail","reverse":true},{"n":10,"text":"In a social group, s/he can easily keep track of several different people's conversations.","subscale":"attention_switching","reverse":false},{"n":11,"text":"S/he finds social situations easy.","subscale":"social_skill","reverse":false},{"n":12,"text":"S/he tends to notice details that others do not.","subscale":"attention_to_detail","reverse":true},{"n":13,"text":"S/he would rather go to a library than a birthday party.","subscale":"social_skill","reverse":true},{"n":14,"text":"S/he finds making up stories easy.","subscale":"imagination","reverse":false},{"n":15,"text":"S/he is drawn more strongly to people than to things.","subscale":"social_skill","reverse":false},{"n":16,"text":"S/he tends to have very strong interests, which s/he gets upset about if s/he cannot pursue.","subscale":"attention_switching","reverse":true},{"n":17,"text":"S/he enjoys social chit-chat.","subscale":"communication","reverse":false},{"n":18,"text":"When s/he talks, it is not always easy for others to get a word in edgeways.","subscale":"communication","reverse":true},{"n":19,"text":"S/he is fascinated by numbers.","subscale":"attention_to_detail","reverse":true},{"n":20,"text":"When s/he is reading a story, s/he finds it difficult to work out the characters' intentions or feelings.","subscale":"imagination","reverse":true},{"n":21,"text":"S/he does not particularly enjoy fictional stories.","subscale":"imagination","reverse":true},{"n":22,"text":"S/he finds it hard to make new friends.","subscale":"social_skill","reverse":true},{"n":23,"text":"S/he notices patterns in things all the time.","subscale":"attention_to_detail","reverse":true},{"n":24,"text":"S/he would rather go to the cinema than a museum.","subscale":"imagination","reverse":false},{"n":25,"text":"It does not upset him/her if his/her daily routine is disturbed.","subscale":"attention_switching","reverse":false},{"n":26,"text":"S/he does not know how to keep a conversation going with her/his peers.","subscale":"communication","reverse":true},{"n":27,"text":"S/he finds it easy to “read between the lines” when someone is talking to her/him.","subscale":"communication","reverse":false},{"n":28,"text":"S/he usually concentrates more on the whole picture, rather than the small details.","subscale":"attention_to_detail","reverse":false},{"n":29,"text":"S/he is not very good at remembering phone numbers.","subscale":"attention_to_detail","reverse":false},{"n":30,"text":"S/he does not usually notice small changes in a situation, or a person's appearance.","subscale":"attention_to_detail","reverse":false},{"n":31,"text":"S/he knows how to tell if someone listening to him/her is getting bored.","subscale":"communication","reverse":false},{"n":32,"text":"S/he finds it easy to go back and forth between different activities.","subscale":"attention_switching","reverse":false},{"n":33,"text":"When s/he talks on the phone, s/he is not sure when it is her/his turn to speak.","subscale":"communication","reverse":true},{"n":34,"text":"S/he enjoys doing things spontaneously.","subscale":"attention_switching","reverse":false},{"n":35,"text":"S/he is often the last to understand the point of a joke.","subscale":"communication","reverse":true},{"n":36,"text":"S/he finds it easy to work out what someone is thinking or feeling just by looking at their face.","subscale":"social_skill","reverse":false},{"n":37,"text":"If there is an interruption, s/he can switch back to what s/he was doing very quickly.","subscale":"attention_switching","reverse":false},{"n":38,"text":"S/he is good at social chit-chat.","subscale":"communication","reverse":false},{"n":39,"text":"People often tell her/him that s/he keeps going on and on about the same thing.","subscale":"communication","reverse":true},{"n":40,"text":"When s/he was in preschool, s/he used to enjoy playing games involving pretending with other children.","subscale":"imagination","reverse":false},{"n":41,"text":"S/he likes to collect information about categories of things (e.g. types of car, types of bird, types of train, types of plant, etc.).","subscale":"imagination","reverse":true},{"n":42,"text":"S/he finds it difficult to imagine what it would be like to be someone else.","subscale":"imagination","reverse":true},{"n":43,"text":"S/he likes to plan any activities s/he participates in carefully.","subscale":"attention_switching","reverse":true},{"n":44,"text":"S/he enjoys social occasions.","subscale":"social_skill","reverse":false},{"n":45,"text":"S/he finds it difficult to work out people's intentions.","subscale":"social_skill","reverse":true},{"n":46,"text":"New situations make him/her anxious.","subscale":"attention_switching","reverse":true},{"n":47,"text":"S/he enjoys meeting new people.","subscale":"social_skill","reverse":false},{"n":48,"text":"S/he is good at taking care not to hurt other people's feelings.","subscale":"social_skill","reverse":false},{"n":49,"text":"S/he is not very good at remembering people's date of birth.","subscale":"attention_to_detail","reverse":false},{"n":50,"text":"S/he finds it very easy to play games with children that involve pretending.","subscale":"imagination","reverse":false}],"subscales":{"social_skill":{"name":"Social Skill","items":[1,11,13,15,22,36,44,45,47,48],"max":30},"attention_switching":{"name":"Attention Switching","items":[2,4,10,16,25,32,34,37,43,46],"max":30},"attention_to_detail":{"name":"Attention to Detail","items":[5,6,9,12,19,23,28,29,30,49],"max":30},"communication":{"name":"Communication","items":[7,17,18,26,27,31,33,35,38,39],"max":30},"imagination":{"name":"Imagination","items":[3,8,14,20,21,24,40,41,42,50],"max":30}},"norms":[{"group":"Control","sex":"all","n":1225,"total":{"mean":41.7,"sd":18.6},"subscales":{"communication":{"mean":8.2,"sd":5.0},"attention_to_detail":{"mean":8.7,"sd":4.5},"social":{"mean":7.0,"sd":5.0},"imagination":{"mean":7.0,"sd":4.6},"attention_switching":{"mean":10.9,"sd":5.1}}},{"group":"Control","sex":"male","n":607,"total":{"mean":45.7,"sd":20.0},"subscales":{"communication":{"mean":9.0,"sd":5.4},"attention_to_detail":{"mean":8.9,"sd":4.7},"social":{"mean":7.8,"sd":5.3},"imagination":{"mean":8.5,"sd":4.9},"attention_switching":{"mean":11.5,"sd":5.6}}},{"group":"Control","sex":"female","n":618,"total":{"mean":37.7,"sd":16.1},"subscales":{"communication":{"mean":7.4,"sd":4.4},"attention_to_detail":{"mean":8.5,"sd":4.4},"social":{"mean":6.1,"sd":4.6},"imagination":{"mean":5.5,"sd":3.7},"attention_switching":{"mean":10.3,"sd":4.6}}},{"group":"AS/HFA","sex":"all","n":348,"total":{"mean":104.8,"sd":15.6},"subscales":{"communication":{"mean":24.4,"sd":4.0},"attention_to_detail":{"mean":14.7,"sd":4.0},"social":{"mean":22.1,"sd":5.1},"imagination":{"mean":19.2,"sd":5.4},"attention_switching":{"mean":24.2,"sd":4.2}}},{"group":"AS/HFA","sex":"male","n":312,"total":{"mean":104.8,"sd":15.7},"subscales":{"communication":{"mean":24.4,"sd":4.0},"attention_to_detail":{"mean":14.9,"sd":4.0},"social":{"mean":21.9,"sd":5.1},"imagination":{"mean":19.4,"sd":5.2},"attention_switching":{"mean":24.2,"sd":4.2}}},{"group":"AS/HFA","sex":"female","n":36,"total":{"mean":104.7,"sd":15.7},"subscales":{"communication":{"mean":24.9,"sd":4.2},"attention_to_detail":{"mean":13.7,"sd":3.5},"social":{"mean":23.4,"sd":4.4},"imagination":{"mean":17.9,"sd":6.7},"attention_switching":{"mean":24.7,"sd":3.6}}},{"group":"Autism","sex":"all","n":192,"total":{"mean":103.0,"sd":16.3},"subscales":{"communication":{"mean":23.9,"sd":4.1},"attention_to_detail":{"mean":13.7,"sd":4.4},"social":{"mean":21.7,"sd":5.1},"imagination":{"mean":20.9,"sd":5.4},"attention_switching":{"mean":22.8,"sd":4.4,"source_printed_mean":10.9,"source_printed_sd":22.8,"flag":"probable_typo","flag_note":"Source prints 10.9 (22.8), a typo (10.9 = the Control mean; inconsistent with autistic boys 22.9 / girls 22.4). Mean corrected to 22.8; SD 4.4 derived by pooling boys (n=156, SD 4.2) + girls (n=36, SD 5.3), which sum to the All n of 192."}}},{"group":"Autism","sex":"male","n":156,"total":{"mean":103.6,"sd":15.1},"subscales":{"communication":{"mean":24.0,"sd":3.9},"attention_to_detail":{"mean":13.7,"sd":4.4},"social":{"mean":21.7,"sd":4.8},"imagination":{"mean":21.3,"sd":4.7},"attention_switching":{"mean":22.9,"sd":4.2}}},{"group":"Autism","sex":"female","n":36,"total":{"mean":100.2,"sd":20.8},"subscales":{"communication":{"mean":23.5,"sd":5.0},"attention_to_detail":{"mean":13.3,"sd":4.8},"social":{"mean":21.8,"sd":6.2},"imagination":{"mean":19.2,"sd":6.2},"attention_switching":{"mean":22.4,"sd":5.3}}}],"norms_subscale_order":["communication","attention_to_detail","social","imagination","attention_switching"],"cutoffs":[{"score":66,"recommended":false,"sensitivity":0.99,"specificity":0.9,"pct_at_or_above":{"control_all":9.7,"control_female":4.7,"control_male":14.8,"as_hfa":98.9,"autism":99.5}},{"score":76,"recommended":true,"sensitivity":0.95,"specificity":0.95,"pct_at_or_above":{"control_all":4.3,"control_female":1.6,"control_male":7.1,"as_hfa":95.1,"autism":94.8}},{"score":86,"recommended":false,"sensitivity":0.86,"specificity":0.98,"pct_at_or_above":{"control_all":2.2,"control_female":1.0,"control_male":3.5,"as_hfa":87.1,"autism":82.8}}],"reliability":{"test_retest_r":0.85,"cronbach_alpha":{"whole":0.97,"social":0.93,"attention_to_detail":0.83,"attention_switching":0.89,"communication":0.92,"imagination":0.88}}}});
 
 /* ── RMET — Reading the Mind in the Eyes Test (Revised) ────────────────────────
@@ -8664,6 +8771,7 @@ Object.assign(REGISTRY, {"baars_self":{
   higherMeans:'more ADHD / cognitive-tempo symptoms',
   scoring:BAARS_SCORING, subscales:BAARS_SUBSCALES,
   items:baarsBuild(BAARS_INF_CURRENT, BAARS_INF_CHILD),
+  borrowedCutoff:{from:'BAARS-IV self-report', cutoff:'symptom counts of at least '+BAARS_SCORING.currentThreshold+' of 9 current and '+BAARS_SCORING.childThreshold+' of 9 childhood symptoms in a domain'},
   report:{caveat:BAARS_CAUTION}
 }});
 
@@ -11361,7 +11469,8 @@ Object.assign(REGISTRY, {"asrs_observer":{
     {n:17, part:'B', subscale:'hyperimpulsive', text:'How often does this person have difficulty waiting their turn in situations when turn taking is required?'},
     {n:18, part:'B', subscale:'hyperimpulsive', text:'How often does this person interrupt others?'}
   ],
-  screener:{partA:6, positive:4, sensitivity:0.687, specificity:0.995, ppv:0.974, source:'Kessler et al. (2005), self-report screener characteristics; observer-specific values to be confirmed.'},
+  screener:{partA:6, positive:4, sensitivity:0.687, specificity:0.995, ppv:0.974, source:'Kessler et al. (2005), self-report screener characteristics; not validated for observer report.'},
+  borrowedCutoff:{from:'ASRS v1.1 self-report, Kessler et al. 2005', cutoff:'the Part A screen, 4 or more of the 6 Part A items in the shaded range'},
   report:{caveat:'Observer-rated screen: flags an adult whose symptoms warrant fuller assessment; it cannot confirm or exclude ADHD on its own. Community norms shown for the self-report ASRS are omitted here; read the Part A screen and symptom profile alongside the self-report and the wider picture.'}
 }});
 
@@ -11470,6 +11579,7 @@ Object.assign(REGISTRY, {"wurs_observer":{
   prompt:'As a child, this person was (or had)…',
   report:{ caveat:'A retrospective observer screen for the adult’s CHILDHOOD ADHD, completed by someone who knew them as a child; it is not diagnostic. The WURS-25 has no separately validated observer version or observer-specific norms, so the self-report thresholds are applied to the informant report as corroborating history and interpreted cautiously (30 primary; 46 the classic higher threshold). Read alongside the self-report, childhood records, and the wider assessment.' },
   scoring:{ type:'likert', options:WURS_OPTIONS, totalMax:100, cutoff:30 },
+  borrowedCutoff:{from:'WURS-25 self-report, Gift et al. 2021 and Ward et al. 1993', cutoff:'a total of 30 (primary) and 46 (the classic higher threshold)'},
   subscales:{},
   items:_wursItems(true),
   cutoffs:[
@@ -13084,6 +13194,8 @@ const FAMILIES = [
 
 const App = {
   go(view){
+    // leaving a Test library practice run (any runner's Exit) returns to the library, not the patient home
+    if(view==='home' && typeof Online!=='undefined' && Online.sandbox && Online.exitSandbox){ Online.exitSandbox(); return; }
     // leaving the runner always halts a running RMET stopwatch + any queued auto-advance
     if(view!=='runner'){ this.stopRmetTimer(); clearTimeout(State.advanceTimer); State.advanceTimer = null; this._backExit = null; }
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -13121,6 +13233,8 @@ const App = {
     } else if(State.client.name){
       el.textContent = State.client.name;
     } else { el.textContent=''; }
+    // the meta text takes header room: refit the console tabs so none is cut off ("Financ")
+    if(typeof Online!=='undefined' && Online._fitTopNav) Online._fitTopNav();
   },
 
   /* ---------- HOME ---------- */
@@ -14093,7 +14207,8 @@ const App = {
      the link says so and asks nothing (see confirmExit). */
   _runnerTop(t){
     const nm = this.clinicianRunner() ? t.fullName : (t.name || t.fullName);
-    return `<div class="runner-top"><div class="test-name">${nm}</div>${this._cvBtnHtml()}<button type="button" class="runner-exit" onclick="App.confirmExit()">${this.resumeKey()?'Save and exit':'Exit'}</button></div>`;
+    const practice = (typeof Online!=='undefined' && Online.sandbox) ? '<span class="runner-practice" title="Test library practice run: nothing is saved">Practice, not saved</span>' : '';
+    return `<div class="runner-top"><div class="test-name">${nm}</div>${practice}${this._cvBtnHtml()}<button type="button" class="runner-exit" onclick="App.confirmExit()">${this.resumeKey()?'Save and exit':'Exit'}</button></div>`;
   },
   noteFor(n, val){ State.itemNotes = State.itemNotes || {}; State.itemNotes[n] = val; },
   /* cancel a pending auto-advance so the clinician can finish a note; the next
@@ -14392,7 +14507,7 @@ const App = {
     this.closeClientView();
     // flush the latest answers to the server before leaving (the per-answer save
     // is debounced, so a quick exit could otherwise miss the last response)
-    if(typeof Online!=='undefined' && Online.saveRunnerDraft && State.currentTest && this.resumeKey()){
+    if(!this._informantRun() && typeof Online!=='undefined' && Online.saveRunnerDraft && State.currentTest && this.resumeKey()){
       clearTimeout(this._srvDraftT);
       try{ Online.saveRunnerDraft(State.currentTest.id, {a:State.answers, q:State.qIndex}); }catch(_){}
     }
@@ -14465,7 +14580,7 @@ const App = {
   markSandboxResult(){
     const root = document.querySelector('#view-results .results');
     if(root) root.insertAdjacentHTML('afterbegin',
-      `<div class="sandbox-banner no-print">Practice administration, <b>nothing has been saved.</b> <button class="btn btn-ghost btn-sm" onclick="Online.exitSandbox()">← Test library</button></div>`);
+      `<div class="sandbox-banner no-print">Practice run: <b>nothing has been saved.</b></div>`);   // the results header already has the "← Test library" link
   },
 
   /* sandbox referral: the intake form has no score, so show the built record */
@@ -14474,7 +14589,7 @@ const App = {
     const body = groups.map(g=>`<div class="panel"><div class="panel-head"><h3>${this.esc(g.title)}</h3></div>${(g.items||[]).map(it=>`<div class="sb-rrow"><span class="sb-rk">${this.esc(it.label)}</span><span class="sb-rv">${this.esc(it.value)}</span></div>`).join('')}</div>`).join('');
     document.getElementById('view-results').innerHTML = `
       <div class="results">
-        <div class="sandbox-banner no-print">Practice referral, <b>nothing has been saved.</b> <button class="btn btn-ghost btn-sm" onclick="Online.exitSandbox()">← Test library</button></div>
+        <div class="sandbox-banner no-print">Practice referral: <b>nothing has been saved.</b> <button class="btn btn-ghost btn-sm" onclick="Online.exitSandbox()">← Test library</button></div>
         <div class="result-banner"><div class="rb-test">Referral / intake · Practice</div></div>
         ${body || '<p class="lede">No entries.</p>'}
       </div>`;
@@ -14531,17 +14646,30 @@ const App = {
      the timed RMET, where a pause would invalidate the timing. Cleared the
      moment the assessment is scored. */
   resumeKey(){
-    const uid = (typeof Online!=='undefined' && Online.user) ? Online.user.id : null;
     const t = State.currentTest;
+    // informants (no login): keyed by their link token, on this device only, so a
+    // closed tab or a link that expires mid-form doesn't lose their answers
+    const inf = this._informantRun();
+    if(inf){
+      const tok = inf.token || inf.id;
+      if(!tok || !t || t.format==='image' || t.format==='assist' || Online.demoMode) return null;
+      return 'as_resume_inf_' + tok + '_' + t.id;
+    }
+    const uid = (typeof Online!=='undefined' && Online.user) ? Online.user.id : null;
     if(!uid || !t || t.format==='image' || t.format==='assist') return null;
     if(typeof Online !== 'undefined' && Online.sandbox) return null;   // practice runs never resume
     return 'as_resume_' + uid + '_' + t.id;
   },
+  /* the informant link being completed right now (not a clinician administering) */
+  _informantRun(){
+    return (typeof Online!=='undefined' && Online.informantFor && !Online.adminFor) ? Online.informantFor : null;
+  },
   saveProgress(){
     const k = this.resumeKey(); if(!k) return;
     try{ localStorage.setItem(k, JSON.stringify({a:State.answers, q:State.qIndex, ts:Date.now()})); }catch(e){}
-    // mirror to the server (debounced) so progress survives a device/browser change
-    if(typeof Online!=='undefined' && Online.saveRunnerDraft && State.currentTest){
+    // mirror to the server (debounced) so progress survives a device/browser change.
+    // Never for an informant: runner_drafts belongs to the signed-in account.
+    if(!this._informantRun() && typeof Online!=='undefined' && Online.saveRunnerDraft && State.currentTest){
       clearTimeout(this._srvDraftT);
       const tid=State.currentTest.id, a=Object.assign({}, State.answers), q=State.qIndex;
       this._srvDraftT=setTimeout(()=>{ try{ Online.saveRunnerDraft(tid,{a,q}); }catch(_){} }, 2500);
@@ -14560,7 +14688,7 @@ const App = {
   },
   clearProgress(){
     clearTimeout(this._srvDraftT);
-    if(typeof Online!=='undefined' && Online.deleteRunnerDraft && State.currentTest){ try{ Online.deleteRunnerDraft(State.currentTest.id); }catch(_){} }
+    if(!this._informantRun() && typeof Online!=='undefined' && Online.deleteRunnerDraft && State.currentTest){ try{ Online.deleteRunnerDraft(State.currentTest.id); }catch(_){} }
     const k = this.resumeKey(); if(!k) return;
     try{ localStorage.removeItem(k); }catch(e){}
   },
@@ -14726,10 +14854,15 @@ const App = {
     const demo = (typeof Online!=='undefined' && Online.demoMode);
     const demoBack = demo ? `<button class="btn btn-primary btn-lg" onclick="Online.exitDemoInformant()">Back to demo</button>` : '';
     Online.submitInformant(r).then(ok=>{
+      const code0 = (typeof Online!=='undefined' && Online.informantLastError) || '';
+      // saved (or already saved from another device): the draft on this device is done with
+      if(ok || code0==='done') this.clearProgress();
       // mini-battery: if more questionnaires remain for this informant, start the
-      // next one instead of showing the final thank-you.
-      if(ok && typeof Online.advanceInformant === 'function' && Online.advanceInformant()) return;
+      // next one instead of showing the final thank-you. "done" means this one was
+      // already sent (e.g. from a second device), so move on to what's left too.
+      if((ok || code0==='done') && typeof Online.advanceInformant === 'function' && Online.advanceInformant()) return;
       if(ok){
+        try{ sessionStorage.removeItem('as_inf_token'); }catch(_){}
         document.getElementById('view-results').innerHTML =
           `<div class="results"><div class="submitted-card"><div class="submitted-icon">${check}</div><h1>Thank you</h1><p class="submitted-sub">Your answers have been sent securely to the clinic. There's nothing more to do, you can close this page.</p>${demoBack}</div></div>`;
         return;
@@ -14738,9 +14871,11 @@ const App = {
       // transient/network failure — a dead link needs the sender, not a retry.
       const code = (typeof Online!=='undefined' && Online.informantLastError) || 'network';
       let title='We couldn’t send your answers', sub, retry=false;
-      if(code==='expired'){ sub='This link expired before your answers could be saved. Please contact whoever sent it to you for a fresh link, sorry for the inconvenience.'; }
+      if(code==='expired'){ sub='This link expired before your answers could be sent. Your answers are saved on this device. Please ask whoever sent you the link to renew it, then open the same link again on this device to send them.'; }
       else if(code==='revoked'){ sub='This link has been withdrawn, so your answers couldn’t be saved. Please contact whoever sent it to you.'; }
       else if(code==='done'){ title='Already recorded'; sub='This questionnaire has already been completed for this link, so there’s nothing more to do. You can close this page.'; }
+      else if(code==='no_consent'){ sub='We can only accept your answers once you have agreed to take part. Please open the link again and choose “I consent”. Your answers are saved on this device.'; }
+      else if(code==='bad_result'){ sub='Something went wrong while saving these answers, so they couldn’t be sent. Your answers are saved on this device. Please try again, or contact the clinic if it keeps happening.'; retry=true; }
       else if(code==='network'){ sub='This looks like a connection problem. Your answers are still here. Please check your internet and try again.'; retry=true; }
       else { sub='There’s a problem with this link, so your answers couldn’t be saved. Please contact the clinic or whoever sent you the link.'; }
       document.getElementById('view-results').innerHTML =
@@ -14807,6 +14942,10 @@ const App = {
     State.answers = {}; State.qIndex = 0; State.result = null;
     // drop the finished test so the header stops reading "Name · GAD-7" on the home screen
     State.currentTest = null; this.updateTopMeta();
+    // a Test library practice run goes back to the library
+    if(typeof Online !== 'undefined' && Online.sandbox){ Online.exitSandbox(); return; }
+    // an informant who exits mid-form: their answers are on this device
+    if(typeof Online !== 'undefined' && Online.informantFor && !Online.adminFor && Online.renderInformantPaused){ Online.renderInformantPaused(); return; }
     // returning from an on-behalf entry: clear admin mode, reopen the patient
     if(typeof Online !== 'undefined' && Online.adminFor){
       const email = Online.adminFor.email; Online.adminFor = null;
@@ -15950,7 +16089,36 @@ Object.assign(App, {
      callers place it right AFTER the result hero, so the answer precedes the framing. */
   caveatLine(t){
     const cv = t && t.report && t.report.caveat;
-    return cv ? `<div class="caveat report-caveat">${this.reportInfoIcon}<div class="cv-body">${this.esc(cv)}</div></div>` : '';
+    const main = cv ? `<div class="caveat report-caveat">${this.reportInfoIcon}<div class="cv-body">${this.esc(cv)}</div></div>` : '';
+    return main + this.borrowedCutoffLine(t);
+  },
+  /* interview collateral person ({name, relationship, informant_id?}): the
+     relationship as recorded, else the linked registered informant's, plus a
+     "registered informant" tag when the interview is linked to that person. */
+  interviewInformant(c){
+    c = c || {};
+    let linked = null;
+    if(c.informant_id){
+      try{
+        if(typeof InterviewInformants!=='undefined') linked = InterviewInformants.find(c.informant_id);
+        else if(typeof Online!=='undefined') linked = (Online._allInformants||[]).find(i=>i && i.id===c.informant_id) || null;
+      }catch(e){}
+    }
+    const rel = c.relationship || (linked && linked.relationship) || '';
+    return { name:c.name||'', rel, linked:!!c.informant_id, record:linked };
+  },
+  interviewInformantHtml(c, wrap){
+    const x = this.interviewInformant(c), esc = v=>this.esc(v);
+    if(!x.name && !x.rel) return '';
+    const tag = x.linked ? ' <span class="iinf-tag">registered informant</span>' : '';
+    if(wrap==='paren') return `${esc(x.name)}${x.rel?` (${esc(x.rel)})`:''}${tag}`;
+    return `${x.name?`<b>${esc(x.name)}</b>`:''}${x.rel?`${x.name?', ':''}${esc(x.rel)}`:''}${tag}`;
+  },
+  /* informant / observer forms whose cut-off is borrowed from the self-report
+     form (registry: borrowedCutoff). One consistent wording for all of them. */
+  borrowedCutoffLine(t){
+    const txt = (typeof informantCutoffCaveat==='function') ? informantCutoffCaveat(t) : '';
+    return txt ? `<div class="caveat report-caveat borrowed-cutoff">${this.reportInfoIcon}<div class="cv-body"><b>Indicative only.</b> ${this.esc(txt)}</div></div>` : '';
   },
   /* one references & norms block, from report.references or, by default, the
      instrument's citation + licence (the same fields the Norms page uses). Gated on
@@ -18530,8 +18698,8 @@ Object.assign(App, {
     const col=r.collateral||{};
     const cLabelA = young?'Parent / carer':sA, cLabelC = young?'Teacher / school':sC;
     const collat=[];
-    if(col.partner&&col.partner.name) collat.push(`<b>${esc(cLabelA)}</b> ${esc(col.partner.name)}${col.partner.relationship?`, ${esc(col.partner.relationship)}`:''}`);
-    if(col.family&&col.family.name) collat.push(`<b>${esc(cLabelC)}</b> ${esc(col.family.name)}${col.family.relationship?`, ${esc(col.family.relationship)}`:''}`);
+    if(col.partner&&col.partner.name) collat.push(`<b>${esc(cLabelA)}</b> ${this.interviewInformantHtml(col.partner,'paren')}`);
+    if(col.family&&col.family.name) collat.push(`<b>${esc(cLabelC)}</b> ${this.interviewInformantHtml(col.family,'paren')}`);
     const onsetTxt = r.onset==='yes'?'Several symptoms before age 12 (set)':r.onset==='no'?'Not before age 12 (set)':'From childhood symptoms (auto)';
     return `
       <div class="score-hero"><div class="score-summary" style="max-width:none">
@@ -18667,7 +18835,7 @@ Object.assign(App, {
         ${r.finalNotes?`<p class="panel-sub"><b>Notes:</b> ${esc(r.finalNotes)}</p>`:''}
       </div>
 
-      ${(inf.name)?`<div class="panel"><div class="panel-head"><h3>Informant present</h3></div><p class="panel-sub"><b>${esc(inf.name)}</b>${inf.relationship?`, ${esc(inf.relationship)}`:''}</p></div>`:''}
+      ${(inf.name)?`<div class="panel"><div class="panel-head"><h3>Informant present</h3></div><p class="panel-sub">${this.interviewInformantHtml(inf)}</p></div>`:''}
 
       ${(r.symptoms||[]).some(x=>x.rating!=null)?`<div class="panel">
         <div class="panel-head"><h3>Symptom ratings</h3></div>
@@ -18730,7 +18898,7 @@ Object.assign(App, {
     const detailBits=[];
     if(ageTxt) detailBits.push(`Age at interview: ${esc(ageTxt)}`);
     if(r.item30!=null) detailBits.push(`Item 30 (Overall Level of Language): code ${esc(String(r.item30))}`);
-    if(inf.name) detailBits.push(`Informant: ${esc(inf.name)}${inf.relationship?` (${esc(inf.relationship)})`:''}`);
+    if(inf.name) detailBits.push(`Informant: ${this.interviewInformantHtml(inf,'paren')}`);
     if(r.clinician) detailBits.push(`Clinician: ${esc(r.clinician)}`);
     return `
       <div class="score-hero"><div class="score-summary" style="max-width:none">
@@ -18838,7 +19006,7 @@ Object.assign(App, {
     const detailBits=[];
     if(r.interviewDate) detailBits.push(`Administered: ${esc(this.fmtDate?this.fmtDate(r.interviewDate):r.interviewDate)}`);
     if(ageTxt) detailBits.push(`Age at interview: ${esc(ageTxt)}`);
-    if(inf.name) detailBits.push(`Informant: ${esc(inf.name)}${inf.relationship?` (${esc(inf.relationship)})`:''}`);
+    if(inf.name) detailBits.push(`Informant: ${this.interviewInformantHtml(inf,'paren')}`);
     else if(inf.relationship) detailBits.push(`Informant: ${esc(inf.relationship)}`);
     if(r.clinician) detailBits.push(`Clinician: ${esc(r.clinician)}`);
 
@@ -19899,7 +20067,7 @@ Object.assign(App, {
 
       <div class="panel">
         <div class="panel-head"><h3>About this result</h3></div>
-        <p class="panel-sub" style="margin-bottom:0">Part A is the WHO-validated screener (sensitivity ${Math.round(t.screener.sensitivity*100)}%, specificity ${Math.round(t.screener.specificity*100)}%); Part B adds context but has no separate cut-off. The frequency total is descriptive only, there is no validated total-score threshold.</p>
+        <p class="panel-sub" style="margin-bottom:0">Part A is the WHO-validated screener (sensitivity ${Math.round(t.screener.sensitivity*100)}%, specificity ${Math.round(t.screener.specificity*100)}%${t.borrowedCutoff?', figures from the self-report form; not validated for observer report':''}); Part B adds context but has no separate cut-off. The frequency total is descriptive only, there is no validated total-score threshold.</p>
       </div>
     `;
   },
