@@ -241,6 +241,15 @@ for _hdr in _EXCL_BLOCKS:
     if _n != 1:
         raise ValueError(f"Expected to strip the '{_hdr}' registry block, stripped {_n}; registry.js format changed.")
 
+# Their AGE_BOUNDS entries in state.js carry citation notes too (e.g. "Barkley
+# 2011"); drop those lines so the excluded instruments leave no trace.
+_EXCL_AGE = ['baars_self', 'baars_informant', 'rcads_self', 'rcads_parent', 'rcads25_self',
+             'rcads25_parent', 'iesr', 'ybocs_clin', 'ybocs_sr', 'ybocs_check', 'ybocs_child',
+             'ybocs_child_check']
+state, _n_age = re.subn(r'(?m)^[ \t]*(' + '|'.join(_EXCL_AGE) + r'):[ \t]*\{.*\},?[ \t]*\r?\n', '', state)
+if _n_age != len(_EXCL_AGE):
+    raise ValueError(f"Expected to strip {len(_EXCL_AGE)} AGE_BOUNDS lines, stripped {_n_age}; state.js format changed.")
+
 # Belt and braces: prove the protected wording really is gone from what we ship.
 _FORBIDDEN = [
     ("BAARS", "Difficulty sustaining my attention in tasks or fun activities"),
