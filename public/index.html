@@ -10509,11 +10509,11 @@ Object.assign(REGISTRY, {"sad_child":{
        the moderate right skew (skewness ≈ +0.67). binWidth 10 from x0=0. */
     norm:{ mean:42.77, sd:20.26, n:749, label:'Non-ASD adults',
       hist:{ x0:0, binWidth:10, counts:[13,74,127,146,138,104,74,39,19,7,4,3,0,1] },
-      source:'Non-ASD comparison group, Horder et al. (2014) dataset, n=749 adults (J. Horder, personal communication, 27 July 2026). King’s College London students and staff, 2012; ~90% under 35 and 72% female, so a young-adult convenience sample rather than a representative population norm. Percentiles are given as a guaranteed empirical band read from the group’s published frequency distribution; the score’s bin fixes the bounds exactly, with no interpolation and no distribution-shape assumption; SD distance is shown alongside.' },
+      source:'Non-ASD comparison group, Horder et al. (2014) dataset, n=749 adults (J. Horder, personal communication, 27 July 2026). King’s College London students and staff, 2012; 82% aged 30 or under and 72% female (Horder et al. 2014, full sample of 772), so a young-adult convenience sample rather than a representative population norm. Percentiles are given as a guaranteed empirical band read from the group’s published frequency distribution; the score’s bin fixes the bounds exactly, with no interpolation and no distribution-shape assumption; SD distance is shown alongside.' },
     /* single comparison group; its citation drives the source note on the chart */
     compareGroups:[
       { label:'Non-ASD adults', mean:42.77, sd:20.26, n:749,
-        source:'Non-ASD group of the Horder et al. (2014) dataset (J. Horder, personal communication, 27 July 2026). King’s College London students and staff, 2012; ~90% under 35 and 72% female; a young-adult convenience sample, not a representative population norm.' }
+        source:'Non-ASD group of the Horder et al. (2014) dataset (J. Horder, personal communication, 27 July 2026). King’s College London students and staff, 2012; 82% aged 30 or under and 72% female (Horder et al. 2014, full sample of 772); a young-adult convenience sample, not a representative population norm.' }
     ],
     /* Recorded for the norms dashboard only — deliberately NOT shown as a
        comparison lane. n=23, ASD status self-reported on a single unverified
@@ -13196,9 +13196,9 @@ const AGE_BOUNDS = {
   snap_parent:   {min:6,  max:18,  label:'6–18 years',      note:'SNAP-IV 26 spans school age and adolescence (about 6 to 18); Bussing et al. 2008 community data cover ages 5 to 11 only'},
   snap_teacher:  {min:6,  max:18,  label:'6–18 years',      note:'SNAP-IV 26 spans school age and adolescence (about 6 to 18); Bussing et al. 2008 community data cover ages 5 to 11 only'},
   sdq_parent:    {min:4,  max:17,  label:'4–17 years',      note:'SDQ parent/teacher version covers ages 4–17 (Goodman)'},
-  rcads_self:    {min:8,  max:18,  label:'8–18 years',      note:'RCADS self-report covers ages 8–18 (Chorpita et al. 2000); too developmentally advanced for significant learning disability'},
+  rcads_self:    {min:8,  max:18,  label:'8–18 years',      note:'RCADS self-report covers ages 8–18 (Chorpita et al. 2000); T-score norms cover ages 9–18, so age 8 uses the youngest band; too developmentally advanced for significant learning disability'},
   rcads_parent:  {min:8,  max:18,  label:'8–18 years',      note:'RCADS-P covers the same 8–18 age range as the self-report (Ebesutani et al. 2011); T-score norms cover ages 9–18, so age 8 uses the youngest band'},
-  rcads25_self:  {min:8,  max:18,  label:'8–18 years',      note:'RCADS-25 short form covers ages 8–18 (Ebesutani et al. 2012)'},
+  rcads25_self:  {min:8,  max:18,  label:'8–18 years',      note:'RCADS-25 short form covers ages 8–18 (Ebesutani et al. 2012); T-score norms cover ages 9–18, so age 8 uses the youngest band'},
   rcads25_parent:{min:8,  max:18,  label:'8–18 years',      note:'RCADS-25-P short form covers ages 8–18 (Ebesutani et al. 2017); T-score norms cover ages 9–18, so age 8 uses the youngest band'},
   sdq_self:      {min:11, max:17,  label:'11–17 years',     note:'SDQ self-report version is for ages 11–17 (Goodman)'},
   sad_child:     {min:11, max:17,  label:'11–17 years',     note:'DSM-5 child severity measure for ages 11–17 (Craske et al. 2013)'},
@@ -13215,7 +13215,7 @@ const AGE_BOUNDS = {
   asrs_adolescent:{min:11, max:17,  label:'11–17 years',     note:'ASRS adolescent adaptation for ages 11–17'},
   spq:           {min:18, max:null,label:'18+ years',       note:'Sensory Perception Quotient is an adult self-report (18+)'},
   spq35:         {min:18, max:null,label:'18+ years',       note:'SPQ short form; adult self-report (18+)'},
-  sci:           {min:16, max:null,label:'16+ years',       note:'Sleep Condition Indicator is validated in adults (16+)'},
+  sci:           {min:16, max:null,label:'16+ years',       note:'SCI reference values cover ages 16–75 (Espie et al. 2018, J Sleep Res 27:e12643; described as adults); the 2014 validation samples were 18+'},
   iesr:          {min:18, max:null,label:'18+ years',       note:'IES-R is used with adults (18+)'},
   sqa2:          {min:18, max:null,label:'18+ years',       note:'SQ-A-2 self-report is for adults (18+)'},
 };
@@ -17896,6 +17896,7 @@ Object.assign(App, {
       // the floor of the 0-100 scale, so a normal-curve "99th percentile" claim
       // there is the least trustworthy number on the card
       const tailWord = z => {
+        if(total === 0) return 'at the scale floor (lowest possible score)';
         const p = zToPercentile(z);
         if(p >= 99) return "markedly above this group's typical range";
         if(p <= 1) return "markedly below this group's typical range";
@@ -18076,7 +18077,7 @@ Object.assign(App, {
         <div class="panel-head"><h3>Compared with adult reference groups</h3></div>
         <p class="panel-sub">Each measure shows one row per reference group (dot = mean, bar = ±1 SD${isInf ? '' : ', notch = published median'}); the vertical line is this ${who}. ${isInf
           ? 'The only published informant reference is informant ratings of adults referred to an NHS adult autism diagnostic service; no autistic vs non-autistic informant comparison exists for this version. Informants rate systematically lower than self-report (referred mean total 2.32 vs 2.48), so a modestly lower informant score than the client’s own report is usual rather than a discrepancy.'
-          : 'The two rows are the validated autistic vs non-autistic contrast, and they overlap: scores between roughly 1.6 and 2.0 occur in both groups. Where a median notch sits off its mean dot the distribution is skewed, which is why positions are given in words rather than percentiles.'} These are reference samples, not population norms, and all are adults. The RBQ-3 has no cut-off: a high score is not a diagnosis${isInf ? '' : ' (autism also requires social-communication features the RBQ-3 does not measure)'}, and a low score does not rule autism out.</p>
+          : 'The two rows are the validated autistic vs non-autistic contrast. Their ±1 SD bars do not meet, but the groups still overlap (see the group separation figure below). Where a median notch sits off its mean dot the distribution is skewed, which is why positions are given in words rather than percentiles.'} These are reference samples, not population norms, and all are adults. The RBQ-3 has no cut-off: a high score is not a diagnosis${isInf ? '' : ' (autism also requires social-communication features the RBQ-3 does not measure)'}, and a low score does not rule autism out.</p>
         ${axes}
         <div class="norm-legend">
           <div class="norm-legend-item"><span class="spql-sw spql-sw-you"></span>This ${who} (${fmt(r.mean20)})</div>${legend}

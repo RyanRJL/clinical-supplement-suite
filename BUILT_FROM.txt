@@ -1,1 +1,1 @@
-Built from assessment_suite_project commit 3dd7263
+Built from assessment_suite_project commit 578a618
