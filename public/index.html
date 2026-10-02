@@ -10095,8 +10095,8 @@ Object.assign(REGISTRY, {"sad_child":{
     fullName:'Weiss Functional Impairment Rating Scale (self-report)',
     category:'adhd',
     status:'live',
-    respondent:'Self-report (adolescents & adults)',
-    ageRange:'Adolescents & adults',
+    respondent:'Self-report',
+    ageRange:'18+ years',
     estMinutes:'10–15 min',
     description:'Self-report of how emotional/behavioural problems affect everyday functioning across seven life domains, distinct from ADHD symptoms.',
     citation:'Weiss MD. Weiss Functional Impairment Rating Scale (WFIRS); CADDRA scoring guide (2025).',
@@ -10177,7 +10177,7 @@ Object.assign(REGISTRY, {"sad_child":{
    symptoms. Item wording from the official WFIRS-P form. The scale is free for
    clinical/research use and may be posted (© M. D. Weiss); the CADDRA scoring
    guide is separately copyrighted for private/clinic use. Fills the child-ADHD
-   functional-impairment gap (WFIRS-S starts at adolescents).
+   functional-impairment gap (WFIRS-S is for adults 18+).
 ─────────────────────────────────────────────────────────────────────────── */
 (function(){
   const DOMAINS = [
@@ -13206,18 +13206,28 @@ const AGE_BOUNDS = {
   catq:          {min:16, max:null,label:'16+ years',       note:'CAT-Q validated in adults aged 16+ (Hull et al. 2019); not yet established for younger adolescents'},
   lsas:          {min:18, max:null,label:'18+ years',       note:'LSAS validated in adults (Safren 1999 sample 18–61); use LSAS-CA for under-18s'},
   assist:        {min:18, max:60,  label:'18–60 years',     note:'WHO ASSIST v3.0 manual: validated only in adults aged 18 to 60'},
-  wfirs_s:       {min:12, max:null,label:'Adolescents & adults', note:'WFIRS self-report is for older adolescents and adults; use the parent version (WFIRS-P) for children'},
-  wfirs_p:       {min:6,  max:18,  label:'6–18 years',      note:'WFIRS parent report rates functioning across seven domains for children and adolescents (about 6 to 18)'},
+  wfirs_s:       {min:18, max:null,label:'18+ years',       note:'WFIRS self-report validated in adults (Canu et al. 2016, college students); only one small adolescent study found. Use the parent version (WFIRS-P) for under-18s'},
+  wfirs_p:       {min:6,  max:18,  label:'6–18 years',      note:'WFIRS-P studied in ages 5–19 (Thompson et al. 2017) and 6–17 (Weiss et al. 2015); general-population norms cover 6–11 (Arildskov et al. 2023)'},
   coventry:      {min:2,  max:18,  label:'Children & young people', note:'Clinician differential aid for children/young people (Coventry Grid, Moran 2010)'},
   gsq:           {min:16, max:null,label:'16+ years',       note:'GSQ validated in adults 16–66 (Robertson & Simmons 2013)'},
   gsq_p:         {min:6,  max:11,  label:'6–11 years',      note:'GSQ-P validated with parents of children 6–11 (Smees et al. 2022)'},
   rgsq_p:        {min:6,  max:11,  label:'6–11 years',      note:'rGSQ-P short form; same validation sample as the GSQ-P (Smees et al. 2022)'},
   asrs_adolescent:{min:11, max:17,  label:'11–17 years',     note:'ASRS adolescent adaptation for ages 11–17'},
-  spq:           {min:18, max:null,label:'18+ years',       note:'Sensory Perception Quotient is an adult self-report (18+)'},
-  spq35:         {min:18, max:null,label:'18+ years',       note:'SPQ short form; adult self-report (18+)'},
+  spq:           {min:18, max:null,label:'18+ years',       note:'Validated in adults only (Tavassoli et al. 2014; German short form, ages 18–62, 2022); no adolescent validation found'},
+  spq35:         {min:18, max:null,label:'18+ years',       note:'SPQ short form; validated in adults only (Tavassoli et al. 2014; German short form, ages 18–62, 2022)'},
   sci:           {min:16, max:null,label:'16+ years',       note:'SCI reference values cover ages 16–75 (Espie et al. 2018, J Sleep Res 27:e12643; described as adults); the 2014 validation samples were 18+'},
-  iesr:          {min:18, max:null,label:'18+ years',       note:'IES-R is used with adults (18+)'},
+  iesr:          {min:18, max:null,label:'18+ years',       note:'The app’s cut-off of 25 comes from adult samples (Asukai et al. 2002). The IES-R has been used from age 12 (Asukai 2002; Taiwan flood study, ages 12–15), but the CRIES is the version built for ages 8–18'},
   sqa2:          {min:18, max:null,label:'18+ years',       note:'SQ-A-2 self-report is for adults (18+)'},
+  wurs_self:     {min:18, max:null,label:'18+ years',       note:'Adults rating their own childhood; validated in adult samples only (Ward et al. 1993; Gift et al. 2021)'},
+  wurs_observer: {min:18, max:null,label:'Rates an adult 18+', note:'Informant rating of an adult’s childhood; the WURS is validated in adults only (Ward et al. 1993)'},
+  asrs_observer: {min:18, max:null,label:'Rates an adult 18+', note:'No official observer form or validation study exists; age follows the self-report ASRS (adults 18+, Kessler et al. 2005)'},
+  ocir:          {min:18, max:null,label:'18+ years',       note:'OCI-R validated in adults (Foa et al. 2002); use the OCI-CV-R for ages 6–17'},
+  oci_cv_r:      {min:6,  max:17,  label:'6–17 years',      note:'OCI-CV-R sample ages 6–17 (Abramovitch et al. 2022)'},
+  ybocs_clin:    {min:18, max:null,label:'18+ years',       note:'Adult Y-BOCS; severity bands from adults aged 18–82 (Storch et al. 2015). Use the CY-BOCS for under-18s'},
+  ybocs_sr:      {min:18, max:null,label:'18+ years',       note:'Adult Y-BOCS self-report; severity bands from adults aged 18–82 (Storch et al. 2015). Use the CY-BOCS for under-18s'},
+  ybocs_check:   {min:18, max:null,label:'18+ years',       note:'Adult Y-BOCS symptom checklist; use the CY-BOCS checklist for under-18s'},
+  ybocs_child:   {min:6,  max:17,  label:'6–17 years',      note:'CY-BOCS validated in ages 8–17 (Scahill et al. 1997); severity bands from ages 4–18 (Lewin et al. 2014)'},
+  ybocs_child_check:{min:6, max:17, label:'6–17 years',     note:'CY-BOCS symptom checklist; CY-BOCS validated in ages 8–17 (Scahill et al. 1997) and 4–18 (Lewin et al. 2014)'},
 };
 
 
