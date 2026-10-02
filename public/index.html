@@ -8692,7 +8692,7 @@ Object.assign(REGISTRY, {"asrs":{
     adhd:asrsTable3To04({1:{m:2.65,sd:1.26},2:{m:2.72,sd:1.29},3:{m:2.68,sd:1.24},4:{m:2.97,sd:1.31},5:{m:3.14,sd:1.39},6:{m:2.55,sd:1.24},7:{m:2.55,sd:1.16},8:{m:3.16,sd:1.30},9:{m:2.91,sd:1.22},10:{m:2.85,sd:1.24},11:{m:3.17,sd:1.29},12:{m:2.15,sd:1.24},13:{m:2.94,sd:1.24},14:{m:2.79,sd:1.30},15:{m:2.66,sd:1.30},16:{m:2.62,sd:1.30},17:{m:2.43,sd:1.23},18:{m:2.51,sd:1.18}}),
     noAdhd:asrsTable3To04({1:{m:1.75,sd:0.87},2:{m:1.72,sd:0.88},3:{m:1.77,sd:0.90},4:{m:2.00,sd:1.01},5:{m:1.97,sd:1.13},6:{m:1.67,sd:0.93},7:{m:1.79,sd:0.83},8:{m:1.98,sd:0.99},9:{m:1.79,sd:0.93},10:{m:2.07,sd:0.96},11:{m:2.04,sd:1.00},12:{m:1.38,sd:0.73},13:{m:1.84,sd:0.95},14:{m:1.81,sd:0.99},15:{m:1.75,sd:0.94},16:{m:1.78,sd:0.94},17:{m:1.61,sd:0.86},18:{m:1.76,sd:0.82}}),
     // Treated / not treated, as printed and NOT shifted or shown: the not-treated
-    // column is about the no-ADHD column + 0.01 on every item, so it is mislabelled.
+    // column is the no-ADHD column + 0.01 to 0.02 on every item, so it is mislabelled.
     treated:{1:{m:2.84,sd:1.21},2:{m:2.93,sd:1.26},3:{m:2.80,sd:1.22},4:{m:3.16,sd:1.29},5:{m:3.16,sd:1.32},6:{m:2.74,sd:1.24},7:{m:2.69,sd:1.18},8:{m:3.27,sd:1.28},9:{m:3.03,sd:1.15},10:{m:2.93,sd:1.20},11:{m:3.19,sd:1.24},12:{m:2.30,sd:1.18},13:{m:2.97,sd:1.22},14:{m:2.99,sd:1.26},15:{m:2.78,sd:1.28},16:{m:2.71,sd:1.24},17:{m:2.54,sd:1.17},18:{m:2.60,sd:1.22}},
     notTreated:{1:{m:1.76,sd:0.88},2:{m:1.73,sd:0.90},3:{m:1.78,sd:0.91},4:{m:2.01,sd:1.02},5:{m:1.98,sd:1.14},6:{m:1.68,sd:0.94},7:{m:1.80,sd:0.84},8:{m:1.99,sd:1.00},9:{m:1.81,sd:0.94},10:{m:2.08,sd:0.97},11:{m:2.06,sd:1.02},12:{m:1.39,sd:0.74},13:{m:1.86,sd:0.96},14:{m:1.82,sd:1.00},15:{m:1.76,sd:0.95},16:{m:1.79,sd:0.95},17:{m:1.62,sd:0.87},18:{m:1.77,sd:0.83}},
     labels:{1:'Wrapping up details',2:'Getting things in order',3:'Remembering appointments',4:'Avoid / delay starting',5:'Fidget or squirm',6:'Overly active / driven',7:'Careless mistakes',8:'Keeping attention',9:'Concentrating on people',10:'Misplacing things',11:'Distracted by noise',12:'Leaving your seat',13:'Restless or fidgety',14:'Unwinding / relaxing',15:'Talking too much',16:'Finishing sentences',17:'Waiting your turn',18:'Interrupting others'}
@@ -8778,64 +8778,7 @@ Object.assign(REGISTRY, {"asrs_adolescent":{
   report:{caveat:'A screen, not a diagnosis, and an adult instrument used off-label in adolescents (preliminary validity, validated against the SDQ rather than a diagnostic interview). In under-18s, weight a positive screen alongside a youth-specific measure (e.g. NICHQ Vanderbilt), developmental history and a clinical interview. ADHD frequently co-occurs with autism.'}
 }});
 
-/* ── BAARS-IV — Barkley Adult ADHD Rating Scale (Self + Informant) ──────────────
-   Proprietary (© Russell A. Barkley / Guilford Press); reproduced here for the
-   clinic's LICENSED internal clinical use only. Item wording transcribed from the
-   clinic's own DSM-5 BAARS forms. Structure: 18 current DSM ADHD symptoms +
-   9 Sluggish Cognitive Tempo (SCT) items + 18 retrospective childhood ADHD items.
-   4-point scale (Never or rarely / Sometimes / Often / Very often), stored as option
-   index 0–3; a symptom "counts" when rated Often or Very often (index ≥2).
-
-   Scoring (new type 'baars'): per-domain symptom counts. Current ADHD uses the DSM-5
-   adult threshold (≥5 of 9 in a domain); the childhood section uses ≥6 to support the
-   before-age-12 onset criterion. SCT is reported descriptively (it is NOT a DSM
-   diagnosis and does not feed the ADHD count). No norm percentiles (BAARS-IV norms are
-   proprietary to the manual). Pervasiveness (≥2 settings) and impairment are confirmed
-   clinically. Screening aid only — never a standalone diagnosis.
-─────────────────────────────────────────────────────────────────────────── */
-const BAARS_OPTIONS = [{label:'Never or rarely'},{label:'Sometimes'},{label:'Often'},{label:'Very often'}];
-const BAARS_SUBSCALES = {
-  current_inattention:    {name:'Inattention (current)',                items:[1,2,3,4,5,6,7,8,9]},
-  current_hyperimpulsive: {name:'Hyperactivity–Impulsivity (current)',  items:[10,11,12,13,14,15,16,17,18]},
-  sct:                    {name:'Sluggish Cognitive Tempo',            items:[19,20,21,22,23,24,25,26,27]},
-  child_inattention:      {name:'Inattention (childhood)',              items:[28,29,30,31,32,33,34,35,36]},
-  child_hyperimpulsive:   {name:'Hyperactivity–Impulsivity (childhood)',items:[37,38,39,40,41,42,43,44,45]}
-};
-function baarsBuild(current, child){
-  const items = [];
-  current.forEach((text,i)=>{ const n=i+1; const sub = n<=9?'current_inattention':(n<=18?'current_hyperimpulsive':'sct'); items.push({n, subscale:sub, text}); });
-  child.forEach((text,i)=>{ const n=i+1; const sub = n<=9?'child_inattention':'child_hyperimpulsive'; items.push({n:27+n, subscale:sub, text}); });
-  return items;
-}
-const BAARS_SCORING = {type:'baars', options:BAARS_OPTIONS, symptomMinIndex:2, currentThreshold:5, childThreshold:6, totalMax:54};
-const BAARS_CAUTION = 'DSM-5 also requires onset of several symptoms before age 12, symptoms in two or more settings, clear impairment, and that symptoms are not better explained by another condition, all confirmed clinically. Best practice combines self-report with an informant. Sluggish Cognitive Tempo is shown for description only; it is not a DSM diagnosis.';
-
-const BAARS_SELF_CURRENT = [];
-const BAARS_SELF_CHILD = [];
-const BAARS_INF_CURRENT = [];
-const BAARS_INF_CHILD = [];
-Object.assign(REGISTRY, {"baars_self":{
-  id:'baars_self', name:'BAARS (self-report)', fullName:'Barkley Adult ADHD Rating Scale-IV (self-report)',
-  category:'adhd', status:'live', respondent:'Self-report', ageRange:'18+ years', estMinutes:'8–12 min',
-  description:'Adult ADHD symptoms (current + childhood) by DSM symptom count, plus a Sluggish Cognitive Tempo scale.',
-  citation:'Barkley RA (2011). Barkley Adult ADHD Rating Scale-IV (BAARS-IV). New York: Guilford Press.',
-  licence:'© Russell A. Barkley / Guilford Press. Proprietary instrument, reproduced here for the clinic’s licensed internal clinical use only; not for redistribution.',
-  higherMeans:'more ADHD / cognitive-tempo symptoms',
-  scoring:BAARS_SCORING, subscales:BAARS_SUBSCALES,
-  items:baarsBuild(BAARS_SELF_CURRENT, BAARS_SELF_CHILD),
-  report:{caveat:BAARS_CAUTION}
-},"baars_informant":{
-  id:'baars_informant', name:'BAARS (informant)', fullName:'Barkley Adult ADHD Rating Scale-IV (informant report)',
-  category:'adhd', status:'live', respondent:'Informant / observer report', informantKind:'observer', informantHelp:'An ADHD rating scale, best completed by someone who knows {subject} well now and also knew {subject} as a child, for example a parent, partner, or long-standing friend.', ageRange:'rates an adult 18+', estMinutes:'8–12 min',
-  description:'Observer ratings of an adult’s ADHD symptoms (current + childhood) by DSM symptom count, plus Sluggish Cognitive Tempo.',
-  citation:'Barkley RA (2011). Barkley Adult ADHD Rating Scale-IV (BAARS-IV). New York: Guilford Press.',
-  licence:'© Russell A. Barkley / Guilford Press. Proprietary instrument, reproduced here for the clinic’s licensed internal clinical use only; not for redistribution.',
-  higherMeans:'more ADHD / cognitive-tempo symptoms',
-  scoring:BAARS_SCORING, subscales:BAARS_SUBSCALES,
-  items:baarsBuild(BAARS_INF_CURRENT, BAARS_INF_CHILD),
-  borrowedCutoff:{from:'BAARS-IV self-report', cutoff:'symptom counts of at least '+BAARS_SCORING.currentThreshold+' of 9 current and '+BAARS_SCORING.childThreshold+' of 9 childhood symptoms in a domain'},
-  report:{caveat:BAARS_CAUTION}
-}});
+/* (excluded instrument omitted from the hosted build) */
 
 /* ── PHQ-9 (depression) & GAD-7 (anxiety) ──────────────────────────────────────
    Public-domain Pfizer instruments (developed by Drs Spitzer, Williams, Kroenke &
@@ -9054,115 +8997,9 @@ Object.assign(REGISTRY, {"sdq_parent":{
   ]
 }});
 
-/* ── RCADS — Revised Child Anxiety and Depression Scale (47-item) ──────────────
-   Youth self-report (8–18) + parent/carer version (RCADS-P), © 1998 Bruce F.
-   Chorpita & Susan H. Spence. Used with written permission (rcads.ucla.edu
-   request #836, approved for EHR incorporation, 17 Jul 2026). Item text is
-   reproduced verbatim and must not be altered (terms of use), so US spellings
-   are intentional. Wording is verified item-by-item against the official UCLA
-   FHIR JSONs (RCADS-47-Y-EN / RCADS-47-CG-EN, rcads-proxy, saved in
-   Downloads/RCADS/*.fhir.json) — these correct three typos in the NHS-styled
-   questionnaire PDFs (Y9 "parents", Y10 "get bothered", CG38 "has to talk").
-   A they/them caregiver revision (RCADS-47-CG-EN-2) exists if ever preferred.
-   Six DSM-linked subscales (item allocation per the official scoring aids):
-   separation anxiety (7), social phobia (9), generalised anxiety (6), panic (9),
-   OCD (6), major depression (10); plus Total Anxiety (37 anxiety items) and
-   Total Internalising (all 47). Raw scores convert to T-scores by gender and
-   US school-grade band (derived from age, grade = age − 6, per the official
-   RCADS scoring guidance at rcads.ucla.edu/Scoring) via the official UCLA
-   conversion tables in engine/rcads_norms.js; T ≥ 65 borderline (top ~7%),
-   T ≥ 70 clinical threshold (top ~2%). New scoring type 'rcads'.
-   Item 37 (thinks about death) is surfaced for safety review like PHQ-9 item 9. */
-const RCADS_OPTIONS = [{label:'Never'},{label:'Sometimes'},{label:'Often'},{label:'Always'}];
-const RCADS_SUBSCALES = {
-  sad:{name:'Separation Anxiety', items:[5,9,17,18,33,45,46], max:21},
-  soc:{name:'Social Phobia',      items:[4,7,8,12,20,30,32,38,43], max:27},
-  gad:{name:'Generalised Anxiety',items:[1,13,22,27,35,37], max:18},
-  pd: {name:'Panic Disorder',     items:[3,14,24,26,28,34,36,39,41], max:27},
-  ocd:{name:'Obsessive-Compulsive', items:[10,16,23,31,42,44], max:18},
-  mdd:{name:'Depression (low mood)', items:[2,6,11,15,19,21,25,29,40,47], max:30}
-};
-const RCADS_LICENCE = '© 1998 Bruce F. Chorpita and Susan H. Spence. Reproduced with written permission (rcads.ucla.edu, approved request #836, EHR incorporation). Item wording must not be altered.';
-const RCADS_CAVEAT = 'T-scores compare against community norms for the same gender and school-grade band (T 65 ≈ top 7%, borderline; T 70 ≈ top 2%, clinical threshold). They are screening guides, not diagnoses. Item 37 asks about thoughts of death: any answer above Never should be reviewed directly and a risk assessment considered.';
-/* Item arrays live in named consts (not inline) so build.py can strip the
-   permission-bound item text from the publicly hosted supplement build, exactly
-   as it does for the proprietary BAARS-IV arrays. */
-const RCADS_ITEMS_SELF = [];
-const RCADS_ITEMS_PARENT = [];
-Object.assign(REGISTRY, {"rcads_self":{
-  id:'rcads_self', name:'RCADS (young person)', fullName:'Revised Child Anxiety and Depression Scale (self-report)',
-  category:'mood', status:'live', respondent:'Self-report (young person)', ageRange:'8–18 years', estMinutes:'5–10 min',
-  description:'47-item anxiety and low-mood screen for 8–18s: separation anxiety, social phobia, generalised anxiety, panic, OCD and depression subscales, with gender- and grade-normed T-scores.',
-  citation:'Chorpita, Yim, Moffitt, Umemoto & Francis (2000). Behav Res Ther 38:835–855. T-scores: official RCADS conversion tables (rcads.ucla.edu).',
-  licence:RCADS_LICENCE,
-  higherMeans:'more anxiety and low-mood symptoms',
-  prompt:'Please pick the word that shows how often each of these things happens to you. There are no right or wrong answers.',
-  scoring:{ type:'rcads', options:RCADS_OPTIONS, flagItem:37, normVersion:'child', totalMax:141 },
-  subscales:RCADS_SUBSCALES,
-  report:{caveat:RCADS_CAVEAT},
-  items:RCADS_ITEMS_SELF
-},"rcads_parent":{
-  id:'rcads_parent', name:'RCADS (parent)', fullName:'Revised Child Anxiety and Depression Scale: Parent Version (RCADS-P)',
-  category:'mood', status:'live', respondent:'Parent / carer report', ageRange:'8–18 years', estMinutes:'5–10 min',
-  informantKind:'childhood',
-  informantHelp:'A questionnaire about {subject}’s worries, fears and mood, best completed by a parent or carer who knows them well now.',
-  description:'Parent/carer-report version of the RCADS: the same six anxiety and low-mood subscales about the young person, with gender- and grade-normed T-scores.',
-  citation:'Ebesutani, Bernstein, Nakamura, Chorpita & Weisz (2010). J Abnorm Child Psychol 38:249–260. T-scores: official RCADS conversion tables (rcads.ucla.edu).',
-  licence:RCADS_LICENCE,
-  higherMeans:'more anxiety and low-mood symptoms',
-  prompt:'Please pick the word that shows how often each of these things happens to your child. There are no right or wrong answers.',
-  scoring:{ type:'rcads', options:RCADS_OPTIONS, flagItem:37, normVersion:'parent', totalMax:141 },
-  subscales:RCADS_SUBSCALES,
-  report:{caveat:RCADS_CAVEAT},
-  items:RCADS_ITEMS_PARENT
-}});
+/* (excluded instrument omitted from the hosted build) */
 
-/* ── RCADS-25 — Revised Child Anxiety and Depression Scale, 25-item short form ──
-   Youth self-report + caregiver (RCADS-25-P), © Chorpita & Spence, developed by
-   Ebesutani et al. (2012). Used with written permission (rcads.ucla.edu request
-   #836). A brief, lower-burden version for screening / repeat monitoring: two
-   broad scales — Total Depression (10 items) and Total Anxiety (15 items) — plus
-   Total Anxiety & Depression (all 25), rather than the six DSM subscales of the
-   47-item form. Item text is reproduced verbatim from the official RCADS-25 FHIR
-   questionnaires (verified item-by-item). Raw→T by gender and US school-grade
-   band (grade = age − 6) via engine/rcads25_norms.js; T ≥ 65 borderline, T ≥ 70
-   clinical. Item 18 ("thinks about death") feeds the safety flag. Type 'rcads25'. */
-const RCADS25_DEP = [1,4,8,10,13,15,16,19,21,24];
-const RCADS25_ANX = [2,3,5,6,7,9,11,12,14,17,18,20,22,23,25];
-const RCADS25_SUBSCALES = {
-  dep:{name:'Total Depression', items:RCADS25_DEP, max:30},
-  anx:{name:'Total Anxiety',    items:RCADS25_ANX, max:45}
-};
-const RCADS25_CAVEAT = 'T-scores compare against community norms for the same gender and school-grade band (T 65 ≈ top 7%, borderline; T 70 ≈ top 2%, clinical threshold). The 25-item form is a brief screen / progress measure; the 47-item RCADS gives the six disorder-specific subscales. Item 18 asks about thoughts of death: any answer above Never should be reviewed directly and a risk assessment considered.';
-const RCADS25_ITEMS_SELF = [];
-const RCADS25_ITEMS_PARENT = [];
-Object.assign(REGISTRY, {"rcads25_self":{
-  id:'rcads25_self', name:'RCADS-25 (young person)', fullName:'Revised Child Anxiety and Depression Scale: 25-item (self-report)',
-  category:'mood', status:'live', respondent:'Self-report (young person)', ageRange:'8–18 years', estMinutes:'~5 min',
-  description:'25-item short form for 8–18s: Total Anxiety and Total Depression (plus combined), with gender- and grade-normed T-scores. A brief screen / progress measure.',
-  citation:'Ebesutani et al. (2012). Psychol Assess 24:833–845 (short form of Chorpita et al. 2000). T-scores: official RCADS-25 conversion tables (rcads.ucla.edu).',
-  licence:RCADS_LICENCE,
-  higherMeans:'more anxiety and low-mood symptoms',
-  prompt:'Please pick the word that shows how often each of these things happens to you. There are no right or wrong answers.',
-  scoring:{ type:'rcads25', options:RCADS_OPTIONS, flagItem:18, normVersion:'child', depItems:RCADS25_DEP, anxItems:RCADS25_ANX, totalMax:75 },
-  subscales:RCADS25_SUBSCALES,
-  report:{caveat:RCADS25_CAVEAT},
-  items:RCADS25_ITEMS_SELF
-},"rcads25_parent":{
-  id:'rcads25_parent', name:'RCADS-25 (parent)', fullName:'Revised Child Anxiety and Depression Scale: 25-item, Parent Version (RCADS-25-P)',
-  category:'mood', status:'live', respondent:'Parent / carer report', ageRange:'8–18 years', estMinutes:'~5 min',
-  informantKind:'childhood',
-  informantHelp:'A brief questionnaire about {subject}’s worries, fears and mood, best completed by a parent or carer who knows them well now.',
-  description:'Parent/carer 25-item short form: Total Anxiety and Total Depression (plus combined) about the young person, with gender- and grade-normed T-scores.',
-  citation:'Ebesutani C, Korathu-Larson P, Nakamura BJ, Higa-McMillan C & Chorpita B (2017). The Revised Child Anxiety and Depression Scale 25–Parent Version: scale development and validation in a school-based and clinical sample. Assessment 24(6):712–728. T-scores: official RCADS-25 conversion tables (rcads.ucla.edu).',
-  licence:RCADS_LICENCE,
-  higherMeans:'more anxiety and low-mood symptoms',
-  prompt:'Please pick the word that shows how often each of these things happens to your child. There are no right or wrong answers.',
-  scoring:{ type:'rcads25', options:RCADS_OPTIONS, flagItem:18, normVersion:'parent', depItems:RCADS25_DEP, anxItems:RCADS25_ANX, totalMax:75 },
-  subscales:RCADS25_SUBSCALES,
-  report:{caveat:RCADS25_CAVEAT},
-  items:RCADS25_ITEMS_PARENT
-}});
+/* (excluded instrument omitted from the hosted build) */
 
 /* ── Question framing (instrument stems) ───────────────────────────────────────
    Each instrument's items are only meaningful with their standard instruction —
@@ -10155,7 +9992,7 @@ Object.assign(REGISTRY, {"sad_child":{
           short:'Non-ADHD students (18–25)', color:'var(--green)',
           citation:'Canu et al. (2016), J Atten Disord 24(12):1648–1660',
           domains:{
-            family:{mean:0.29, sd:0.37}, work:{mean:0.14, sd:0.27, caveat:'reference probably too low: no student marked Work not applicable (Canu 2016)'},
+            family:{mean:0.29, sd:0.37}, work:{mean:0.14, sd:0.27, caveat:'reference may be too low: no student marked Work not applicable (Canu 2016)'},
             school:{mean:0.38, sd:0.41}, life:{mean:0.48, sd:0.44},
             self:{mean:0.80, sd:0.74}, social:{mean:0.26, sd:0.35},
             risk:{mean:0.32, sd:0.33}
@@ -10901,101 +10738,17 @@ Object.assign(REGISTRY, {"sad_child":{
     report:{caveat:'The SPQ short form has no population norms and no clinical cut-off. The score is shown only against study-sample averages. Note the direction: a LOWER score means MORE sensory sensitivity. Interpret descriptively, alongside clinical judgement.'}
   }});
 })();
-/* ── DIVA-5 — Diagnostic Interview for ADHD in adults ──────────────────────────
-   Clinician-administered semi-structured interview (engine in engine/diva.js).
-   Lightweight meta only: the interview content + scoring live in the module.
-   `clinicianOnly` keeps it out of the patient self-assign list (it can only be
-   run by a clinician, with the patient + collateral informants present).
-─────────────────────────────────────────────────────────────────────────── */
-Object.assign(REGISTRY, {"diva":{
-  id:'diva', name:'DIVA-5', formLabel:'Adult (18+)', fullName:'Diagnostic Interview for ADHD in adults (DIVA-5)',
-  category:'adhd', status:'live', respondent:'Clinician interview', ageRange:'18+ years', estMinutes:'~90 min',
-  format:'interview', clinicianOnly:true,
-  description:'Semi-structured DSM-5 diagnostic interview for adult ADHD, administered by the clinician with the patient (and partner/family where present).',
-  citation:'Kooij JJS, Francken MH, Bron TI (2019). DIVA-5: Diagnostic Interview for ADHD in adults. DIVA Foundation, The Hague.',
-  licence:'© DIVA Foundation. Used under clinic licence (divacenter.eu).',
-  report:{caveat:'A semi-structured diagnostic interview: the recorded symptom counts and DSM-5 thresholds are a clinician decision aid. The clinician makes the diagnosis. Adult presentation prevails where childhood and adulthood differ.'}
-}});
+/* (excluded instrument omitted from the hosted build) */
 
-/* ── Young DIVA-5 — Diagnostic Interview for ADHD in young people (5–17) ──────
-   Same engine (engine/diva.js, variant 'young_diva'): child/adolescent wording,
-   parent/teacher collateral, DSM-5 child threshold of ≥6 symptoms, single-stage
-   impairment. Clinician-administered. ── */
-Object.assign(REGISTRY, {"young_diva":{
-  id:'young_diva', name:'Young DIVA-5', formLabel:'Young (5–17)', fullName:'Diagnostic Interview for ADHD in young people (Young DIVA-5)',
-  category:'adhd', status:'live', respondent:'Clinician interview', ageRange:'5–17 years', estMinutes:'~60 min',
-  format:'interview', clinicianOnly:true,
-  description:'Semi-structured DSM-5 diagnostic interview for ADHD in children & adolescents (5–17), administered by the clinician with the young person and a parent/family member (teacher / school reports as collateral).',
-  citation:'Curran S, Asherson P, Kooij JJS, Bron TI, Wynchank D (2021). Young DIVA-5: Diagnostic Interview for ADHD in young people aged 5–17. DIVA Foundation, The Hague.',
-  licence:'© DIVA Foundation. Used under clinic licence (divacenter.eu).',
-  report:{caveat:'A semi-structured diagnostic interview: the recorded symptom counts and DSM-5 thresholds are a clinician decision aid. The clinician makes the diagnosis. For under-17s DSM-5 requires ≥6 symptoms in a domain.'}
-}});
+/* (excluded instrument omitted from the hosted build) */
 
-/* ── DASI-2 — Diagnostic Autism Spectrum Interview ────────────────────────────
-   Clinician-administered semi-structured ASD interview + structured
-   observational record (engine in engine/dasi.js). Lightweight meta only.
-   `clinicianOnly` keeps it out of the patient self-assign list. ── */
-Object.assign(REGISTRY, {"dasi":{
-  id:'dasi', name:'DASI-2', fullName:'Diagnostic Autism Spectrum Interview (DASI-2)',
-  category:'autism', status:'live', respondent:'Clinician interview', ageRange:'2+ years', estMinutes:'90–180 min (splittable)',
-  format:'interview', clinicianOnly:true,
-  description:'Semi-structured lifespan ASD diagnostic interview + structured observational record (OR1-OR5), administered by the clinician with the client and, where possible, a parent/carer or informant. Components (background, symptom ratings, co-existing screen, observation) can be run separately across sittings.',
-  citation:'Young S (2025). DASI-2: Diagnostic Autism Spectrum Interview. Psychology Services Limited, London.',
-  licence:'© Psychology Services Limited 2025. Free-to-download clinical tool (psychology-services.uk.com); introductory online training recommended.',
-  report:{caveat:'A semi-structured diagnostic interview and observational record: the recorded ratings and DSM-5 criterion endorsements are a clinician decision aid. The clinician makes the diagnosis, weighing developmental history, collateral and observation.'}
-}});
+/* (excluded instrument omitted from the hosted build) */
 
-/* ── ADI-R algorithm — Autism Diagnostic Interview-Revised scoring ────────────
-   Clinician-only SCORING COMPANION (engine/adir.js): the ADI-R itself is
-   administered on the paper protocol by a trained clinician; this module keys
-   in the algorithm-item codes and applies the published DSM-5 (Lampinen et al.
-   2025, revised 09/2025 cut-offs: 29 phrase / 35 no-phrase) and toddler
-   (Kim & Lord 2012) algorithms. No adult algorithm exists; per the authors the
-   adolescent DSM-5 algorithm is applied at 18+ with a labelled note. ── */
-Object.assign(REGISTRY, {"adir":{
-  id:'adir', name:'ADI-R algorithm', fullName:'Autism Diagnostic Interview-Revised (ADI-R): DSM-5 and toddler algorithm scoring',
-  category:'autism', status:'live', respondent:'Clinician-scored', ageRange:'12 months+', estMinutes:'~10–15 min (from a completed protocol)',
-  format:'interview', clinicianOnly:true,
-  description:'Scores a completed ADI-R protocol against the published algorithms: the revised DSM-5 algorithms (4–17 years, also applied to adults per the authors) and the three toddler algorithms (12–47 months), selected automatically from age and the Item 30 language level. Codes of 3 convert to 2; codes outside 0–3 score 0.',
-  citation:'Lampinen LA, Zheng S, Olson L, et al. (2025). DSM-5 based algorithms for the ADI-R for children ages 4–17 years. J Child Psychol Psychiatry. · Kim SH, Lord C (2012). New ADI-R algorithms for toddlers and young preschoolers from 12 to 47 months. J Autism Dev Disord 42(1):82–93.',
-  licence:'ADI-R © Western Psychological Services; for clinicians trained in ADI-R administration. This module reproduces no interview content, it scores the algorithm forms distributed to trained users (09/2025 revision).',
-  report:{caveat:'An algorithm score, not a diagnosis: the ADI-R classification is a clinician decision aid to be weighed with observation (e.g. ADOS-2/DASI-2), developmental history and clinical judgement. The clinician makes the diagnosis.'}
-}});
+/* (excluded instrument omitted from the hosted build) */
 
-/* ── ADI-R interview workspace — a place to write, not a copy of the test ─────
-   Clinician-only WORKSHEET (engine/adirw.js) for use while administering the
-   ADI-R from the paper protocol booklet. It carries the booklet's structure
-   (printed page numbers, items 1-93 with their published short titles, and the
-   code boxes each item actually has) plus a typing area per item. It carries
-   NONE of the booklet's content: no questions, no probes, no coding
-   descriptors. Codes entered are keyed exactly as engine/adir.js keys them, so
-   the workspace hands off to the algorithm scoring with the codes prefilled. ── */
-Object.assign(REGISTRY, {"adirw":{
-  id:'adirw', name:'ADI-R interview workspace', fullName:'Autism Diagnostic Interview-Revised (ADI-R): interview record and coding worksheet',
-  category:'autism', status:'live', respondent:'Clinician-administered', ageRange:'12 months to adult', estMinutes:'~90–150 min (the interview itself)',
-  format:'interview', clinicianOnly:true,
-  description:'A digital worksheet for recording the ADI-R as you administer it from the protocol booklet: the printed page numbers in order, items 1 to 93 with the code boxes each one carries (Current, Ever, Most abnormal 4.0-5.0, At 5.0 years, age in months), a typing area per item for verbatim and examples, and the booklet’s family, education and concluding-comment areas. Hands the codes straight to the ADI-R algorithm scoring when the interview is done.',
-  citation:'Le Couteur A, Lord C, Rutter M (2003). The Autism Diagnostic Interview-Revised (ADI-R). Los Angeles: Western Psychological Services.',
-  licence:'ADI-R © Western Psychological Services; for clinicians trained in ADI-R administration, used alongside the WPS Edition Interview Protocol (W-382A) and Manual (W-382B), which must be obtained from WPS. This module reproduces no interview questions, probes or coding descriptors: it records item numbers, code values and the clinician’s own notes.',
-  report:{caveat:'An interview record, not a diagnosis and not a score: the codes and notes here are the clinician’s own record of what the informant reported. Classification comes from the ADI-R algorithm scoring, and the diagnosis from the clinician weighing history, observation and collateral.'}
-}});
+/* (excluded instrument omitted from the hosted build) */
 
-/* ── ADOS-2 Module 4 algorithm — revised (Hus & Lord 2014) scoring ────────────
-   Clinician-only SCORING COMPANION (engine/ados.js), sibling of `adir`: the
-   ADOS-2 is administered and coded on the protocol by a trained clinician;
-   this keys the 15 revised-algorithm item ratings (SA 10 + RRB 5), applies
-   the 3→2 / 7-8-9→0 conversion, the single ASD cut-off of 8, and the
-   calibrated severity score (1–10, ages 9–39). Modules T/1/2/3 not included
-   (their algorithms live in the proprietary WPS manual). ── */
-Object.assign(REGISTRY, {"ados_m4":{
-  id:'ados_m4', name:'ADOS-2 Module 4 algorithm', fullName:'Autism Diagnostic Observation Schedule, Second Edition (ADOS-2), Module 4: revised algorithm scoring',
-  category:'autism', status:'live', respondent:'Clinician-scored', ageRange:'Adolescents/adults with fluent speech', estMinutes:'~5–10 min (from a completed protocol)',
-  format:'interview', clinicianOnly:true,
-  description:'Scores a completed ADOS-2 Module 4 protocol against the revised algorithm (Hus & Lord 2014): Social Affect + Restricted and Repetitive Behaviour totals, the single ASD cut-off of 8 (sensitivity 90.5%, specificity 82.2%), and the calibrated severity score (1–10, calibrated for ages 9–39). Ratings of 3 convert to 2; ratings outside 0–3 score 0.',
-  citation:'Hus V, Lord C (2014). The autism diagnostic observation schedule, module 4: revised algorithm and standardized severity scores. J Autism Dev Disord 44(8):1996–2012.',
-  licence:'ADOS-2 © Western Psychological Services; for clinicians trained in ADOS-2 administration. This module reproduces no administration or coding content, it scores the published revised Module 4 algorithm (Compass Psychology scoring resource, Dec 2024).',
-  report:{caveat:'An observation algorithm score, not a diagnosis: per the ADOS-2 manual, findings are communicated through descriptions of observed behaviours alongside the classification, and raw scores are not reported outside the clinical record. The clinician makes the diagnosis, integrating interview (e.g. ADI-R/DASI-2), history and judgement.'}
-}});
+/* (excluded instrument omitted from the hosted build) */
 
 /* ── SQ-A-2 — Signposting Questionnaire for Autism-2 (self-report, adult) ─────
    Livingston, Jones et al. (2026), 18-item Adapted self-report. 4-point scale,
@@ -12668,25 +12421,6 @@ window.CUTOFFS_MASTER = [
   "verified": ""
  },
  {
-  "instrument": "ados_m4",
-  "instrument_name": "ADOS-2 Module 4, revised algorithm",
-  "scale": "Overall total (SA + RRB)",
-  "cutoff": "≥ 8",
-  "label": "ASD",
-  "recommended": "yes",
-  "sensitivity": "90.5%",
-  "specificity": "82.2%",
-  "target": "Autism (ASD incl. PDD-NOS/Asperger's)",
-  "comparison": "mixed",
-  "reference_standard": "Clinical diagnosis (best estimate, DSM-IV-TR)",
-  "n_cases": "347",
-  "n_noncases": "90",
-  "setting": "US adolescents and adults 10-62, autism clinics (Chicago, Michigan, Cornell) and Simons Simplex Collection",
-  "figure_type": "printed",
-  "source": "Hus V, Lord C (2014). The autism diagnostic observation schedule, module 4: revised algorithm and standardized severity scores. J Autism Dev Disord 44(8):1996–2012.",
-  "verified": ""
- },
- {
   "instrument": "gad7",
   "instrument_name": "Generalised Anxiety Disorder-7",
   "scale": "Total",
@@ -12725,63 +12459,6 @@ window.CUTOFFS_MASTER = [
   "verified": "Yes"
  },
  {
-  "instrument": "iesr",
-  "instrument_name": "Impact of Event Scale – Revised",
-  "scale": "Total",
-  "cutoff": "≥ 33",
-  "label": "Probable PTSD",
-  "recommended": "yes",
-  "sensitivity": "0.91",
-  "specificity": "0.82",
-  "target": "Probable PTSD",
-  "comparison": "population sample",
-  "reference_standard": "Questionnaire (PCL total 50+)",
-  "n_cases": "",
-  "n_noncases": "",
-  "setting": "Australian male Vietnam veterans, ex-service organisation community sample",
-  "figure_type": "printed",
-  "source": "Creamer M, Bell R & Failla S (2003). Psychometric properties of the Impact of Event Scale – Revised. Behav Res Ther 41:1489–1496.",
-  "verified": "Yes"
- },
- {
-  "instrument": "iesr",
-  "instrument_name": "Impact of Event Scale – Revised",
-  "scale": "Total",
-  "cutoff": "≥ 25",
-  "label": "Clinical concern (full or partial PTSD)",
-  "recommended": "",
-  "sensitivity": "0.89",
-  "specificity": "0.93",
-  "target": "Full or partial PTSD",
-  "comparison": "population sample",
-  "reference_standard": "Structured interview (SCID PTSD module)",
-  "n_cases": "18",
-  "n_noncases": "55",
-  "setting": "Japanese survivors of an arsenic poisoning, 3 months to 1 year after (study 2)",
-  "figure_type": "printed",
-  "source": "Asukai N, Kato H, Kawamura N, Kim Y, Yamamoto K, Kishimoto J, Miyake Y & Nishizono-Maher A (2002). Reliability and validity of the Japanese-language version of the Impact of Event Scale-Revised (IES-R-J): four studies of different traumatic events. J Nerv Ment Dis 190:175–182.",
-  "verified": "Yes"
- },
- {
-  "instrument": "iesr",
-  "instrument_name": "Impact of Event Scale – Revised",
-  "scale": "Total",
-  "cutoff": "≥ 25",
-  "label": "Clinical concern (full or partial PTSD)",
-  "recommended": "",
-  "sensitivity": "0.75",
-  "specificity": "0.71",
-  "target": "Full or partial PTSD",
-  "comparison": "population sample",
-  "reference_standard": "Structured interview (CAPS)",
-  "n_cases": "20",
-  "n_noncases": "66",
-  "setting": "Japanese earthquake survivors, 3 years 10 months after (study 3)",
-  "figure_type": "printed",
-  "source": "Asukai N, Kato H, Kawamura N, Kim Y, Yamamoto K, Kishimoto J, Miyake Y & Nishizono-Maher A (2002). Reliability and validity of the Japanese-language version of the Impact of Event Scale-Revised (IES-R-J): four studies of different traumatic events. J Nerv Ment Dis 190:175–182.",
-  "verified": "Yes"
- },
- {
   "instrument": "sci",
   "instrument_name": "Sleep Condition Indicator (SCI-08)",
   "scale": "Total",
@@ -12798,139 +12475,6 @@ window.CUTOFFS_MASTER = [
   "setting": "UK adults, Glasgow Science Centre visitors",
   "figure_type": "printed",
   "source": "Espie CA, Kyle SD, Hames P, Gardani M, Fleming L & Cape J (2014). The Sleep Condition Indicator: a clinical screening tool to evaluate insomnia disorder. BMJ Open 4:e004183.",
-  "verified": "Yes"
- },
- {
-  "instrument": "adir",
-  "instrument_name": "ADI-R DSM-5 algorithm (4y–17y11m)",
-  "scale": "Total, phrase speech (Item 30 = 0)",
-  "cutoff": "≥ 29",
-  "label": "ASD",
-  "recommended": "yes",
-  "sensitivity": "82%",
-  "specificity": "75%",
-  "target": "Autism (DSM-IV PDD or DSM-5 ASD)",
-  "comparison": "mixed",
-  "reference_standard": "Clinical diagnosis (best estimate)",
-  "n_cases": "1661",
-  "n_noncases": "710",
-  "setting": "US children 4-17 with phrase speech, six autism clinical-research databanks",
-  "figure_type": "printed",
-  "source": "Lampinen LA, et al. (2025). J Child Psychol Psychiatry 66(9):1403–1413. doi 10.1111/jcpp.14159",
-  "verified": "Yes"
- },
- {
-  "instrument": "adir",
-  "instrument_name": "ADI-R DSM-5 algorithm (4y–17y11m)",
-  "scale": "Total, no phrase speech (Item 30 > 0)",
-  "cutoff": "≥ 35",
-  "label": "ASD",
-  "recommended": "yes",
-  "sensitivity": "86%",
-  "specificity": "88%",
-  "target": "Autism (DSM-IV PDD or DSM-5 ASD)",
-  "comparison": "clinic referrals",
-  "reference_standard": "Clinical diagnosis (best estimate)",
-  "n_cases": "483",
-  "n_noncases": "51",
-  "setting": "US children 4-17 without phrase speech, six autism clinical-research databanks",
-  "figure_type": "printed",
-  "source": "Lampinen LA, et al. (2025). J Child Psychol Psychiatry 66(9):1403–1413. doi 10.1111/jcpp.14159",
-  "verified": "Yes"
- },
- {
-  "instrument": "rcads_parent",
-  "instrument_name": "Revised Child Anxiety and Depression Scale: Parent Version (RCADS-P)",
-  "scale": "Major depression (raw)",
-  "cutoff": "≥ 7",
-  "label": "Clinic-sample optimal raw cut-off",
-  "recommended": "",
-  "sensitivity": "0.67",
-  "specificity": "0.72",
-  "target": "Major depressive disorder",
-  "comparison": "clinic referrals",
-  "reference_standard": "Semi-structured interview (P-ChIPS) with clinician diagnosis",
-  "n_cases": "69",
-  "n_noncases": "417",
-  "setting": "US clinic-referred youth aged 6-18 (Honolulu and Boston)",
-  "figure_type": "printed",
-  "source": "Ebesutani C, Bernstein A, Nakamura BJ, Chorpita BF, Weisz JR & the Research Network on Youth Mental Health (2010). A psychometric analysis of the Revised Child Anxiety and Depression Scale – Parent Version in a clinical sample. J Abnorm Child Psychol 38:249–260.",
-  "verified": "Yes"
- },
- {
-  "instrument": "rcads_parent",
-  "instrument_name": "Revised Child Anxiety and Depression Scale: Parent Version (RCADS-P)",
-  "scale": "Generalised anxiety (raw)",
-  "cutoff": "≥ 6",
-  "label": "Clinic-sample optimal raw cut-off",
-  "recommended": "",
-  "sensitivity": "0.83",
-  "specificity": "0.73",
-  "target": "Generalised anxiety disorder",
-  "comparison": "clinic referrals",
-  "reference_standard": "Semi-structured interview (P-ChIPS) with clinician diagnosis",
-  "n_cases": "75",
-  "n_noncases": "413",
-  "setting": "US clinic-referred youth aged 6-18 (Honolulu and Boston)",
-  "figure_type": "printed",
-  "source": "Ebesutani C, Bernstein A, Nakamura BJ, Chorpita BF, Weisz JR & the Research Network on Youth Mental Health (2010). A psychometric analysis of the Revised Child Anxiety and Depression Scale – Parent Version in a clinical sample. J Abnorm Child Psychol 38:249–260.",
-  "verified": "Yes"
- },
- {
-  "instrument": "rcads_parent",
-  "instrument_name": "Revised Child Anxiety and Depression Scale: Parent Version (RCADS-P)",
-  "scale": "Separation anxiety (raw)",
-  "cutoff": "≥ 4",
-  "label": "Clinic-sample optimal raw cut-off",
-  "recommended": "",
-  "sensitivity": "0.92",
-  "specificity": "0.73",
-  "target": "Separation anxiety disorder",
-  "comparison": "clinic referrals",
-  "reference_standard": "Semi-structured interview (P-ChIPS) with clinician diagnosis",
-  "n_cases": "74",
-  "n_noncases": "414",
-  "setting": "US clinic-referred youth aged 6-18 (Honolulu and Boston)",
-  "figure_type": "printed",
-  "source": "Ebesutani C, Bernstein A, Nakamura BJ, Chorpita BF, Weisz JR & the Research Network on Youth Mental Health (2010). A psychometric analysis of the Revised Child Anxiety and Depression Scale – Parent Version in a clinical sample. J Abnorm Child Psychol 38:249–260.",
-  "verified": "Yes"
- },
- {
-  "instrument": "rcads_parent",
-  "instrument_name": "Revised Child Anxiety and Depression Scale: Parent Version (RCADS-P)",
-  "scale": "Obsessive-compulsive (raw)",
-  "cutoff": "≥ 4",
-  "label": "Clinic-sample optimal raw cut-off",
-  "recommended": "",
-  "sensitivity": "0.88",
-  "specificity": "0.86",
-  "target": "OCD",
-  "comparison": "clinic referrals",
-  "reference_standard": "Semi-structured interview (P-ChIPS) with clinician diagnosis",
-  "n_cases": "17",
-  "n_noncases": "469",
-  "setting": "US clinic-referred youth aged 6-18 (Honolulu and Boston)",
-  "figure_type": "printed",
-  "source": "Ebesutani C, Bernstein A, Nakamura BJ, Chorpita BF, Weisz JR & the Research Network on Youth Mental Health (2010). A psychometric analysis of the Revised Child Anxiety and Depression Scale – Parent Version in a clinical sample. J Abnorm Child Psychol 38:249–260.",
-  "verified": "Yes"
- },
- {
-  "instrument": "rcads_parent",
-  "instrument_name": "Revised Child Anxiety and Depression Scale: Parent Version (RCADS-P)",
-  "scale": "Social phobia (raw)",
-  "cutoff": "≥ 12",
-  "label": "Clinic-sample optimal raw cut-off",
-  "recommended": "",
-  "sensitivity": "0.71",
-  "specificity": "0.76",
-  "target": "Social phobia",
-  "comparison": "clinic referrals",
-  "reference_standard": "Semi-structured interview (P-ChIPS) with clinician diagnosis",
-  "n_cases": "44",
-  "n_noncases": "441",
-  "setting": "US clinic-referred youth aged 6-18 (Honolulu and Boston)",
-  "figure_type": "printed",
-  "source": "Ebesutani C, Bernstein A, Nakamura BJ, Chorpita BF, Weisz JR & the Research Network on Youth Mental Health (2010). A psychometric analysis of the Revised Child Anxiety and Depression Scale – Parent Version in a clinical sample. J Abnorm Child Psychol 38:249–260.",
   "verified": "Yes"
  }
 ];
@@ -13214,8 +12758,8 @@ const AGE_BOUNDS = {
   catq:          {min:16, max:null,label:'16+ years',       note:'CAT-Q validated in adults aged 16+ (Hull et al. 2019); not yet established for younger adolescents'},
   lsas:          {min:18, max:null,label:'18+ years',       note:'LSAS validated in adults (Safren 1999 sample 18–61); use LSAS-CA for under-18s'},
   assist:        {min:18, max:60,  label:'18–60 years',     note:'WHO ASSIST v3.0 manual: validated only in adults aged 18 to 60'},
-  wfirs_s:       {min:18, max:null,label:'18+ years',       note:'WFIRS self-report validated in adults (Canu et al. 2016, college students); only one small adolescent study found. Use the parent version (WFIRS-P) for under-18s'},
-  wfirs_p:       {min:6,  max:18,  label:'6–18 years',      note:'WFIRS-P studied in ages 5–19 (Thompson et al. 2017) and 6–17 (Weiss et al. 2015); general-population norms cover 6–11 (Arildskov et al. 2023)'},
+  wfirs_s:       {min:18, max:null,label:'18+ years',       note:'WFIRS self-report validated in adults (Canu et al. 2016, college students). Use the parent version (WFIRS-P) for under-18s'},
+  wfirs_p:       {min:6,  max:18,  label:'6–18 years',      note:'WFIRS-P studied in ages 5–19 (Thompson et al. 2017) and 6–17 (Gajria et al. 2015, Health Qual Life Outcomes 13:184); general-population norms cover 6–11 (Arildskov et al. 2023)'},
   coventry:      {min:2,  max:18,  label:'Children & young people', note:'Clinician differential aid for children/young people (Coventry Grid, Moran 2010)'},
   gsq:           {min:16, max:null,label:'16+ years',       note:'GSQ validated in adults 16–66 (Robertson & Simmons 2013)'},
   gsq_p:         {min:6,  max:11,  label:'6–11 years',      note:'GSQ-P validated with parents of children 6–11 (Smees et al. 2022)'},
@@ -13224,7 +12768,8 @@ const AGE_BOUNDS = {
   spq:           {min:18, max:null,label:'18+ years',       note:'Validated in adults only (Tavassoli et al. 2014; German short form, ages 18–62, 2022); no adolescent validation found'},
   spq35:         {min:18, max:null,label:'18+ years',       note:'SPQ short form; validated in adults only (Tavassoli et al. 2014; German short form, ages 18–62, 2022)'},
   sci:           {min:16, max:null,label:'16+ years',       note:'SCI reference values cover ages 16–75 (Espie et al. 2018, J Sleep Res 27:e12643; described as adults); the 2014 validation samples were 18+'},
-  iesr:          {min:18, max:null,label:'18+ years',       note:'The app’s cut-off of 25 comes from adult samples (Asukai et al. 2002). The IES-R has been used from age 12 (Asukai 2002; Taiwan flood study, ages 12–15), but the CRIES is the version built for ages 8–18'},
+  iesr:          {min:18, max:null,label:'18+ years',       note:'The 25 cut-off comes from Asukai et al. (2002): Study 2 sampled ages 12–68 and Study 3 adults. The IES-R has been used from age 12, but the CRIES is the version built for children and adolescents'},
+  rbq3_self:     {min:13, max:null,label:'13+ years',       note:'RBQ-3 v1.3 manual: self-report from age 13'},
   sqa2:          {min:18, max:null,label:'18+ years',       note:'SQ-A-2 self-report is for adults (18+)'},
   wurs_self:     {min:18, max:null,label:'18+ years',       note:'Adults rating their own childhood; validated in adult samples only (Ward et al. 1993; Gift et al. 2021)'},
   wurs_observer: {min:18, max:null,label:'Rates an adult 18+', note:'Informant rating of an adult’s childhood; the WURS is validated in adults only (Ward et al. 1993)'},
@@ -15612,7 +15157,7 @@ const App = {
         const g = (grp,n) => inm[grp] && inm[grp][n] ? `${inm[grp][n].m.toFixed(2)} (${inm[grp][n].sd.toFixed(2)})` : '—';
         html += `<h4>Per-item means (SD), on the app's 0–4 answers, by ADHD status (Adler 2018 Table 3, printed means minus 1)</h4>` +
           tbl(['#','Item','ADHD','No ADHD'], t.items.map(it=>[it.n, (inm.labels&&inm.labels[it.n])||('Item '+it.n), g('adhd',it.n), g('noAdhd',it.n)])) +
-          note(`Groups: self-reported ADHD n=${inm.groupN.adhd}, no ADHD n=${inm.groupN.noAdhd.toLocaleString()}. Table 3's treated and not-treated columns are not shown: the not-treated column repeats the no-ADHD column (+0.01 on every item), so it is mislabelled. The result report's symptom profile uses the ADHD vs no-ADHD columns; group total/subscale ±1 SD bands are estimated from these item SDs and the Symptom Checklist's internal consistency (Cronbach α≈0.88–0.89), via var(total)=Σσ²ᵢ/(1−α(k−1)/k).`) +
+          note(`Groups: self-reported ADHD n=${inm.groupN.adhd}, no ADHD n=${inm.groupN.noAdhd.toLocaleString()}. Table 3's treated and not-treated columns are not shown: the not-treated column repeats the no-ADHD column (+0.01 to +0.02 on every item), so it is mislabelled. The result report's symptom profile uses the ADHD vs no-ADHD columns; group total/subscale ±1 SD bands are estimated from these item SDs and the Symptom Checklist's internal consistency (Cronbach α≈0.88–0.89), via var(total)=Σσ²ᵢ/(1−α(k−1)/k).`) +
           src(inm.source);
       }
       html += src(t.licence) + `</div>`;
@@ -16110,8 +15655,8 @@ Object.assign(App, {
      on every report that uses them. */
   _ladderNote(t, body){
     const LADDER = new Set(['rmet','wurs_self','wurs_observer','rbq3_self','rbq3_other','gsq','wfirs_s','asrs_adolescent']);
-    if(!LADDER.has(t.id) || !/(mildly|moderately|markedly) above|within (this|the|reference)/i.test(body)) return '';
-    return `<p class="src-note" style="margin-top:10px">Position words (within / mildly / moderately / markedly above) are this app’s convention, set at about the 84th, 93rd and 98th centile (+1, +1.5 and +2 SD). They are not published cut-offs.</p>`;
+    if(!LADDER.has(t.id) || !/(mildly|moderately|markedly) (above|below)|within (this|the|reference)/i.test(body)) return '';
+    return `<p class="src-note" style="margin-top:10px">Position words (within, and mildly / moderately / markedly above or below) are this app’s convention, set at about the 84th, 93rd and 98th centile (+1, +1.5 and +2 SD). They are not published cut-offs.</p>`;
   },
   /* instruments whose own result builder does NOT already list the person's
      per-item responses get the shared "Item responses" panel appended (so the
@@ -16355,9 +15900,9 @@ Object.assign(App, {
       // report and the console agree. 76 is the recommended one.
       const cs = (cuts || []).filter(c => typeof c.score==='number').map(c => c.score).sort((a,b)=>a-b);
       const [lo, mid, hi] = cs.length===3 ? cs : [66, 76, 86];
-      if(total>=hi){ band='band-high'; bandLabel=`Above the high cut-off (${hi})`; }
-      else if(total>=mid){ band='band-high'; bandLabel=`Above the middle cut-off (${mid})`; }
-      else if(total>=lo){ band='band-elevated'; bandLabel=`Above the low cut-off (${lo})`; }
+      if(total>=hi){ band='band-high'; bandLabel=`At or above the high cut-off (${hi})`; }
+      else if(total>=mid){ band='band-high'; bandLabel=`At or above the middle cut-off (${mid})`; }
+      else if(total>=lo){ band='band-elevated'; bandLabel=`At or above the low cut-off (${lo})`; }
       else { band='band-typical'; bandLabel=`Below the low cut-off (${lo})`; }
       summary = total>=mid
         ? `This score is at or above the ${total>=hi?'high':'middle'} AQ-Child cut-off (${total>=hi?hi:mid}; ${mid} is the recommended screening cut-off). Consider alongside developmental history and other measures.`
@@ -16806,10 +16351,9 @@ Object.assign(App, {
       above: true
     };
   },
-  /* the same ladder as a bare phrase, for the instruments that earn a position
+  /* the same ladder as a bare phrase, for instruments that earn a position
      but NOT a colour (reference sample too small, non-normal, or its
-     distribution unpublished — GSQ-P, SQ-A-2, ASRS community, WFIRS-S refs,
-     WURS clinical lanes, RBQ-3). Lower-cased for use mid-sentence. */
+     distribution unpublished). Lower-cased for use mid-sentence. */
   refPositionWord(pct, opts){
     const r = this.refPosition(pct, opts);
     return r ? r.label.charAt(0).toLowerCase()+r.label.slice(1) : null;
@@ -18844,8 +18388,8 @@ Object.assign(App, {
       // normal-curve percentile would mislead; show the SD distance instead.
       const floored = norm && norm.sd>0 && norm.mean <= norm.sd;
       const pct = z==null ? '<span class="sdq-pct-empty">—</span>'
-        : floored ? `<span title="Sample scores pile up at 0, so no percentile is given">${mean===0 ? 'at floor' : (z>=0?'+':'−')+Math.abs(z).toFixed(1)+' SD'}</span>`
         : mean >= 3 ? '<span title="Highest possible score; a normal curve would place part of the sample above it, so no percentile is given">at ceiling</span>'
+        : floored ? `<span title="Sample scores pile up at 0, so no percentile is given">${mean===0 ? 'at floor' : (z>=0?'+':'−')+Math.abs(z).toFixed(1)+' SD'}</span>`
         : this.pctileCell(z);
       return `<div class="sdq-u-row">
         <span class="sdq-name">${this.esc(f.name||key)}</span>
@@ -19335,9 +18879,9 @@ Object.assign(App, {
     const dCalc=(a,b)=>{ if(!a||!b||a[1]==null||b[1]==null) return null; const p=Math.sqrt((a[1]*a[1]+b[1]*b[1])/2); return p>0?Math.abs(a[0]-b[0])/p:null; };
     const badgeFor=d=>{ if(d==null) return ''; const r2=d.toFixed(2);
       const b = d<0.2 ? {c:'none',x:`Groups overlap almost entirely (d≈${r2}). Position here is not informative`}
-        : d<0.5 ? {c:'low',x:`Large overlap between groups (d≈${r2})`}
-        : d<0.8 ? {c:'mod',x:`Moderate separation (d≈${r2})`}
-        : {c:'good',x:`Clearer separation (d≈${r2})`};
+        : d<0.5 ? {c:'low',x:`Small separation, large overlap between groups (d≈${r2})`}
+        : d<0.8 ? {c:'mod',x:`Medium separation (d≈${r2})`}
+        : {c:'good',x:`Large separation (d≈${r2})`};
       return `<div class="spql-badge spql-badge-${b.c}">${b.x}</div>`; };
     // compact separation cell (Cohen's d) for the by-sense table
     const sepWord=d=> d==null?{c:'',x:'—'} : d<0.2?{c:'none',x:`negligible (${d.toFixed(2)})`} : d<0.5?{c:'low',x:`small (${d.toFixed(2)})`} : d<0.8?{c:'mod',x:`medium (${d.toFixed(2)})`} : {c:'good',x:`large (${d.toFixed(2)})`};
@@ -20466,6 +20010,8 @@ Object.assign(App, {
     // Swanson's own tentative 5% cut-offs (item mean, informant-specific), shown
     // as a plain line beside the sum bands; they do not drive the colour.
     const sw = t.swanson5pct;
+    // items 1-18 actually answered (a clinician edit can leave blanks); average over those
+    const n18 = Array.from({length:18},(_,i)=>i+1).filter(n=>(r.answers||{})[n]!=null).length || 18;
     const swLine = (key, raw, nItems) => {
       if(!sw || !key || sw[key]==null || !nItems) return '';
       // compare the 2-dp mean that is printed, so the words match the figures
@@ -20483,7 +20029,7 @@ Object.assign(App, {
         <div class="cs-block">
           <div class="cs-head"><span class="cs-name">${s.name}</span><span class="cs-score">${s.raw}/${s.max} · ${s.nItems} items · target ≥${s.target}</span><span class="band-pill ${pillFor(s.band)}">${s.band ? s.band.label : '—'}</span></div>
           ${zones ? this.severityTrack({ max:s.max, score:s.raw, zones }) : ''}
-          ${swLine(cfg && cfg.key, s.raw, s.nItems)}
+          ${swLine(cfg && cfg.key, s.raw, s.answered || s.nItems)}
         </div>`;
     };
     const rows = list.map(srow).join('');
@@ -20505,7 +20051,7 @@ Object.assign(App, {
         <p class="panel-sub">Each subset is the summed item rating (0–3 per item), shown against the published severity bands; the marker is this informant's score. The suggested target, at or above which symptoms are treated as clinically significant, is the first band boundary.</p>
         ${rows}
         <p class="panel-sub" style="margin-top:12px;margin-bottom:0">The ADHD symptom total (items 1–18, 0–54) tracks severity over time; it is not a diagnostic threshold. A positive screen suggests further evaluation; a negative screen does not exclude ADHD. Cross-setting agreement (home and school) and a clinical interview are essential.</p>
-        ${sw && sw.combined!=null ? `<p class="panel-sub" style="margin-top:8px;margin-bottom:0">ADHD combined (items 1–18): average per item ${(Math.round(r.total/18*100)/100).toFixed(2)}; Swanson’s tentative 5% cut-off for ${sw.who} is ${sw.combined.toFixed(2)}, so this is <b>${Math.round(r.total/18*100)/100 >= sw.combined ? 'at or above' : 'below'}</b> it.</p>` : ''}
+        ${sw && sw.combined!=null ? `<p class="panel-sub" style="margin-top:8px;margin-bottom:0">ADHD combined (items 1–18): average per item ${(Math.round(r.total/n18*100)/100).toFixed(2)}; Swanson’s tentative 5% cut-off for ${sw.who} is ${sw.combined.toFixed(2)}, so this is <b>${Math.round(r.total/n18*100)/100 > sw.combined ? 'above' : 'not above'}</b> it.</p>` : ''}
         <p class="src-note">Subset severity bands and targets per the SNAP-IV 26-item scoring guide (OHSU copy). ${sw ? `The per-item lines use ${this.esc(sw.source)} Swanson labels them tentative; they mark roughly the top 5% of ratings in his reference sample, separately for parents and teachers. The colour follows the sum bands.` : ''}</p>
       </div>
     `;
