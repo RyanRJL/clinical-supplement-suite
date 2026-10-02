@@ -8725,11 +8725,11 @@ Object.assign(REGISTRY, {"asrs":{
   report:{caveat:'The ASRS flags adults whose symptoms warrant fuller assessment; it cannot confirm or exclude ADHD on its own. ADHD frequently co-occurs with autism, read this alongside the wider picture.'}
 }});
 
-/* ── ASRS v1.1 Screener — Adolescent (Green et al. 2018) ───────────────────────
+/* ── ASRS v1.1 Screener — Adolescent (Green et al. 2019) ───────────────────────
    A SEPARATE assessment (like the AQ has adult/adolescent/child versions): the
    6-item Part A screener only — the version validated in adolescents (ages 11–18).
    Same items and ≥4-of-6 "elevated" scoring as the adult Part A, but scored against
-   age-matched community norms (Green 2018) and clearly framed as off-label /
+   age-matched community norms (Green 2019) and clearly framed as off-label /
    preliminary for under-18s. Reuses the 'asrs' scorer (6 items, no subscales →
    total = the 0–24 screener sum). Norms applied by AGE (UK-friendly). */
 const ASRS_TEEN_NORMS = {
@@ -8756,7 +8756,7 @@ Object.assign(REGISTRY, {"asrs_adolescent":{
   respondent:'Self-report (young person)',
   ageRange:'11–17 years',
   estMinutes:'2–3 min',
-  description:'The 6-item ASRS Part A screener, scored against age-matched adolescent community norms (Green et al. 2018). Off-label / preliminary in under-18s.',
+  description:'The 6-item ASRS Part A screener, scored against age-matched adolescent community norms (Green et al. 2019). Off-label / preliminary in under-18s.',
   citation:'Green JG et al. (2019), Int J Methods Psychiatr Res 28:e1751 (adolescent validation). Screener scoring per Kessler RC et al. (2005), Psychol Med 35:245–256.',
   licence:'© World Health Organization 2003. Free for clinical use; reproduction/translation requests are directed to Prof. R. Kessler, Harvard Medical School.',
   higherMeans:'more frequent ADHD symptoms',
@@ -9227,15 +9227,15 @@ Object.assign(REGISTRY, {"rcads25_self":{
   });
 })();
 
-/* ── WHO ASSIST v3.0 — Modified Drug Version ───────────────────────────────────
-   Alcohol, Smoking and Substance Involvement Screening Test. This build is the
-   DRUG-ONLY adaptation: ten illicit / non-medical substance classes, no tobacco
-   or alcohol items, and the injection-risk item (Q8) is omitted by clinical
-   decision. Flow is branching, so ASSIST uses a custom runner (format:'assist'):
+/* ── ASSIST (WHO v3.0 tobacco/alcohol + NIDA-Modified v2.0 drug list) ─────────
+   Alcohol, Smoking and Substance Involvement Screening Test. Tobacco and
+   alcohol follow WHO ASSIST v3.0; the drug classes follow the NIDA-Modified
+   ASSIST v2.0. The injection-risk item (Q8) is omitted by clinical decision. Flow is branching, so ASSIST uses a custom runner (format:'assist'):
      Q1  lifetime-use grid (ever used, non-medical) — gates everything else
      Q2–Q7  asked ONLY for each substance flagged at Q1
    Per-substance Specific Substance Involvement (SSI) score = sum(Q2..Q7); risk
-   band per substance (cannabis uses a 5/27 split, all others 4/27 — WHO manual).
+   band per substance (alcohol 11/27, all others 4/27 — WHO manual Box 6;
+   NIDA-Modified v2.0 p.7 for the drugs).
    Screening only — guides feedback intensity (education / brief intervention /
    brief intervention + referral), not diagnosis.
 
@@ -9318,10 +9318,10 @@ Object.assign(REGISTRY, {"assist":{
     {key:'cannabis',     label:'Cannabis',                examples:'marijuana, weed, hash, skunk, edibles'},
     {key:'cocaine',      label:'Cocaine',                 examples:'coke, crack, powder'},
     {key:'rx_stimulants',label:'Prescription stimulants', examples:'used non-medically, e.g. Ritalin, Adderall, Elvanse, Concerta'},
-    {key:'meth',         label:'Amphetamine-type stimulants', examples:'speed, crystal meth, ice, MDMA / ecstasy / molly'},
+    {key:'meth',         label:'Amphetamine-type stimulants', examples:'speed, crystal meth, ice'},
     {key:'inhalants',    label:'Inhalants',               examples:'nitrous oxide, poppers, glue, solvents, aerosols'},
     {key:'sedatives',    label:'Sedatives or sleeping pills', examples:'used non-medically, e.g. Valium, Xanax, diazepam, benzodiazepines, Z-drugs'},
-    {key:'hallucinogens',label:'Hallucinogens',           examples:'LSD, acid, magic mushrooms, ketamine'},
+    {key:'hallucinogens',label:'Hallucinogens',           examples:'LSD, acid, magic mushrooms, ketamine, MDMA / ecstasy / molly'},  // ecstasy here per NIDA-Modified v2.0
     {key:'street_opioids',label:'Street opioids',         examples:'heroin, illicit fentanyl'},
     {key:'rx_opioids',   label:'Prescription opioids',    examples:'used non-medically, e.g. codeine, tramadol, oxycodone, morphine'},
     {key:'other',        label:'Any other drug',          examples:'anything not listed above'}
@@ -20329,7 +20329,7 @@ Object.assign(App, {
       ${this.asrsTeenPanel(t, r, cAge)}`;
   },
 
-  /* Adolescent ASRS Screener norm bar (Green et al. 2018): the 6-item screener
+  /* Adolescent ASRS Screener norm bar (Green et al. 2019): the 6-item screener
      score (0–24) vs an age-matched US community sample. Distribution ≈ normal
      (skew 0.52) so the percentile is meaningful. Falls back to the overall 11–18
      sample if the age is unknown / out of range. */
@@ -20345,14 +20345,14 @@ Object.assign(App, {
     // the percentile is not meaningful there.
     const pct = pasum === 0 ? 'at floor' : this.pctileCell(z);
     const elevated = r.partAPositive;
-    // the pill states the NATIVE screen outcome only (Green et al. 2018 define
+    // the pill states the NATIVE screen outcome only (Green et al. 2019 define
     // the >=4-of-6 screen, not an SD band). The old `z>=1 → amber` fallback
     // added an app-invented second threshold on top of a validated one.
     const bandCls = elevated ? 'band-high' : 'band-typical';
     const who = g ? `age ${age}` : 'ages 11–18';
     const ctx = g
-      ? `for this ${age}-year-old against a US community adolescent sample (Green et al. 2018; US grade ${g.grade} ≈ age ${age}, n=2,472)`
-      : `against the overall US community adolescent sample (Green et al. 2018, ages 11–18, n=2,472)${age==null?'. Add a date of birth for an age-matched norm':''}`;
+      ? `for this ${age}-year-old against a US community adolescent sample (Green et al. 2019; US grade ${g.grade} ≈ age ${age}, n=2,472)`
+      : `against the overall US community adolescent sample (Green et al. 2019, ages 11–18, n=2,472)${age==null?'. Add a date of birth for an age-matched norm':''}`;
     const elevCtx = g ? `for context, ${g.elev}% of same-age peers screened elevated. ` : '';
     return `
       <div class="panel">
