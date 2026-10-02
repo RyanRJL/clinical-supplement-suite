@@ -9251,7 +9251,7 @@ Object.assign(REGISTRY, {"assist":{
   format:'assist',
   respondent:'Self-report',
   ageRange:'18+ years',
-  estMinutes:'2–10 min',
+  estMinutes:'5–10 min',   // WHO ASSIST v3.0 manual: about 5-10 minutes
   description:'WHO substance-involvement screen. A lifetime-use grid, then risk questions for each substance used, giving a risk band per substance.',
   citation:'WHO ASSIST Working Group (2002). Addiction 97(9):1183–1194; WHO (2010), The ASSIST screening test manual for use in primary care. Drug list: NIDA-Modified ASSIST v2.0 (National Institute on Drug Abuse).',
   licence:'Free for clinical use (World Health Organization).',
@@ -10155,7 +10155,7 @@ Object.assign(REGISTRY, {"sad_child":{
           short:'Non-ADHD students (18–25)', color:'var(--green)',
           citation:'Canu et al. (2016), J Atten Disord 24(12):1648–1660',
           domains:{
-            family:{mean:0.29, sd:0.37}, work:{mean:0.14, sd:0.27},
+            family:{mean:0.29, sd:0.37}, work:{mean:0.14, sd:0.27, caveat:'reference probably too low: no student marked Work not applicable (Canu 2016)'},
             school:{mean:0.38, sd:0.41}, life:{mean:0.48, sd:0.44},
             self:{mean:0.80, sd:0.74}, social:{mean:0.26, sd:0.35},
             risk:{mean:0.32, sd:0.33}
@@ -11255,7 +11255,7 @@ Object.assign(REGISTRY, {"sci":{
   Object.assign(REGISTRY, {"ocir":{
     id:'ocir', name:'OCI-R', fullName:'Obsessive-Compulsive Inventory-Revised (OCI-R)',
     category:'ocd', status:'live',
-    respondent:'Self-report', ageRange:'Adults', estMinutes:'3–5 min',
+    respondent:'Self-report', ageRange:'Adults', estMinutes:'5–10 min',   // OCI-R manual: typically 5-10 minutes
     description:'Eighteen-item self-report screen for obsessive-compulsive symptoms, rating distress over the past month across six symptom dimensions. Total 0–72 with published screening cut-offs.',
     citation:'Foa EB, Huppert JD, Leiberg S, Langner R, Kichic R, Hajcak G & Salkovskis PM (2002). The Obsessive-Compulsive Inventory: development and validation of a short version. Psychological Assessment 14(4):485–496. Severity benchmarks and the OCD reference sample: Abramovitch A, Abramowitz JS, Riemann BC & McKay D (2020). Severity benchmarks and contemporary clinical norms for the Obsessive-Compulsive Inventory-Revised (OCI-R). J Obsessive-Compulsive Relat Disord 27:100557. Subscale validity against symptom subtypes: Huppert JD, Walther MR, Hajcak G, Yadin E, Foa EB, Simpson HB & Liebowitz MR (2007). The OCI-R: validation of the subscales in a clinical sample. J Anxiety Disord 21(3):394–406.',
     licence:'© Edna B. Foa 2002 (the copyright line printed on the form and on the paper’s Appendix). NO explicit grant of permission to reproduce or web-publish the scale could be located: the paper contains none, and PsyToolkit (who document scale licensing carefully) say only that it may be used for research while respecting that copyright note. The formal permission route is a request to Foa / the Center for the Treatment and Study of Anxiety at the University of Pennsylvania. Aggregator sites assert it is "public domain" or "free for non-commercial use", but none is the rights holder and none cites a grant. INCLUDED in the publicly hosted build by Ryan’s explicit decision (2026-08-04) on the basis that the scale circulates freely in NHS and university materials; this is a documented risk acceptance, not a located licence. Reverse it by removing ocir from ALLOW in build.py.',
@@ -16102,7 +16102,16 @@ Object.assign(App, {
   /* dispatch to the per-type psychometric body builder. Reused by the clinician
      summary (which sets State.currentTest/result/client per submission first). */
   resultBody(t, r){
-    return this._dispatchBody(t, r) + this._autoItemResponses(t, r);
+    const body = this._dispatchBody(t, r);
+    return body + this._ladderNote(t, body) + this._autoItemResponses(t, r);
+  },
+  /* The position words (within / mildly / moderately / markedly above) come from
+     the app's own reference ladder (refPosition), not from any paper. Say so once
+     on every report that uses them. */
+  _ladderNote(t, body){
+    const LADDER = new Set(['rmet','wurs_self','wurs_observer','rbq3_self','rbq3_other','gsq','wfirs_s','asrs_adolescent']);
+    if(!LADDER.has(t.id) || !/(mildly|moderately|markedly) above|within (this|the|reference)/i.test(body)) return '';
+    return `<p class="src-note" style="margin-top:10px">Position words (within / mildly / moderately / markedly above) are this app’s convention, set at about the 84th, 93rd and 98th centile (+1, +1.5 and +2 SD). They are not published cut-offs.</p>`;
   },
   /* instruments whose own result builder does NOT already list the person's
      per-item responses get the shared "Item responses" panel appended (so the
@@ -16327,7 +16336,8 @@ Object.assign(App, {
         const sx = (State.client.sex==='male'||State.client.sex==='female') ? State.client.sex : null;
         const nc = t.adultNorms.groups.nonclinical[sx || 'overall'];
         const z = (total - nc.mean) / t.adultNorms.pooledSD.nonclinical;
-        summary += ` Relative to the general adult population${sx?` (${sx})`:''}, this total is around the ${this.pctileShort(z)} percentile (Ruzich et al. 2015, N≈6,900).`;
+        const pz = zToPercentile(z);
+        summary += ` Relative to the general adult population${sx?` (${sx})`:''}, this total is ${pz>97 ? 'above roughly the 97th percentile' : `around the ${this.pctileShort(z)} percentile`} (normal-curve estimate from Ruzich et al. 2015, N≈6,900; the real upper tail is heavier, so high percentiles overstate rarity).`;
       }
     } else if(t.id==='aq_adolescent'){
       if(total>=30){ band='band-high'; bandLabel='At or above recommended cut-off (30)'; }
@@ -17794,7 +17804,7 @@ Object.assign(App, {
     const insomnia = total <= cut;
     const bandCls = insomnia ? 'band-high' : 'band-typical';
     const status = insomnia ? 'Probable insomnia disorder' : 'No insomnia indicated';
-    const shortMax = sc.shortMax, short = r.short, shortIns = r.hasShort && short <= (shortMax/2);
+    const shortMax = sc.shortMax, short = r.short;   // SCI-02 has no published cut-off, so its bar is neutral
     const summary = `SCI-08 total ${total} of ${max}. ${insomnia
       ? `This is at or below the cut-off of ${cut}, screening <b>positive</b> for probable insomnia disorder`
       : `This is above the cut-off of ${cut}; insomnia disorder is <b>not</b> indicated`}. Higher scores mean better sleep.`;
@@ -17824,7 +17834,7 @@ Object.assign(App, {
           <div class="sdq-u-row">
             <span class="sdq-name">SCI-02 short form</span>
             <span class="sdq-score">${r.hasShort?short:'—'}<span class="sdq-max">/${shortMax}</span></span>
-            <div class="sdq-track"><div class="vand-bar"><span class="vand-bar-fill ${shortIns?'fill-high':'fill-typical'}" style="width:${Math.max(0,Math.min(100,(short/shortMax)*100))}%"></span></div></div>
+            <div class="sdq-track"><div class="vand-bar"><span class="vand-bar-fill fill-accent" style="width:${Math.max(0,Math.min(100,(short/shortMax)*100))}%"></span></div></div>
             <span class="sdq-pct"></span>
           </div>
         </div>
@@ -18078,8 +18088,7 @@ Object.assign(App, {
         if(r.mean20 != null && cell.sd > 0){
           const z = (r.mean20 - cell.mean) / cell.sd, pos = posWord(z);
           const where = pos === 'within' ? 'within this range' : `${pos} this range`;
-          const gloss = pos === 'markedly above' ? ', higher than nearly the whole sample' : '';
-          tail = ` · ${who} ${where} (${sdPhrase(z)})${gloss}`;
+          tail = ` · ${who} ${where} (${sdPhrase(z)})`;
         }
         const med = cell.median != null ? `, median ${cell.median.toFixed(2)}${cell.iqr != null ? ` (IQR ${cell.iqr.toFixed(2)})` : ''}` : '';
         legend += `<div class="norm-legend-item"><span class="norm-legend-swatch" style="background:${g.color}"></span>${this.esc(g.label)} (n=${g.n}): mean total ${cell.mean} (SD ${cell.sd})${med}${tail}</div>`;
@@ -18580,7 +18589,7 @@ Object.assign(App, {
         track = `<div class="sdq-track"><div class="norm-axis"></div>${bands}<div class="hsc-cut" style="left:${impPct}%" title="impairment ≥1.5"></div><div class="norm-marker" style="left:${pct.toFixed(1)}%"><div class="norm-marker-dot"></div></div></div>`;
         const ctx = activeRefs.map(cr=>{
           const d = cr.domains[key]; if(!d || !(d.sd>0)) return null;
-          return `${zWord((s.mean-d.mean)/d.sd)} ${this.esc(cr.short)}`;
+          return `${zWord((s.mean-d.mean)/d.sd)} ${this.esc(cr.short)}${d.caveat?` (${this.esc(d.caveat)})`:''}`;
         }).filter(Boolean).join(' · ');
         note = [impNote, s.na?`${s.na} N/A`:'', ctx].filter(Boolean).join(' · ');
       } else {
@@ -19322,7 +19331,7 @@ Object.assign(App, {
         : {c:'good',x:`Clearer separation (d≈${r2})`};
       return `<div class="spql-badge spql-badge-${b.c}">${b.x}</div>`; };
     // compact separation cell (Cohen's d) for the by-sense table
-    const sepWord=d=> d==null?{c:'',x:'—'} : d<0.2?{c:'none',x:`near-total (${d.toFixed(2)})`} : d<0.5?{c:'low',x:`large (${d.toFixed(2)})`} : d<0.8?{c:'mod',x:`moderate (${d.toFixed(2)})`} : {c:'good',x:`clear (${d.toFixed(2)})`};
+    const sepWord=d=> d==null?{c:'',x:'—'} : d<0.2?{c:'none',x:`negligible (${d.toFixed(2)})`} : d<0.5?{c:'low',x:`small (${d.toFixed(2)})`} : d<0.8?{c:'mod',x:`medium (${d.toFixed(2)})`} : {c:'good',x:`large (${d.toFixed(2)})`};
     // per-group lanes (box = ±1 SD, dot = mean); shared renderer, no cut-offs here
     const lanes=(max, groups, score, dir)=>this.groupLanes({max, groups, score, dir});
     const origMax=t.id==='spq35'?105:276, okey=t.id==='spq35'?'short':'full';
@@ -19350,7 +19359,7 @@ Object.assign(App, {
       });
       html+=`<div class="panel"><div class="panel-head"><h3>By sense</h3></div>
         <table class="spq-subtab"><thead><tr><th>Sense</th><th class="r">This client</th><th class="r">Autistic (SD)</th><th class="r">Non-autistic (SD)</th><th class="r">Separation</th></tr></thead><tbody>${rows}</tbody></table>
-        <p class="panel-sub">Lower = more sensitive; ${sexWord} sample. "Separation" is how distinct the two groups are (Cohen's d). At near-total overlap the score says little about group membership.</p></div>`;
+        <p class="panel-sub">Lower = more sensitive; ${sexWord} sample. "Separation" is Cohen's d between the two groups, worded by Cohen's (1988) conventions: 0.2 small, 0.5 medium, 0.8 large. Below 0.2 the groups overlap almost entirely and the score says little about group membership.</p></div>`;
     }
     if(r.hasRs && RN && sexKey==='male'){
       // revised scoring has a female-only reference sample → not interpretable for men
@@ -20174,7 +20183,7 @@ Object.assign(App, {
           ${totalRow}
           ${subtypeRows}
         </div>
-        <p class="panel-sub" style="margin:10px 0 0;font-size:12.5px">Community norms (Adler 2018, N=22,397): general ${an.general.mean} (SD ${an.general.sd}); women ${an.sex.female.mean} / men ${an.sex.male.mean}; higher in younger adults (≈${an.age['18-29'].mean} at 18–29, falling to ≈${an.age['65+'].mean} at 65+). The 0–72 frequency total for this client is ${r.total}.</p>
+        <p class="panel-sub" style="margin:10px 0 0;font-size:12.5px">Community norms (Adler 2018, N=22,397): general ${an.general.mean} (SD ${an.general.sd}); women ${an.sex.female.mean} / men ${an.sex.male.mean}; higher in younger adults (≈${an.age['18-29'].mean} at 18–29, falling to ≈${an.age['65+'].mean} at 65+). The deviation above uses the sex norms only, because Adler reports age figures for 18–29 and 65+ alone. The 0–72 frequency total for this client is ${r.total}.</p>
       </div>`;
     }
 
@@ -20251,7 +20260,7 @@ Object.assign(App, {
           </div>
         </details>
         <div class="norm-legend" style="margin-top:12px;padding-top:12px"><div class="norm-legend-item"><span class="norm-legend-dot"></span>This client</div><div class="norm-legend-item"><span class="norm-legend-swatch" style="background:var(--green);opacity:.5"></span>Non-ADHD ±1 SD</div><div class="norm-legend-item"><span class="norm-legend-swatch" style="background:var(--rose-fill);opacity:.5"></span>ADHD ±1 SD</div></div>
-        <p class="src-note">${this.esc(t.itemNorms.source)} Group ±1 SD ranges are estimated via Cronbach α (var(total)=Σσ²ᵢ/(1−α(k−1)/k), α=${alpha}). Shown as ±1 SD ranges and categories, not precise percentiles, because the empirical score distribution isn't published. Any percentile would be a normal-curve model over this same SD.</p>
+        <p class="src-note">${this.esc(t.itemNorms.source)} Group ±1 SD ranges are estimated via Cronbach α (var(total)=Σσ²ᵢ/(1−α(k−1)/k), α=${alpha}). The α is the full 18-item scale’s, quoted by Adler from another sample; reusing it for the 9-item subscales probably makes those ranges somewhat too wide. Shown as ±1 SD ranges and categories, not precise percentiles, because the empirical score distribution isn't published. Any percentile would be a normal-curve model over this same SD.</p>
       </div>`;
     }
 
