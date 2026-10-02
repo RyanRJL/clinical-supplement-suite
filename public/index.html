@@ -8659,7 +8659,7 @@ Object.assign(REGISTRY, {"asrs":{
     totalMax:72 },
   /* US general-population norms for the 0–18 Symptom-Checklist total — Adler et al.
      (2018), Int J Clin Pract 73(1):e13260; N=22,397. The distribution is highly skewed
-     (most adults score 0–1), so deviation from the mean is descriptive, not a precise
+     (scores bunch near 0: mean 2.0, SD 3.2, floor 0), so deviation from the mean is descriptive, not a precise
      percentile. Age bands: only the 18–29 and 65+ means are reported numerically in the
      text (intermediate bands appear only in a figure), so the age trend is shown but not
      used for a point estimate. */
@@ -8671,7 +8671,7 @@ Object.assign(REGISTRY, {"asrs":{
     age:{'18-29':{mean:3.0, sd:4.1}, '65+':{mean:1.2, sd:2.1}},
     race:{White:{mean:2.0, sd:3.1}, Black:{mean:2.2, sd:3.7}, Other:{mean:2.5, sd:3.8}},
     hispanic:{mean:2.8, sd:4.2},
-    note:'Items 1, 2, 3, 9, 12, 16, 18 score a point from “sometimes”; the other 11 items from “often”. Most community adults score 0–1 (mean 2.0), so read a score as deviation from this skewed community average, not a normal-curve percentile.'
+    note:'Items 1, 2, 3, 9, 12, 16, 18 score a point from “sometimes”; the other 11 items from “often”. Community scores bunch near 0 (mean 2.0, SD 3.2), so read a score as deviation from this community average, not a normal-curve percentile.'
   },
   /* Per-item means (SD) on the raw 0–4 frequency scale, by ADHD status, from the
      SAME study (Adler 2018, N=22,397). Used for the ADHD-vs-non-ADHD symptom
@@ -13185,7 +13185,7 @@ const AGE_BOUNDS = {
   aq_child:      {min:4,  max:11,  label:'4–11 years',      note:'Validated on ages 4–11 (Auyeung et al. 2008)'},
   aq_adolescent: {min:12, max:15,  label:'12–15 years',     note:'ARC form and scoring key: ages 12–15; AQ-Adolescent validated on ages 9.8–16.5 (Baron-Cohen et al. 2006)'},
   aq_adult:      {min:16, max:null,label:'16+ years',          note:'Validated on adults 16+ (Baron-Cohen et al. 2001); clinical data from 18+ (Ashwood et al. 2016)'},
-  rmet:          {min:16, max:null,label:'16+ years',       note:'Adult version validated on 16+ (Baron-Cohen et al. 2001); a separate child version exists but is not included here'},
+  rmet:          {min:16, max:null,label:'16+ years',       note:'Adult version used from 16 (Greenberg et al. 2023, PNAS, ages 16–70; the authors note it is not fully validated under 16). Age and sex percentiles (Kynast 2021) start at 20. A separate child version exists but is not included here'},
   asrs:          {min:18, max:null,label:'18+ years',       note:'Screener accuracy from adults aged 18–44 (Kessler et al. 2005); community norms extend to 65+ (Adler et al. 2018)'},
   baars_self:    {min:18, max:null,label:'18+ years',       note:'BAARS-IV adult version covers ages 18+ (Barkley 2011)'},
   baars_informant:{min:18,max:null,label:'18+ years',       note:'BAARS-IV adult version covers ages 18+ (Barkley 2011)'},
@@ -15586,7 +15586,7 @@ const App = {
             ['Other race', `${an.race.Other.mean} (${an.race.Other.sd})`],
             ['Hispanic', `${an.hispanic.mean} (${an.hispanic.sd})`]
           ]) +
-          note(`Items 1, 2, 3, 9, 12, 16, 18 score a point from “sometimes”; the other 11 from “often”. Subtype symptomatic at ≥${an.subtypeSymptomatic} of 9. Distribution is skewed (most score 0–1), read as deviation, not a normal-curve percentile.`) +
+          note(`Items 1, 2, 3, 9, 12, 16, 18 score a point from “sometimes”; the other 11 from “often”. Subtype symptomatic at ≥${an.subtypeSymptomatic} of 9. Scores bunch near 0 (the floor is less than one SD below the mean), so read as deviation, not a normal-curve percentile.`) +
           src(an.source);
       }
       const inm = t.itemNorms;
@@ -15814,7 +15814,7 @@ const App = {
         note(`${t.items.length} items rated 0–${sc.options.length-1} (${sc.options.map(o=>o.label).join(' / ')}) for the past 7 days. Total 0–${sc.totalMax}.`) +
         `<h4>Average Total Score (total ÷ ${t.items.length}), severity anchor</h4>` +
         tbl(['Average','Severity'], sc.anchors.map((a,i)=>[String(i), a])) +
-        note('The Average Total Score reduces the total to a 0–4 scale; round to the nearest anchor. Monitoring/severity measure, not diagnostic.') +
+        note('The Average Total Score reduces the total to a 0–4 scale. The APA form gives no rule for a fractional average; the app rounds to the nearest level (x.5 rounds up). Monitoring/severity measure, not diagnostic.') +
         src(t.licence) + `</div>`;
     }
 
@@ -18817,6 +18817,7 @@ Object.assign(App, {
       const floored = norm && norm.sd>0 && norm.mean <= norm.sd;
       const pct = z==null ? '<span class="sdq-pct-empty">—</span>'
         : floored ? `<span title="Sample scores pile up at 0, so no percentile is given">${mean===0 ? 'at floor' : (z>=0?'+':'−')+Math.abs(z).toFixed(1)+' SD'}</span>`
+        : mean >= 3 ? '<span title="Highest possible score; a normal curve would place part of the sample above it, so no percentile is given">at ceiling</span>'
         : this.pctileCell(z);
       return `<div class="sdq-u-row">
         <span class="sdq-name">${this.esc(f.name||key)}</span>
@@ -20107,7 +20108,7 @@ Object.assign(App, {
     const z = refN.sd>0 ? (cTotal - refN.mean)/refN.sd : 0;
     const zTxt = (z>=0?'+':'') + z.toFixed(1);
     // NO band pill on this row. The Adler community distribution is heavily
-    // floor-bound (mean 2.0, SD 3.2, floor 0 — most adults score 0-1), which the
+    // floor-bound (mean 2.0, SD 3.2, floor 0), which the
     // panel text below already states; z is not interpretable on it, so neither
     // is any band derived from z. The old rule went red at +2 SD, i.e. a raw
     // 8.4/18. The deviation itself is still reported, in SDs, as a magnitude.
@@ -20141,7 +20142,7 @@ Object.assign(App, {
     adlerPanel = `
       <div class="panel">
         <div class="panel-head"><h3>Symptom burden vs US general population</h3><span class="card-tag tag-adhd">Total ${cTotal}/18 · ${refLabel} mean ${refN.mean}</span></div>
-        <p class="panel-sub">The 0–18 Symptom-Checklist total (items 1, 2, 3, 9, 12, 16, 18 count from Sometimes; the other 11 from Often) against the ${refLabel} (mean ${refN.mean}, SD ${refN.sd}). Green band = community mean ±1 SD; tick = +2 SD. This score is about ${zTxt} SD from the community mean. The community distribution is highly skewed (most adults score 0–1), so read this as deviation, not a precise percentile.</p>
+        <p class="panel-sub">The 0–18 Symptom-Checklist total (items 1, 2, 3, 9, 12, 16, 18 count from Sometimes; the other 11 from Often) against the ${refLabel} (mean ${refN.mean}, SD ${refN.sd}). Green band = community mean ±1 SD; tick = +2 SD. This score is about ${zTxt} SD from the community mean. Community scores bunch near 0 (the floor is less than one SD below the mean), so read this as deviation, not a precise percentile.</p>
         <div class="profile-table" style="--cols:minmax(150px,1.2fr) 58px minmax(140px,2.6fr) 150px">
           <div class="ph"><span>Measure</span><span class="r">Score</span><span class="col-opt">vs ${refLabel} (mean ${refN.mean})</span><span class="c">Deviation</span></div>
           ${totalRow}
@@ -20224,7 +20225,7 @@ Object.assign(App, {
           </div>
         </details>
         <div class="norm-legend" style="margin-top:12px;padding-top:12px"><div class="norm-legend-item"><span class="norm-legend-dot"></span>This client</div><div class="norm-legend-item"><span class="norm-legend-swatch" style="background:var(--green);opacity:.5"></span>Non-ADHD ±1 SD</div><div class="norm-legend-item"><span class="norm-legend-swatch" style="background:var(--rose-fill);opacity:.5"></span>ADHD ±1 SD</div></div>
-        <p class="src-note">${this.esc(t.itemNorms.source)} Group ±1 SD ranges are estimated via Cronbach α (var(total)=Σσ²ᵢ/(1−α(k−1)/k), α=${alpha}) and corroborated by NovoPsych's independent correlation-based estimate (ADHD ≈13.4, non-ADHD ≈9.8; ~3% from ours). Shown as ±1 SD ranges and categories, not precise percentiles, because the empirical score distribution isn't published. Every available percentile (incl. NovoPsych's) is a normal-curve model over this same SD.</p>
+        <p class="src-note">${this.esc(t.itemNorms.source)} Group ±1 SD ranges are estimated via Cronbach α (var(total)=Σσ²ᵢ/(1−α(k−1)/k), α=${alpha}). Shown as ±1 SD ranges and categories, not precise percentiles, because the empirical score distribution isn't published. Any percentile would be a normal-curve model over this same SD.</p>
       </div>`;
     }
 
@@ -20314,7 +20315,9 @@ Object.assign(App, {
     const max = an.screenerMax || 24;
     let pasum = 0; (t.scoring.partA || []).forEach(n=>{ const v = ans[n]; if(v != null) pasum += v; });
     const z = norm.sd>0 ? (pasum - norm.mean)/norm.sd : 0;
-    const pct = this.pctileCell(z);
+    // At 0 the normal curve would place part of the sample below the floor, so
+    // the percentile is not meaningful there.
+    const pct = pasum === 0 ? 'at floor' : this.pctileCell(z);
     const elevated = r.partAPositive;
     // the pill states the NATIVE screen outcome only (Green et al. 2018 define
     // the >=4-of-6 screen, not an SD band). The old `z>=1 → amber` fallback
@@ -20480,6 +20483,7 @@ Object.assign(App, {
     const ordinal = p => { const n=Math.round(p); const s=(n%10===1&&n%100!==11)?'st':(n%10===2&&n%100!==12)?'nd':(n%10===3&&n%100!==13)?'rd':'th'; return n+s; };
     const lookupPct = (key, raw) => { if(!key || !pctGroup || !pctGroup[key]) return null; const a=pctGroup[key]; return a[Math.min(raw, a.length-1)]; };
     const bandLabel = ageBand==='5-10' ? 'ages 5–10' : 'ages 11–15';
+    const offBand = cAge!=null && (cAge<5 || cAge>15);   // 4, 16 and 17 have no band of their own
 
     // ONE unified row: name · score · normative track (mean±1SD band + ● marker) · percentile · band
     const urow = (key, name, max, raw, band, opts={}) => {
@@ -20521,7 +20525,7 @@ Object.assign(App, {
       ? `<span class="card-tag tag-behaviour">${sex.charAt(0).toUpperCase()+sex.slice(1)} · ${bandLabel}</span>`
       : `<span class="card-tag tag-behaviour">${t.respondent}</span>`;
     const subText = N
-      ? `Score, the community comparison (green band = mean ±1 SD, ● = this child), percentile (% of community children scoring this or lower), and four-band category, per scale. Higher = more difficulty, except prosocial.${(cAge==null && t.id!=='sdq_self')?' Age unknown, using the 11–15 band; add a DOB for age-matched norms.':''}`
+      ? `Score, the community comparison (green band = mean ±1 SD, ● = this child), percentile (% of community children scoring this or lower), and four-band category, per scale. Higher = more difficulty, except prosocial.${(cAge==null && t.id!=='sdq_self')?' Age unknown, using the 11–15 band; add a DOB for age-matched norms.':''}${offBand?` Age ${cAge} is outside the normed age bands, so the nearest band (${bandLabel}) is used.`:''}`
       : `Score, scale position (●), and four-band category. Add the child's sex and date of birth on the intake screen to show community percentiles and the mean comparison.`;
 
     return `
