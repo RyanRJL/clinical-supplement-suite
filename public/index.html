@@ -8853,7 +8853,7 @@ Object.assign(REGISTRY, {"baars_self":{
 const PHQGAD_OPTIONS = [{label:'Not at all'},{label:'Several days'},{label:'More than half the days'},{label:'Nearly every day'}];
 Object.assign(REGISTRY, {"phq9":{
   id:'phq9', name:'PHQ-9', fullName:'Patient Health Questionnaire-9 (Depression)',
-  category:'mood', status:'live', respondent:'Self-report', ageRange:'Adults (14+)', estMinutes:'2–4 min',
+  category:'mood', status:'live', respondent:'Self-report', ageRange:'14+ years', estMinutes:'2–4 min',
   description:'Nine-item depression severity measure. “Over the last 2 weeks, how often have you been bothered by…”. Conventional severity bands plus German general-population percentiles.',
   citation:'Kroenke K, Spitzer RL, Williams JBW (2001). The PHQ-9. J Gen Intern Med 16:606–613. Norms: Kocalevent, Hinz & Brähler (2013), Gen Hosp Psychiatry 35:551–555 (German general population, N=5018).',
   licence:'Public domain (Pfizer). No permission required to reproduce, translate, display or distribute.',
@@ -9804,7 +9804,7 @@ Object.assign(REGISTRY, {"catq":{
       'Each of the 24 situations is rated twice (Fear 0–3, Avoidance 0–3) over the past week; total 0–144 (Fear 0–72 + Avoidance 0–72).',
       'Performance items: 1,2,3,4,6,8,9,13,14,16,17,20,21 (13). Social-interaction items: the remaining 11. This is the author\'s own allocation, taken from the (P) / (S) tag printed against each item on the original scale (Liebowitz 1987, Fig. 1) and matching the 13 / 11 counts in his 2003 guidelines. Two of the tags are counter-intuitive and are still his: item 21 is performance, item 15 is social interaction.',
       'Cut-offs: ≥30 classified social anxiety disorder against no disorder, and ≥60 discriminated the generalized from the non-generalized form, on this self-report version in Rytwinski et al. (2009), the same values Mennin et al. (2002) found on the clinician-administered LSAS and cited in the author\'s own guidelines. These two thresholds drive the result colour.',
-      'The six severity words (Minimal / Mild / Moderate / Marked / Severe / Very severe) come from the interpretation table circulated by the National Social Anxiety Center, not from a validation study. They are shown as description only; a competing table in equally wide circulation puts Moderate at 55-64. Read the total and the two published cut-offs above the label.',
+      'The six severity words (Minimal / Mild / Moderate / Marked / Severe / Very severe) come from the interpretation table circulated by the National Social Anxiety Center, not from a validation study. They are shown as description only. Read the total and the two published cut-offs above the label.',
       'Developed and validated in adults (Safren 1999 sample 18–61). For under-18s use the dedicated child/adolescent version (LSAS-CA), which is a separate instrument.',
       'Liebowitz designed the LSAS as a clinician-administered interview and did not intend it as a self-rated scale, though it is widely used as one; the two modes agree reasonably well where the person has been briefed properly on the conventions first (Fresco et al. 2001). The per-situation notes in this form carry that briefing, and "Administer with patient" gives the rater guidance.'
     ]
@@ -13197,16 +13197,16 @@ const AGE_BOUNDS = {
   asrs:          {min:18, max:null,label:'18+ years',       note:'Screener accuracy from adults aged 18–44 (Kessler et al. 2005); community norms extend to 65+ (Adler et al. 2018)'},
   baars_self:    {min:18, max:null,label:'18+ years',       note:'BAARS-IV adult version covers ages 18+ (Barkley 2011)'},
   baars_informant:{min:18,max:null,label:'18+ years',       note:'BAARS-IV adult version covers ages 18+ (Barkley 2011)'},
-  phq9:          {min:14, max:null,label:'14+ years',       note:'PHQ-9 norms cover ages 14–92 (Kocalevent et al. 2013); validated in adults and adolescents'},
+  phq9:          {min:14, max:null,label:'14+ years',       note:'PHQ-9 norms cover ages 14–92 (Kocalevent et al. 2013). The severity bands are the adult ones; an adolescent validation (Richardson et al. 2010, ages 13–17) found 11 or more best for major depression (sensitivity 89.5%, specificity 77.5%), against 10 in adults'},
   gad7:          {min:16, max:null,label:'16+ years',       note:'GAD-7 norms cover ages 16+ (Kliem et al. 2025)'},
-  vand_parent:   {min:6,  max:12,  label:'6–12 years',      note:'NICHQ Vanderbilt validated for school-age children ~6–12 (AAP/NICHQ 2002)'},
-  vand_teacher:  {min:6,  max:12,  label:'6–12 years',      note:'NICHQ Vanderbilt validated for school-age children ~6–12 (AAP/NICHQ 2002)'},
+  vand_parent:   {min:6,  max:12,  label:'6–12 years',      note:'Validation studies were for ages 6–12 (AAP Vanderbilt scoring instructions); being DSM-5 criteria based, the AAP says it can also be used with preschoolers and adolescents'},
+  vand_teacher:  {min:6,  max:12,  label:'6–12 years',      note:'Validation studies were for ages 6–12 (AAP Vanderbilt scoring instructions); being DSM-5 criteria based, the AAP says it can also be used with preschoolers and adolescents'},
   snap_parent:   {min:6,  max:18,  label:'6–18 years',      note:'SNAP-IV 26 spans school age and adolescence (about 6 to 18); Bussing et al. 2008 community data cover ages 5 to 11 only'},
   snap_teacher:  {min:6,  max:18,  label:'6–18 years',      note:'SNAP-IV 26 spans school age and adolescence (about 6 to 18); Bussing et al. 2008 community data cover ages 5 to 11 only'},
   sdq_parent:    {min:4,  max:17,  label:'4–17 years',      note:'SDQ parent/teacher version covers ages 4–17 (Goodman)'},
   rcads_self:    {min:8,  max:18,  label:'8–18 years',      note:'RCADS self-report covers ages 8–18 (Chorpita et al. 2000); T-score norms cover ages 9–18, so age 8 uses the youngest band; too developmentally advanced for significant learning disability'},
   rcads_parent:  {min:8,  max:18,  label:'8–18 years',      note:'RCADS-P covers the same 8–18 age range as the self-report (Ebesutani et al. 2011); T-score norms cover ages 9–18, so age 8 uses the youngest band'},
-  rcads25_self:  {min:8,  max:18,  label:'8–18 years',      note:'RCADS-25 short form covers ages 8–18 (Ebesutani et al. 2012); T-score norms cover ages 9–18, so age 8 uses the youngest band'},
+  rcads25_self:  {min:8,  max:18,  label:'8–18 years',      note:'RCADS-25 short form validated in school grades 3–12, about ages 8–18 (Ebesutani et al. 2012 gives grades, not ages); T-score norms cover ages 9–18, so age 8 uses the youngest band'},
   rcads25_parent:{min:8,  max:18,  label:'8–18 years',      note:'RCADS-25-P short form covers ages 8–18 (Ebesutani et al. 2017); T-score norms cover ages 9–18, so age 8 uses the youngest band'},
   sdq_self:      {min:11, max:17,  label:'11–17 years',     note:'SDQ self-report version is for ages 11–17 (Goodman)'},
   sad_child:     {min:11, max:17,  label:'11–17 years',     note:'DSM-5 child severity measure for ages 11–17 (Craske et al. 2013)'},
@@ -16379,7 +16379,7 @@ Object.assign(App, {
             <div style="font-family:var(--font-display);font-size:42px;font-weight:700;color:var(--ink)">${a10}<span style="font-size:20px;color:var(--ink-faint)">/10</span></div>
             <div>
               <span class="band-pill ${a10band}">${a10>=6?'At or above referral threshold (6)':'Below referral threshold (6)'}</span>
-              <p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;max-width:42ch">${a10>=6?'A score of 6+ is the point at which NICE suggests considering referral for full assessment.':'Below the threshold of 6 at which referral is typically considered.'}</p>
+              <p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;max-width:42ch">${a10>=6?'A score of 6 or above is the point at which NICE recommends offering a comprehensive autism assessment (NICE CG142, recommendation 1.2.3).':'Below the threshold of 6 at which referral is typically considered.'}</p>
             </div>
           </div>
         </div>`;
@@ -18919,15 +18919,23 @@ Object.assign(App, {
     const collat=[];
     if(col.partner&&col.partner.name) collat.push(`<b>${esc(cLabelA)}</b> ${this.interviewInformantHtml(col.partner,'paren')}`);
     if(col.family&&col.family.name) collat.push(`<b>${esc(cLabelC)}</b> ${this.interviewInformantHtml(col.family,'paren')}`);
-    const onsetTxt = r.onset==='yes'?'Several symptoms before age 12 (set)':r.onset==='no'?'Not before age 12 (set)':'From childhood symptoms (auto)';
+    const onsetTxt = r.onset==='yes'?'Several symptoms before age 12 (set)':r.onset==='no'?`Not before age 12 (set)${r.onsetAge!=null&&r.onsetAge!==''?`, starting from age ${esc(r.onsetAge)}`:''}`:'From childhood symptoms (auto)';
+    const clin = r.dxSource==='clinician';
+    const presTxt = (r.presentation||'') + (r.remission?', partly in remission':'');
+    const autoTxt = r.autoDiagnosisMet ? `criteria met${r.autoPresentation?` (${r.autoPresentation})`:''}` : 'criteria not met';
+    const csWord = v => v==null ? null : v==='na' ? 'N/A' : ({'0':'0, none or little support','1':'1, some support','2':'2, clear support'})[String(v)] || String(v);
+    const cs = r.collateralSupport || {};
+    const csRows = [['Parent(s) / sibling / other',cs.family],['Partner / good friend / other',cs.partner],['School reports',cs.school]].filter(x=>x[1]!=null);
     return `
       <div class="score-hero"><div class="score-summary" style="max-width:none">
         <div class="ss-label">${esc(t.fullName)}</div>
-        <h2>${met?`ADHD criteria met${r.presentation?`: ${esc(r.presentation)}`:''}`:'ADHD criteria not met'}</h2>
-        <p>${met
+        <h2>${clin ? (met?`ADHD: ${esc(presTxt)}`:'No ADHD diagnosis') : (met?`ADHD criteria met${r.presentation?`: ${esc(presTxt)}`:''}`:'ADHD criteria not met')}</h2>
+        <p>${clin
+          ? `Clinician’s diagnosis${r.dsmCode?` (${esc(r.dsmCode)})`:''}${r.severity?`, ${esc(r.severity)} severity`:''}. ${r.dxDiffers?`<b>This differs from the interview’s automatic readout</b> (${esc(autoTxt)}).`:`The interview’s automatic readout agrees (${esc(autoTxt)}).`}`
+          : met
           ? `The DSM-5 criteria for ${adhdNoun} are met on this interview${r.dsmCode?` (${esc(r.dsmCode)})`:''}${r.severity?`, ${esc(r.severity)} severity`:''}. This is a clinician decision aid. Confirm against the full clinical picture.`
-          : `The DSM-5 criteria for ${adhdNoun} are not fully met on this interview. The counts and unmet criteria are shown below; clinical judgement applies.`}</p>
-        <span class="band-pill ${met?'band-high':'band-typical'}">${met?'Criteria met':'Criteria not met'}</span>
+          : `The DSM-5 criteria for ${adhdNoun} are not fully met on this interview. The counts and unmet criteria are shown below; clinical judgement applies.`}${!clin&&r.remission?' Recorded as partly in remission.':''}</p>
+        <span class="band-pill ${met?'band-high':'band-typical'}">${clin?(met?'ADHD (clinician)':'No ADHD (clinician)'):(met?'Criteria met':'Criteria not met')}</span>
       </div></div>
 
       ${this.caveatLine(t)}
@@ -18950,6 +18958,7 @@ Object.assign(App, {
           <div><span>C/D · Impairment in ≥2 domains</span>${yn(crit.CD)}</div>
           <div><span>E · Not better explained</span>${yn(crit.E)}</div>
         </div>
+        ${csRows.length?`<p class="panel-sub" style="margin-bottom:4px"><b>Diagnosis supported by collateral information:</b> ${csRows.map(x=>`${esc(x[0])}: ${esc(csWord(x[1]))}`).join(' · ')}.</p>`:''}
         <p class="panel-sub">Onset: ${esc(onsetTxt)}.${(impA.length||impC.length)?(twoStage?` Impaired domains: ${esc(sA.toLowerCase())}: ${impA.join(', ')||'none'}; ${esc(sC.toLowerCase())}: ${impC.join(', ')||'none'}.`:` Impaired domains: ${impA.join(', ')||'none'}.`):''}</p>
       </div>
 
