@@ -16944,9 +16944,9 @@ Object.assign(App, {
       // so one effect size is never described two ways in one report
       const a = Math.abs(d), r2 = a.toFixed(2);
       const b = a < 0.2 ? {c:'none', x:`Groups overlap almost entirely (d≈${r2})`}
-        : a < 0.5 ? {c:'low',  x:`Large overlap between groups (d≈${r2})`}
-        : a < 0.8 ? {c:'mod',  x:`Moderate separation (d≈${r2})`}
-        : {c:'good', x:`Clearer separation (d≈${r2})`};
+        : a < 0.5 ? {c:'low',  x:`Small separation, large overlap between groups (d≈${r2})`}
+        : a < 0.8 ? {c:'mod',  x:`Medium separation (d≈${r2})`}
+        : {c:'good', x:`Large separation (d≈${r2})`};
       // a NEGATIVE d is not a weaker positive one: the controls scored higher,
       // so the direction has to be said, not just the size
       return `<span class="spql-badge spql-badge-${b.c}" style="margin:0;white-space:nowrap">${d < 0 ? `Controls scored higher (d≈−${r2})` : b.x}</span>`;
@@ -20001,7 +20001,9 @@ Object.assign(App, {
     // as a plain line beside the sum bands; they do not drive the colour.
     const sw = t.swanson5pct;
     // items 1-18 actually answered (a clinician edit can leave blanks); average over those
-    const n18 = Array.from({length:18},(_,i)=>i+1).filter(n=>(r.answers||{})[n]!=null).length || 18;
+    // (older results saved without answers: use the subsets' own answered counts, as the subset lines do)
+    const n18 = r.answers ? (Array.from({length:18},(_,i)=>i+1).filter(n=>r.answers[n]!=null).length || 18)
+      : (((subs.inattention&&subs.inattention.answered)||0) + ((subs.hyperactive&&subs.hyperactive.answered)||0) || 18);
     const swLine = (key, raw, nItems) => {
       if(!sw || !key || sw[key]==null || !nItems) return '';
       // compare the 2-dp mean that is printed, so the words match the figures
