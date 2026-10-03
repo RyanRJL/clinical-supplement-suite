@@ -12966,9 +12966,11 @@ const App = {
     // The app's name lives in the topbar's centred title slot rather than in a
     // page heading, so the shell keeps that vertical space for the library. The
     // online console owns this same element for its section titles, so only set
-    // it when this local home is the one being mounted.
+    // it when this local home is the one being mounted. results.js also mounts
+    // this home on every page load, online included, so without the mode check
+    // the hosted app showed this name in its topbar while it loaded.
     const at = document.getElementById('cc-apptitle');
-    if(at) at.textContent = 'Clinical Supplement Suite';
+    if(at && (typeof CONFIG === 'undefined' || CONFIG.resolvedMode !== 'online')) at.textContent = 'Clinical Supplement Suite';
     this.renderDeck(true);
   },
 
