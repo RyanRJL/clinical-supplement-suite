@@ -111,6 +111,11 @@ app     = (SRC / 'ui/app.js').read_text(encoding='utf-8')
 results = (SRC / 'ui/results.js').read_text(encoding='utf-8')
 shell   = (SRC / 'index.html').read_text(encoding='utf-8')
 
+# The session interface (this repo's own files, layered on the app's engine:
+# it calls REGISTRY, Scoring.run and App.resultBody, never copies them).
+suite_css = (HERE / 'ui' / 'suite.css').read_text(encoding='utf-8')
+suite_js  = (HERE / 'ui' / 'suite.js').read_text(encoding='utf-8')
+
 # Force local mode no matter where the file is hosted (auto-detect would flip to
 # 'online' on a web host), and strip the Supabase credentials: this tool never
 # talks to the app's backend.
@@ -182,8 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {{
       .map(function(b){{ return Object.assign({{}}, b, {{ tests: (b.tests||[]).filter(function(t){{ return ALLOW.has(t); }}) }}); }})
       .filter(function(b){{ return b.tests.length; }});
   }}
-  App.renderHome();
-  App.go('home');
+  Suite.boot();
 }});"""
 
 cutmaster = build_cutoffs_master()   # after ALLOW: filters the cut-off rows to the visible instruments
@@ -275,6 +279,7 @@ js_bundle = '\n\n'.join(p for p in [
     strip_file_header(state),
     strip_file_header(app),
     strip_file_header(results),
+    suite_js,
     online_boot,
 ] if p)
 
@@ -287,6 +292,9 @@ out = f"""<!DOCTYPE html>
 <title>{title}</title>
 <style>
 {css}
+</style>
+<style>
+{suite_css}
 </style>
 </head>
 <body>
