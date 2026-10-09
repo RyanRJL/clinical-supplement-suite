@@ -1,0 +1,4 @@
+Copied from assessment_suite_project commit d0f5c47
+
+These are copies of the app's files, stripped of copyright-excluded content.
+Never edit them here: fix the app, then run  py build.py --sync

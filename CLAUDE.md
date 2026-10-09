@@ -8,20 +8,22 @@ A separate product from the Neurominds assessment app. Hosted at tools.neuromind
 The app (`../assessment_suite_project`) is the more important product. This project
 must never change it.
 
-- `build.py` READS the app's engine, UI, norms and validator. It must never write to
-  the app repo (the cut-off master is built in memory for this reason).
+- `build.py --sync` READS the app's committed files (`git show`) and copies the ones
+  the build needs into `app/` here. It must never write to the app repo.
+- `app/` is a copy, never edited here. Instrument data and scoring are fixed in the
+  app, then synced (`py build.py --sync`); a fix made only in `app/` would be lost on
+  the next sync and would diverge from the app.
 - Do not edit app files to suit this tool. If the tool needs something the app
-  doesn't have, raise it with Ryan first.
-- Instrument data and scoring are fixed in the app, never patched here. Rebuild here
-  afterwards to pick the fix up.
+  doesn't have, raise it with Ryan first. This repo's own interface is `ui/`.
 
 ## Copyright
 
 Only copyright-clean instruments ship. `ALLOW` controls what appears; anything
-excluded for copyright is also physically stripped, and the `_FORBIDDEN` leak check
-must keep passing. Never weaken or bypass either.
+excluded for copyright is also physically stripped before `app/` is written (this
+repo is public), and the `_FORBIDDEN` leak check must keep passing on both the copy
+and the build. Never weaken or bypass either.
 
 ## Publishing
 
-`py build.py`, then commit `public/` and `BUILT_FROM.txt` and push. Don't publish a
-build the script warns was made from an app with uncommitted changes.
+`py build.py` (or `py build.py --sync` to pick up app changes), then commit `app/`,
+`public/` and `BUILT_FROM.txt` and push.

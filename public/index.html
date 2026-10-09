@@ -7329,6 +7329,40 @@ body.su-on > .app{ display:none; }
 .su-more{ display:block !important; width:100%; padding:12px 20px !important; border-top:1px dashed var(--su-line-2) !important; font-size:13px; color:var(--su-green) !important; font-weight:600; text-align:left !important; }
 .su-none{ padding:28px 20px; color:var(--su-muted); }
 .su-foot{ font-size:12px; color:var(--su-muted); padding:8px 4px 0; }
+.su-libtools{ display:flex; align-items:center; gap:10px; flex:none; }
+.su-libtools .su-search{ width:min(300px,32vw); }
+.su-viewtog button{ padding:6px 12px !important; }
+
+/* carousel: a vertical wheel of cards, the centred one in focus */
+.su-car{ flex:1; min-height:0; display:flex; flex-direction:column; gap:6px; }
+.su-carstage{ flex:1; min-height:0; position:relative; perspective:1400px; overflow:hidden; border-radius:20px;
+  -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%); mask-image:linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%); }
+.su-carstage .su-none{ text-align:center; padding-top:18%; }
+.su-cc{ position:absolute; left:50%; top:50%; width:min(640px, calc(100% - 24px)); background:var(--su-card); border:1px solid var(--su-line); border-radius:22px; box-shadow:var(--su-shadow);
+  padding:16px 22px 16px; display:flex; flex-direction:column; gap:8px; cursor:pointer; transform-origin:50% 50%;
+  transition:transform .5s var(--su-ease), opacity .4s, box-shadow .3s, border-color .3s; will-change:transform; }
+.su-cc.on{ border-color:var(--su-green-2); box-shadow:0 0 0 4px var(--su-mist), 0 30px 60px -34px rgba(30,41,35,.5); cursor:default; }
+.su-cc.added::after{ content:"In the session"; position:absolute; top:16px; right:22px; font-size:11px; font-weight:700; color:var(--su-green); background:var(--su-green-soft); border-radius:999px; padding:3px 9px; }
+.su-cc.added .su-ver{ display:none; }
+.su-cc.unfit .su-cc-name, .su-cc.unfit .su-cc-desc{ opacity:.6; }
+.su-cc-top{ display:flex; align-items:center; gap:10px; min-height:18px; }
+.su-cc-top .su-ver{ margin-left:auto; }
+.su-cc-name b{ display:block; font-family:var(--su-serif); font-weight:450; font-size:28px; line-height:1.1; }
+.su-cc-name small{ display:block; font-size:13.5px; color:var(--su-muted); margin-top:2px; }
+.su-cc-desc{ font-size:14px; line-height:1.45; color:var(--su-ink-2); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.su-cc-foot{ display:flex; align-items:flex-end; justify-content:space-between; gap:14px; margin-top:4px; }
+.su-cc-meta{ display:flex; flex-wrap:wrap; gap:4px 14px; font-size:13px; color:var(--su-muted); }
+.su-cc-meta span + span::before{ content:"·"; margin-right:14px; color:var(--su-line-2); }
+.su-cc-acts{ display:flex; gap:8px; flex:none; }
+#suite .su-cc-acts .su-btn{ padding:8px 16px; font-size:13.5px; }
+#suite .su-cc-acts .su-btn svg{ width:14px; height:14px; }
+.su-cc:not(.on) .su-cc-acts{ visibility:hidden; }
+.su-carbar{ display:flex; align-items:center; justify-content:center; gap:12px; font-size:13px; font-weight:600; color:var(--su-ink-2); }
+.su-carnav{ width:32px; height:32px; border-radius:50% !important; border:1px solid var(--su-line-2) !important; background:#fff !important; display:grid !important; place-items:center; color:var(--su-green) !important; transition:transform .25s var(--su-ease); }
+.su-carnav svg{ width:16px; height:16px; }
+.su-carnav:hover:not(:disabled){ transform:scale(1.08); border-color:var(--su-green) !important; }
+.su-carnav:disabled{ opacity:.35; }
+.su-carmore .su-more{ border-top:0 !important; text-align:center !important; padding:2px 0 !important; }
 
 /* ---------- set-up panel ---------- */
 #suLayer{ position:absolute; inset:64px 0 0 0; pointer-events:none; z-index:5; }
@@ -7340,6 +7374,7 @@ body.su-on > .app{ display:none; }
 .su-x svg{ width:16px; height:16px; }
 .su-sec h4{ display:flex; justify-content:space-between; gap:12px; font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--su-muted); margin-bottom:7px !important; }
 .su-sec h4 span{ letter-spacing:0; text-transform:none; font-weight:500; text-align:right; }
+#suite .su-addname{ margin-top:8px; }
 .su-namehint{ font-size:13px; color:var(--su-green); background:var(--su-mist); border-radius:10px; padding:8px 12px; margin-bottom:8px; }
 .su-fields{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 .su-fld{ display:block; border:1px solid var(--su-line-2); border-radius:12px; background:#fff; padding:5px 12px 6px; transition:border-color .2s, box-shadow .2s; }
@@ -7371,6 +7406,10 @@ body.su-on > .app{ display:none; }
 .su-runhead{ display:flex; align-items:center; justify-content:space-between; gap:20px; max-width:1200px; margin:0 auto 8px; }
 .su-rt b{ font-family:var(--su-serif); font-weight:500; font-size:20px; }
 .su-rt span{ color:var(--su-muted); font-size:13.5px; margin-left:10px; }
+.su-runtools{ display:flex; align-items:center; gap:10px; }
+#suite .su-cvbtn{ padding:8px 14px; font-size:13.5px; }
+#suite .su-cvbtn svg{ width:16px; height:16px; color:var(--su-green); }
+#suite .su-cvbtn.on{ background:var(--su-green-soft); border-color:var(--su-green-2); color:var(--su-green); }
 .su-toggle{ display:flex; background:rgba(255,255,255,.65); border:1px solid var(--su-line-2); border-radius:999px; padding:4px; }
 .su-toggle button{ display:flex !important; align-items:center; gap:7px; padding:6px 14px !important; border-radius:999px; font-size:13.5px; font-weight:600; color:var(--su-ink-2) !important; transition:background .25s, color .25s; }
 .su-toggle button.on{ background:var(--su-green) !important; color:#fff !important; }
@@ -7392,7 +7431,11 @@ body.su-on > .app{ display:none; }
 .su-opt.on kbd{ background:rgba(255,255,255,.15); color:#fff; border-color:rgba(255,255,255,.3); }
 .su-note{ display:block; max-width:760px; }
 .su-note span{ display:block; font-size:12px; font-weight:600; color:var(--su-muted); margin-bottom:4px; }
+.su-note span i{ font-style:normal; font-weight:500; }
 .su-note textarea{ width:100%; border:1px solid var(--su-line-2); border-radius:12px; padding:8px 12px; background:#fff; resize:none; font-size:14px; }
+.su-note textarea:focus{ outline:0; border-color:var(--su-green-2); box-shadow:0 0 0 3px var(--su-mist); }
+.su-pnote textarea{ font-size:13.5px; line-height:1.4; }
+.su-cvfoot{ justify-content:center; }
 .su-runfoot{ display:flex; justify-content:space-between; align-items:center; gap:16px; }
 .su-hintline{ color:var(--su-muted); font-size:13px; text-align:center; }
 .su-hintline.warn{ color:var(--su-warn); font-weight:600; }
@@ -7434,6 +7477,7 @@ body.su-on > .app{ display:none; }
 .su-prow.item .tx{ font-size:15.5px; line-height:1.35; cursor:pointer; padding-right:8px; }
 .su-prow.item .b{ display:flex; justify-content:center; }
 .su-prow.item.cur{ background:var(--su-mist); }
+.su-prow.item.noted .n::after{ content:""; display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--su-clay); margin-left:4px; vertical-align:middle; }
 .su-prow.item.cur::before{ content:""; position:absolute; left:-14px; top:6px; bottom:6px; width:3px; border-radius:2px; background:var(--su-green); }
 .su-bub{ width:27px; height:27px; border-radius:50% !important; border:1.5px solid #A9B0AB !important; display:grid !important; place-items:center; text-align:center !important; font:600 11px var(--su-sans) !important; color:#879089 !important; background:#fff !important; transition:background .15s, transform .2s var(--su-ease); }
 .su-bub:hover:not(:disabled){ border-color:var(--su-green) !important; transform:scale(1.1); }
@@ -7441,7 +7485,7 @@ body.su-on > .app{ display:none; }
 .su-bub:disabled{ opacity:.3; }
 #suPaperHint:empty{ display:none; }
 #suPaperHint.warn{ color:var(--su-warn); font-weight:600; }
-.su-side{ display:flex; flex-direction:column; gap:12px; min-height:0; }
+.su-side{ display:flex; flex-direction:column; gap:12px; min-height:0; overflow:auto; scrollbar-width:thin; padding:2px; }
 .su-card{ background:var(--su-card); border:1px solid var(--su-line); border-radius:18px; box-shadow:var(--su-shadow); padding:15px 16px; }
 .su-card h5{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--su-muted); margin-bottom:8px !important; }
 .su-card p{ font-size:14px; color:var(--su-ink-2); }
@@ -7453,6 +7497,7 @@ body.su-on > .app{ display:none; }
 .su-mini-map button{ width:14px; height:18px; border-radius:3px !important; background:var(--su-line) !important; }
 .su-mini-map button.f{ background:var(--su-green-2) !important; }
 .su-mini-map button.c{ background:#fff !important; outline:2px solid var(--su-green); }
+.su-mini-map button.n{ box-shadow:inset 0 -4px 0 var(--su-clay); }
 .su-keys > div{ display:grid; grid-template-columns:auto 1fr; gap:6px 12px; font-size:13px; color:var(--su-ink-2); align-items:center; }
 
 /* position of the total against published bands and cut-offs */
@@ -7535,9 +7580,11 @@ body.su-on > .app{ display:none; }
 body.su-client .su-steps, body.su-client .su-top-r, body.su-client .su-dock{ display:none; }
 body.su-client .su-cm-bar{ display:flex; align-items:center; gap:14px; margin-left:auto; font-size:13px; color:var(--su-muted); font-weight:600; }
 body.su-client .su-brand{ pointer-events:none; }
-.su-hold{ position:relative; overflow:hidden; border:1px solid var(--su-line-2) !important; border-radius:999px; padding:7px 14px !important; font-size:12.5px; font-weight:600; color:var(--su-ink-2) !important; background:#fff !important; user-select:none; }
-.su-hold::before{ content:""; position:absolute; inset:0; background:var(--su-green-soft); transform:scaleX(0); transform-origin:left; transition:transform .15s; z-index:-1; }
-.su-hold.holding::before{ transform:scaleX(1); transition:transform .9s linear; }
+.su-exitcm{ border:1px solid var(--su-line-2) !important; border-radius:999px; padding:7px 14px !important; font-size:12.5px; font-weight:600; color:var(--su-ink-2) !important; background:#fff !important; }
+.su-exitcm:hover{ border-color:var(--su-green-2) !important; color:var(--su-green) !important; }
+/* the client view window: the question only, nothing to leave by */
+body.su-cvw .su-cm-bar{ display:none !important; }
+body.su-cvw .su-main{ padding-bottom:18px; }
 body.su-client .su-q{ max-width:26ch; }
 body.su-client #suite{ grid-template-rows:64px minmax(0,1fr) 0; }
 
@@ -7571,7 +7618,14 @@ body.su-on.su-handoff > .app > .topbar{ display:none; }
   .su-agebig{ font-size:24px; }
   .su-agebox input[type=range]{ margin:6px 0 0 !important; }
   .su-ticks{ display:none; }
-  .su-libhead{ align-items:center; }
+  .su-libhead{ align-items:center; flex-wrap:wrap; gap:8px; }
+  .su-libtools{ width:100%; }
+  .su-libtools .su-search{ flex:1; width:auto; }
+  .su-viewtog button{ font-size:0 !important; gap:0 !important; }
+  .su-cc-name b{ font-size:23px; }
+  .su-cc-foot{ flex-direction:column; align-items:stretch; }
+  .su-cc-acts{ justify-content:flex-end; }
+  #suite .su-runtools .su-cvbtn{ font-size:0; gap:0; }
   .su-row{ grid-template-columns:minmax(0,1fr) minmax(0,1fr) 34px; }
   .su-row > :nth-child(3), .su-row > :nth-child(4), .su-row > :nth-child(5){ display:none; }
   .su-desk, .su-res, .su-rep{ grid-template-columns:1fr; }
@@ -21140,10 +21194,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
    The app's own runner is still used for the two tests with bespoke formats
    (RMET photos and timing, ASSIST branching); their results join the session.
 
-   Flow: choose tests (library, filtered by area, age and respondent), set up
-   (client details once, version, how it is completed), administer (one question
-   at a time or a paper form, switchable), results, report. The whole interface
-   fits the window; long content moves inside its own panel.
+   Flow: choose tests (library as a list or a carousel, filtered by area and
+   age), set up (client details once, version, how it is completed), administer
+   (a paper form by default, or one question at a time; switchable), results,
+   report. The whole interface fits the window; long content moves inside its
+   own panel.
+
+   Shared screens: Client view opens a second window that shows the client only
+   the current question and its answers (for a second monitor, or a window shared
+   on a video call). The client can answer there; this window stays the clinician
+   view, with a note box for every question. Client mode is the one-screen
+   alternative: the same window, with scores, notes and controls hidden.
 ──────────────────────────────────────────────────────────────────────────────── */
 const Suite = (() => {
   'use strict';
@@ -21232,7 +21293,9 @@ const Suite = (() => {
   const blankClient = () => ({ name:'', dob:'', age:null, sex:'', gender:'', clinician:'', date:TODAY, ref:'' });
   const S = {
     stage:'library',
-    filters:{ cats:new Set(), q:'', showAll:false },
+    filters:{ cats:new Set(), q:'', showAll:false, view:'list' },
+    carIdx:0,            // the centred card in the carousel view
+    showName:false,      // the name field stays hidden until asked for
     client:blankClient(),
     session:[], cur:-1,
     clientMode:false,
@@ -21242,7 +21305,7 @@ const Suite = (() => {
     notesInReport:true,
   };
   let UID = 1;
-  const newMeasure = (id, mode) => ({ uid:'m' + (UID++), id, mode:mode || 'one', answers:{}, notes:{}, qIndex:0, seen:{}, result:null, done:false });
+  const newMeasure = (id, mode) => ({ uid:'m' + (UID++), id, mode:mode || 'paper', answers:{}, notes:{}, qIndex:0, seen:{}, result:null, done:false });
   const cur = () => S.session[S.cur] || null;
   const T = m => REGISTRY[m.id];
 
@@ -21308,6 +21371,11 @@ const Suite = (() => {
     x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg>',
     tick:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
     print:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/></svg>',
+    screen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>',
+    list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>',
+    deck:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="6" y="7" width="12" height="10" rx="2"/><path d="M8 4h8M8 20h8"/></svg>',
+    up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 15 6-6 6 6"/></svg>',
+    down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>',
   };
   const STAGES = [['library', 'Choose tests'], ['run', 'Administer'], ['results', 'Results'], ['report', 'Report']];
 
@@ -21322,7 +21390,7 @@ const Suite = (() => {
           <button class="su-link" data-act="norms">Norms reference</button>
           <label class="su-switch" title="Hides scores and clinical labels while the client uses the screen"><input type="checkbox" id="suClientMode"><span></span>Client mode</label>
         </div>
-        <div class="su-cm-bar"><span>Client mode</span><button class="su-hold" data-hold>Hold to return to clinician view</button></div>
+        <div class="su-cm-bar"><span>Client mode</span><button class="su-exitcm" data-act="exit-client">Return to clinician view</button></div>
       </header>
       <main class="su-main" id="suMain"></main>
       <footer class="su-dock" id="suDock"></footer>
@@ -21343,6 +21411,7 @@ const Suite = (() => {
     main.dataset.stage = S.stage;
     ({ library:renderLibrary, run:renderRun, results:renderResults, report:renderReport })[S.stage](main);
     renderSheet();
+    cvSync();
   }
   function go(stage){
     if (stage === S.stage) return;
@@ -21352,7 +21421,16 @@ const Suite = (() => {
     transition(() => { S.stage = stage; if (stage === 'run' && S.cur < 0) S.cur = firstUndone(); render(); });
   }
   function transition(fn){
-    if (document.startViewTransition && !reduced()){ try { document.startViewTransition(fn); return; } catch (_) {} }
+    if (document.startViewTransition && !reduced()){
+      try {
+        // a transition cut short by the next one rejects these promises; the change itself still happens
+        const vt = document.startViewTransition(fn);
+        // (real errors from fn are re-thrown, so they still show)
+        const quiet = e => { if (!e || (e.name !== 'AbortError' && e.name !== 'InvalidStateError')) setTimeout(() => { throw e; }); };
+        vt.ready.catch(quiet); vt.finished.catch(() => {}); vt.updateCallbackDone.catch(() => {});
+        return;
+      } catch (_) {}
+    }
     fn();
   }
   const firstUndone = () => { const i = S.session.findIndex(m => !m.done); return i < 0 ? 0 : i; };
@@ -21410,23 +21488,55 @@ const Suite = (() => {
     const inSession = new Set(S.session.map(m => m.id));
     const catNames = [...f.cats].map(c => CAT_LABEL[c] || c);
     const title = (catNames.length ? catNames.join(' and ') + ' tests' : 'All tests') + (age != null ? ` <em>for ${age === 1 ? 'a 1-year-old' : 'a ' + age + '-year-old'}</em>` : '');
-    const rowsHtml = shown.map(({ r, v }) => {
+    const info = r => {
       const best = bestVersion(r, age);
-      const added = r.ids.some(i => inSession.has(i));
       const ages = r.ids.map(i => AGE_BOUNDS[i]).filter(Boolean);
       let ageTxt = '';
       if (ages.length){ const lo = Math.min(...ages.map(a => a.min == null ? 0 : a.min)), open = ages.some(a => a.max == null), hi = Math.max(...ages.map(a => a.max || 0)); ageTxt = open ? lo + ' years to adult' : lo + '–' + hi + ' years'; }
-      const resps = [...new Set(r.ids.map(i => RESP_SHORT[respKind(i)]))].join(', ');
-      const mins = clean(REGISTRY[best].estMinutes || '');
-      return `<div class="su-row ${v === 'unfit' ? 'unfit' : ''} ${added ? 'added' : ''}" data-act="open" data-row="${r.key}" role="button" tabindex="0">
-        <div class="su-nm"><b>${esc(r.name)}</b>${r.verified ? '<span class="su-ver" title="Items, scoring and norms checked against the source">✓ Verified</span>' : ''}<small>${esc(r.full)}</small></div>
-        <div class="su-vers">${r.ids.map((i, k) => `<span class="su-v ${age != null && ageFits(i, age) ? 'fit' : ''}">${esc(r.labels[k])}</span>`).join('')}</div>
-        <div class="su-cell">${esc(resps)}</div>
-        <div class="su-cell">${esc(ageTxt)}<small>${esc(CAT_LABEL[r.cat] || '')}</small></div>
-        <div class="su-cell">${esc(mins)}</div>
-        <button class="su-add ${added ? 'in' : ''}" data-act="quick-add" data-row="${r.key}" aria-label="${added ? 'In the session' : 'Add ' + esc(r.name) + ' to the session'}">${added ? ICON.tick : '+'}</button>
-      </div>`;
-    }).join('');
+      return { added:r.ids.some(i => inSession.has(i)), ageTxt,
+        resps:[...new Set(r.ids.map(i => RESP_SHORT[respKind(i)]))].join(', '),
+        mins:clean(REGISTRY[best].estMinutes || ''),
+        vers:r.ids.map((i, k) => `<span class="su-v ${age != null && ageFits(i, age) ? 'fit' : ''}">${esc(r.labels[k])}</span>`).join(''),
+        ver:r.verified ? '<span class="su-ver" title="Items, scoring and norms checked against the source">✓ Verified</span>' : '' };
+    };
+    const more = unfit.length ? `<button class="su-more" data-act="show-all">${f.showAll ? 'Hide the ' + unfit.length + ' for other ages' : unfit.length + ' more ' + (unfit.length === 1 ? 'test is' : 'tests are') + ' for other ages · Show them'}</button>` : '';
+    const none = '<div class="su-none">No tests match. Try clearing a filter.</div>';
+    let listHtml;
+    if (f.view === 'carousel'){
+      S.carIdx = Math.max(0, Math.min(S.carIdx, shown.length - 1));
+      const cards = shown.map(({ r, v }, k) => {
+        const x = info(r);
+        return `<div class="su-cc ${v === 'unfit' ? 'unfit' : ''} ${x.added ? 'added' : ''}" data-act="car-card" data-k="${k}" data-row="${r.key}" role="button" aria-label="${esc(r.name)}">
+          <div class="su-cc-top"><span class="su-eyebrow">${esc(CAT_LABEL[r.cat] || '')}</span>${x.ver}</div>
+          <div class="su-cc-name"><b>${esc(r.name)}</b><small>${esc(r.full)}</small></div>
+          <p class="su-cc-desc">${esc(r.desc)}</p>
+          <div class="su-vers">${x.vers}</div>
+          <div class="su-cc-foot"><div class="su-cc-meta"><span>${esc(x.resps)}</span>${x.ageTxt ? `<span>${esc(x.ageTxt)}</span>` : ''}${x.mins ? `<span>${esc(x.mins)}</span>` : ''}</div>
+            <div class="su-cc-acts"><button class="su-btn su-line" data-act="quick-add" data-row="${r.key}">${x.added ? ICON.tick + ' In the session' : '+ Add'}</button><button class="su-btn su-primary" data-act="open" data-row="${r.key}">Set up</button></div></div>
+        </div>`;
+      }).join('');
+      listHtml = `<div class="su-car">
+          <div class="su-carstage" id="suCarStage">${cards || none}</div>
+          <div class="su-carbar"><button class="su-carnav" data-act="car-step" data-d="-1" aria-label="Previous test">${ICON.up}</button><span id="suCarCount"></span><button class="su-carnav" data-act="car-step" data-d="1" aria-label="Next test">${ICON.down}</button></div>
+          ${more ? `<div class="su-carmore">${more}</div>` : ''}
+        </div>`;
+    } else {
+      const rowsHtml = shown.map(({ r, v }) => {
+        const x = info(r);
+        return `<div class="su-row ${v === 'unfit' ? 'unfit' : ''} ${x.added ? 'added' : ''}" data-act="open" data-row="${r.key}" role="button" tabindex="0">
+          <div class="su-nm"><b>${esc(r.name)}</b>${x.ver}<small>${esc(r.full)}</small></div>
+          <div class="su-vers">${x.vers}</div>
+          <div class="su-cell">${esc(x.resps)}</div>
+          <div class="su-cell">${esc(x.ageTxt)}<small>${esc(CAT_LABEL[r.cat] || '')}</small></div>
+          <div class="su-cell">${esc(x.mins)}</div>
+          <button class="su-add ${x.added ? 'in' : ''}" data-act="quick-add" data-row="${r.key}" aria-label="${x.added ? 'In the session' : 'Add ' + esc(r.name) + ' to the session'}">${x.added ? ICON.tick : '+'}</button>
+        </div>`;
+      }).join('');
+      listHtml = `<div class="su-table">
+          <div class="su-row su-hd"><div>Test</div><div>Versions${age != null ? ' (green fits the age)' : ''}</div><div>Completed by</div><div>Ages</div><div>Time</div><div></div></div>
+          <div class="su-rows" id="suRows">${rowsHtml || none}${more}</div>
+        </div>`;
+    }
     main.innerHTML = `<div class="su-lib">
       <aside class="su-filters">
         <div class="su-fg"><h4>What are you measuring?</h4><div class="su-flist">
@@ -21444,15 +21554,50 @@ const Suite = (() => {
       </aside>
       <section class="su-libmain">
         <div class="su-libhead"><div><div class="su-eyebrow">Choose tests</div><h1>${title}</h1></div>
-          <label class="su-search">${ICON.search}<input id="suSearch" type="search" placeholder="Search all tests" value="${esc(f.q)}" autocomplete="off" spellcheck="false"><kbd>/</kbd></label></div>
-        <div class="su-table">
-          <div class="su-row su-hd"><div>Test</div><div>Versions${age != null ? ' (green fits the age)' : ''}</div><div>Completed by</div><div>Ages</div><div>Time</div><div></div></div>
-          <div class="su-rows" id="suRows">${rowsHtml || '<div class="su-none">No tests match. Try clearing a filter.</div>'}
-            ${unfit.length ? `<button class="su-more" data-act="show-all">${f.showAll ? 'Hide the ' + unfit.length + ' for other ages' : unfit.length + ' more ' + (unfit.length === 1 ? 'test is' : 'tests are') + ' for other ages · Show them'}</button>` : ''}
-          </div>
-        </div>
+          <div class="su-libtools"><div class="su-toggle su-viewtog" role="group" aria-label="Layout"><button class="${f.view === 'list' ? 'on' : ''}" data-act="lib-view" data-view="list" aria-label="List view" title="List view">${ICON.list}List</button><button class="${f.view === 'carousel' ? 'on' : ''}" data-act="lib-view" data-view="carousel" aria-label="Carousel view" title="Carousel view">${ICON.deck}Carousel</button></div>
+          <label class="su-search">${ICON.search}<input id="suSearch" type="search" placeholder="Search all tests" value="${esc(f.q)}" autocomplete="off" spellcheck="false"><kbd>/</kbd></label></div></div>
+        ${listHtml}
         <p class="su-foot">Screening supplements, not diagnostic instruments. Nothing you enter is uploaded or saved; refreshing the page clears it.</p>
       </section></div>`;
+    if (f.view === 'carousel') carLayout();
+  }
+
+  /* carousel: the same tests as the list, as a vertical wheel of cards (the app's
+     carousel, in this interface's style). The centred card opens on click; a card
+     above or below comes to the centre. */
+  function carLayout(){
+    const stage = $('#suCarStage'); if (!stage) return;
+    const cards = $$('.su-cc', stage), n = cards.length;
+    const H = stage.clientHeight, ch = cards[0] ? cards[0].offsetHeight : 260;
+    const step = Math.max(90, Math.min(ch * 0.62, (H - ch) / 2 + 18));
+    cards.forEach((el, i) => {
+      const o = i - S.carIdx, ab = Math.abs(o);
+      const rot = o === 0 ? 0 : (o < 0 ? 1 : -1) * Math.min(22, 10 + (ab - 1) * 6);
+      const sc = o === 0 ? 1 : Math.max(.7, .88 - (ab - 1) * .08);
+      el.style.transform = `translate(-50%, -50%) translateY(${o * step}px) translateZ(${-ab * 80}px) rotateX(${rot}deg) scale(${sc})`;
+      el.style.zIndex = String(100 - ab);
+      el.style.opacity = ab > 2 ? '0' : ab === 2 ? '.35' : '1';
+      el.style.pointerEvents = ab > 2 ? 'none' : 'auto';
+      el.tabIndex = o === 0 ? 0 : -1;
+      el.classList.toggle('on', o === 0);
+    });
+    const c = $('#suCarCount'); if (c) c.textContent = n ? (S.carIdx + 1) + ' of ' + n : '';
+    const nav = $$('.su-carnav'); if (nav.length === 2){ nav[0].disabled = S.carIdx <= 0; nav[1].disabled = S.carIdx >= n - 1; }
+    if (!stage._wheel){
+      stage._wheel = true;
+      let acc = 0, lock = 0, y0 = null;
+      stage.addEventListener('wheel', e => { e.preventDefault(); if (Date.now() < lock) return; acc += e.deltaY; if (Math.abs(acc) >= 40){ carStep(acc > 0 ? 1 : -1); acc = 0; lock = Date.now() + 160; } }, { passive:false });
+      stage.addEventListener('touchstart', e => { y0 = e.touches[0].clientY; }, { passive:true });
+      stage.addEventListener('touchmove', e => { if (y0 == null) return; const dy = e.touches[0].clientY - y0; if (Math.abs(dy) > 50){ carStep(dy < 0 ? 1 : -1); y0 = e.touches[0].clientY; } e.preventDefault(); }, { passive:false });
+      stage.addEventListener('touchend', () => { y0 = null; });
+    }
+  }
+  function carStep(d, focus){
+    const n = $$('#suCarStage .su-cc').length;
+    const k = Math.max(0, Math.min(n - 1, S.carIdx + d));
+    if (k === S.carIdx) return;
+    S.carIdx = k; carLayout();
+    if (focus){ const c = $('#suCarStage .su-cc.on'); if (c) try { c.focus({ preventScroll:true }); } catch (_) {} }
   }
 
   /* ---------- 2. set-up panel ---------- */
@@ -21460,7 +21605,7 @@ const Suite = (() => {
     const row = ROWS.find(r => r.key === rowKey) || ROWS.find(r => r.ids.includes(id));
     if (!row) return;
     const existing = S.session.find(m => row.ids.includes(m.id));
-    S.sheet = { rowKey:row.key, id: id || (existing ? existing.id : bestVersion(row, clientAge())), mode: existing ? existing.mode : 'one', existing: existing ? existing.uid : null };
+    S.sheet = { rowKey:row.key, id: id || (existing ? existing.id : bestVersion(row, clientAge())), mode: existing ? existing.mode : 'paper', existing: existing ? existing.uid : null };
     syncToolUrl(S.sheet.id);
     renderSheet(true);
   }
@@ -21471,9 +21616,12 @@ const Suite = (() => {
   }
   function clientFieldsHtml(needsGender){
     const c = S.client, a = clientAge();
-    return `<div class="su-namehint">You don't need to enter a name, and it is best not to. If you leave it blank, the report will not name anyone.</div>
+    // The name is hidden unless asked for (or already given): it is best left
+    // blank, and the report stays neutral when it is.
+    const named = S.showName || !!c.name;
+    return `${named ? `<div class="su-namehint">You don't need to enter a name, and it is best not to. If you leave it blank, the report will not name anyone.</div>` : ''}
       <div class="su-fields">
-        <label class="su-fld"><span>Name or initials</span><input data-f="name" value="${esc(c.name)}" placeholder="Optional" autocomplete="off" spellcheck="false"></label>
+        ${named ? `<label class="su-fld"><span>Name or initials</span><input data-f="name" value="${esc(c.name)}" placeholder="Optional" autocomplete="off" spellcheck="false"></label>` : ''}
         <label class="su-fld"><span>Age in years</span><input data-f="age" type="number" min="0" max="110" value="${a != null ? a : ''}" placeholder="Age" ${c.dob ? 'readonly title="Worked out from the date of birth"' : ''}></label>
         <label class="su-fld"><span>or date of birth</span><input data-f="dob" type="date" value="${esc(c.dob)}" max="${TODAY}"></label>
         <label class="su-fld"><span>Sex (used for norms where available)</span><select data-f="sex"><option value="">Not given</option>${['male', 'female', 'intersex'].map(v => `<option value="${v}" ${c.sex === v ? 'selected' : ''}>${v[0].toUpperCase() + v.slice(1)}</option>`).join('')}</select></label>
@@ -21481,7 +21629,8 @@ const Suite = (() => {
         <label class="su-fld"><span>Clinician</span><input data-f="clinician" value="${esc(c.clinician)}" placeholder="Optional" autocomplete="off"></label>
         <label class="su-fld"><span>Assessment date</span><input data-f="date" type="date" value="${esc(c.date || TODAY)}"></label>
         <label class="su-fld"><span>Reference</span><input data-f="ref" value="${esc(c.ref)}" placeholder="Optional" autocomplete="off"></label>
-      </div>`;
+      </div>
+      ${named ? '' : `<button class="su-mini su-addname" data-act="show-name">+ Add a name or initials</button>`}`;
   }
   function renderSheet(fresh){
     const layer = $('#suLayer');
@@ -21530,8 +21679,8 @@ const Suite = (() => {
     $('#suModeSec').innerHTML = HANDOFF(t)
       ? `<h4>How will it be completed?</h4><p class="su-sub">${t.format === 'image' ? 'The RMET runs in its own format (photographs, with a practice item and timing).' : 'The ASSIST runs in its own format (a substance grid first, then questions for each substance used).'} The result joins this session.</p>`
       : `<h4>How will it be completed?</h4><div class="su-modes">
-        <button class="su-mode ${S.sheet.mode === 'one' ? 'on' : ''}" data-act="pick-mode" data-mode="one">${ICON.one}<span><b>One at a time</b><small>Large questions on screen. For the client, or for reading aloud.</small></span></button>
-        <button class="su-mode ${S.sheet.mode === 'paper' ? 'on' : ''}" data-act="pick-mode" data-mode="paper">${ICON.paper}<span><b>Paper form</b><small>The whole form as a sheet. Fastest for scoring a paper copy.</small></span></button></div>
+        <button class="su-mode ${S.sheet.mode === 'paper' ? 'on' : ''}" data-act="pick-mode" data-mode="paper">${ICON.paper}<span><b>Paper form</b><small>The whole form as a sheet. Fastest for scoring a paper copy.</small></span></button>
+        <button class="su-mode ${S.sheet.mode === 'one' ? 'on' : ''}" data-act="pick-mode" data-mode="one">${ICON.one}<span><b>One at a time</b><small>Large questions on screen. For the client, or for reading aloud.</small></span></button></div>
         <p class="su-hint">You can switch at any point during the test.</p>`;
   }
   function readClientField(el){
@@ -21561,7 +21710,7 @@ const Suite = (() => {
     const existing = S.session.find(m => row.ids.includes(m.id));
     if (existing){ openSheet(rowKey, existing.id); return; }
     const id = bestVersion(row, clientAge());
-    S.session.push(newMeasure(id, 'one'));
+    S.session.push(newMeasure(id));
     render(); toast(clean(REGISTRY[id].name) + ' added to the session');
   }
 
@@ -21584,7 +21733,7 @@ const Suite = (() => {
     const mode = S.clientMode ? 'one' : m.mode;
     const n = t.items.length, a = answeredCount(m);
     const head = `<div class="su-runhead"><div class="su-rt"><b>${esc(clean(t.name))}</b><span>${S.clientMode ? '' : esc(t.respondent) + ' · '}<span id="suRunCount">${a} of ${n} answered</span></span></div>
-      ${S.clientMode ? '' : `<div class="su-toggle" role="group" aria-label="How it is completed"><button class="${mode === 'one' ? 'on' : ''}" data-act="mode" data-mode="one">${ICON.one}One at a time</button><button class="${mode === 'paper' ? 'on' : ''}" data-act="mode" data-mode="paper">${ICON.paper}Paper form</button></div>`}</div>
+      ${S.clientMode ? '' : `<div class="su-runtools">${cvButtonHtml()}<div class="su-toggle" role="group" aria-label="How it is completed"><button class="${mode === 'paper' ? 'on' : ''}" data-act="mode" data-mode="paper">${ICON.paper}Paper form</button><button class="${mode === 'one' ? 'on' : ''}" data-act="mode" data-mode="one">${ICON.one}One at a time</button></div></div>`}</div>
       <div class="su-prog"><i style="width:${n ? a / n * 100 : 0}%"></i></div>`;
     main.innerHTML = head + (mode === 'one' ? oneHtml(m) : paperHtml(m));
     if (mode === 'paper') afterPaper(m);
@@ -21605,20 +21754,35 @@ const Suite = (() => {
     const key = it.sectionKey || ('i' + m.qIndex);
     return m.seen[key] ? null : key;
   }
-  function oneHtml(m){
-    const t = T(m), i = m.qIndex, item = t.items[i];
-    const introKey = sectionIntroPending(m);
+  /* win: the client window's copy of the question. It follows whichever item is
+     current in the clinician's mode, and has no notes, item numbers, subscale
+     names or Back/Next (the clinician keeps those). */
+  function oneHtml(m, win){
+    const t = T(m), client = S.clientMode || !!win;
+    const i = win ? curItem(m) : m.qIndex, item = t.items[i];
+    const introKey = (!win || m.mode === 'one') ? sectionIntroPending(m) : null;
     if (introKey){
       const si = item.sectionIntro;
       return `<div class="su-one su-intro">${si.tag ? `<div class="su-eyebrow">${esc(si.tag)}</div>` : ''}<h2>${esc(si.title || '')}</h2><p>${esc(si.blurb || '')}</p>
-        ${!S.clientMode && t.adminGuide ? `<div class="su-guide"><b>Administration guidance (rater)</b><ul>${t.adminGuide.map(g => `<li>${esc(g)}</li>`).join('')}</ul></div>` : ''}
+        ${!client && t.adminGuide ? `<div class="su-guide"><b>Administration guidance (rater)</b><ul>${t.adminGuide.map(g => `<li>${esc(g)}</li>`).join('')}</ul></div>` : ''}
         <div><button class="su-btn su-primary su-big" data-act="intro-ok" data-key="${esc(introKey)}">Continue <kbd>↵</kbd></button></div></div>`;
     }
     const opts = optionsFor(t, item), val = m.answers[item.n];
-    const sub = (!S.clientMode && t.subscales && item.subscale && t.subscales[item.subscale]) ? t.subscales[item.subscale].name : '';
+    const sub = (!client && t.subscales && item.subscale && t.subscales[item.subscale]) ? t.subscales[item.subscale].name : '';
     const stem = item.prompt || t.prompt || '';
     const complete = isComplete(m);
-    const showNote = !S.clientMode && (t.itemNotes || m.notes[item.n] || m.noteOpen === item.n);
+    const anchorsW = t.scoring.type === 'mean' ? `<div class="su-anchors"><span>${esc(t.scoring.anchorLow)}</span><span>${esc(t.scoring.anchorHigh)}</span></div>` : '';
+    if (win) return `<div class="su-one">
+      <div class="su-meta">Question ${i + 1} of ${t.items.length}${item.timeframe ? ' · ' + esc(item.timeframe) : ''}</div>
+      ${stem ? `<div class="su-stem">${stem}</div>` : ''}
+      <div class="su-q" id="suQ">${item.text}</div>
+      ${item.help ? `<details class="su-help" open><summary>What counts here?</summary><div>${esc(item.help)}</div></details>` : ''}
+      ${anchorsW}<div class="su-opts" style="--n:${opts.length}">${opts.map((o, oi) => `<button class="su-opt ${val === o.v ? 'on' : ''}" data-act="ans" data-v="${o.v}"><kbd>${oi + 1}</kbd><span>${o.label}</span></button>`).join('')}</div>
+      <div class="su-runfoot su-cvfoot"><span class="su-hintline">${complete ? 'That is every question. Thank you.' : 'Choose the answer that fits best.'}</span></div>
+    </div>`;
+    // with the client view open, this window is the clinician's own, so the note
+    // box for each question is always out
+    const showNote = !S.clientMode && (t.itemNotes || m.notes[item.n] || m.noteOpen === item.n || cvIsOpen());
     const anchors = t.scoring.type === 'mean' ? `<div class="su-anchors"><span>${esc(t.scoring.anchorLow)}</span><span>${esc(t.scoring.anchorHigh)}</span></div>` : '';
     return `<div class="su-one">
       <div class="su-meta">${S.clientMode ? 'Question ' + (i + 1) + ' of ' + t.items.length : 'Item ' + item.n + (sub ? ' · ' + esc(sub) : '')}${item.timeframe ? ' · ' + esc(item.timeframe) : ''}</div>
@@ -21632,18 +21796,27 @@ const Suite = (() => {
         ${complete ? `<button class="su-btn su-primary" data-act="finish">${S.clientMode ? 'Finish' : 'Finish and score'} <kbd>↵</kbd></button>` : `<button class="su-btn su-ghost" data-act="next">Next →</button>`}</div>
     </div>`;
   }
-  function fitQuestion(){
-    const q = $('#suQ'); if (!q) return;
+  function fitQuestion(q){
+    q = q || $('#suQ'); if (!q) return;
     const len = q.textContent.length;
     q.style.fontSize = len > 180 ? 'clamp(22px,2.4vw,30px)' : len > 110 ? 'clamp(26px,3vw,38px)' : len > 60 ? 'clamp(30px,3.6vw,48px)' : 'clamp(34px,4.4vw,58px)';
   }
+  /* is the clinician typing in a note box right now? */
+  const noting = () => { const a = document.activeElement; return !!(a && a.dataset && a.dataset.note != null); };
   function answerOne(m, v){
     const t = T(m), item = t.items[m.qIndex];
     setAnswer(m, item, v);
-    $$('.su-opt').forEach(b => b.classList.toggle('on', Number(b.dataset.v) === v));
-    const b = $$('.su-opt').find(x => Number(x.dataset.v) === v); if (b && !reduced()) b.animate([{ transform:'scale(.97)' }, { transform:'scale(1)' }], { duration:220 });
+    $$('#suMain .su-opt').forEach(b => b.classList.toggle('on', Number(b.dataset.v) === v));
+    const b = $$('#suMain .su-opt').find(x => Number(x.dataset.v) === v); if (b && !reduced()) b.animate([{ transform:'scale(.97)' }, { transform:'scale(1)' }], { duration:220 });
     const ni = stepIdx(m, m.qIndex, 1);
     renderDock();
+    cvSync();
+    if (noting()){
+      // an answer from the client window while the clinician is writing a note:
+      // keep the question (and the note) in place until the clinician moves on
+      const h = $('#suHint'); if (h){ h.textContent = 'Answer recorded. Press Next when your note is done.'; h.classList.remove('warn'); }
+      return;
+    }
     if (ni < t.items.length){
       // answers are stored at once; the move to the next item waits a beat so the
       // choice can be seen, and any key pressed meanwhile completes it first
@@ -21651,7 +21824,7 @@ const Suite = (() => {
       advanceTimer = setTimeout(flushAdvance, reduced() ? 0 : 230);
     } else renderRunSoft();
   }
-  function renderRunSoftFull(){ renderRun($('#suMain')); renderDock(); }
+  function renderRunSoftFull(){ renderRun($('#suMain')); renderDock(); cvSync(); }
   function renderRunSoft(){ const m = cur(); if (m && !m.done && !S.clientMode && m.mode === 'paper' && $('#suStack')) paperUpdate(m); else renderRunSoftFull(); }
   function moveOne(m, dir){
     flushAdvance();
@@ -21738,7 +21911,7 @@ const Suite = (() => {
     const it = r.item, opts = optionsFor(t, it), v = m.answers[it.n];
     bindState(m);
     const skipped = App._isSkipped(it);
-    return `<div class="su-prow item ${r.i === m.paperCursor ? 'cur' : ''}" data-i="${r.i}"><span class="n">${it.n}</span>
+    return `<div class="su-prow item ${r.i === m.paperCursor ? 'cur' : ''} ${(m.notes[it.n] || '').trim() ? 'noted' : ''}" data-i="${r.i}"><span class="n">${it.n}</span>
       <span class="tx" data-act="pjump" data-i="${r.i}">${it.text}</span>${opts.map((o, oi) => `<span class="b"><button class="su-bub ${v === o.v ? 'on' : ''}" data-act="pans" data-i="${r.i}" data-v="${o.v}" ${skipped ? 'disabled' : ''} aria-label="Item ${it.n}: ${esc(String(o.label).replace(/<[^>]+>/g, ''))}">${oi + 1}</button></span>`).join('')}${'<span></span>'.repeat(cols - opts.length)}</div>`;
   }
   function paperTitleHtml(m){
@@ -21768,16 +21941,39 @@ const Suite = (() => {
     m._lay = { pages, cols };
     return m._lay;
   }
+  /* The side panel is updated in parts, so a note being typed is never rebuilt
+     under the clinician's cursor (answers can arrive from the client window). */
+  function paperTypedHtml(m){
+    const t = T(m), typed = (m.typed || []).slice(-10).join(' ');
+    return `<h5>Typed so far</h5><div class="su-typed">${typed ? esc(typed) : '<span>Start typing</span>'}<i>_</i></div><div class="su-cardsub">${answeredCount(m)} of ${t.items.length} answered</div>`;
+  }
+  function paperMapHtml(m){
+    const t = T(m);
+    return `<h5>Whole form</h5><div class="su-mini-map">${t.items.map((it, i) => `<button class="${m.answers[it.n] != null ? 'f' : ''} ${i === m.paperCursor ? 'c' : ''} ${(m.notes[it.n] || '').trim() ? 'n' : ''}" data-act="pjump" data-i="${i}" aria-label="Item ${it.n}"></button>`).join('')}</div>`;
+  }
+  function paperNoteHtml(m){
+    const it = T(m).items[m.paperCursor || 0];
+    if (!it) return '';
+    return `<label class="su-note su-pnote"><span>Note on item ${esc(it.n)} <i>(optional)</i></span><textarea data-note="${esc(it.n)}" rows="3" placeholder="${esc(it.note || 'Context, how this presents, alternative explanations')}">${esc(m.notes[it.n] || '')}</textarea></label>`;
+  }
+  function paperFinishHtml(m){
+    const t = T(m), complete = isComplete(m);
+    return `<button class="su-btn su-primary su-wide" data-act="finish" ${complete ? '' : 'aria-disabled="true"'}>${complete ? 'Finish and score <kbd>↵</kbd>' : (t.items.length - answeredCount(m)) + ' still to answer'}</button>`;
+  }
   function paperSideHtml(m){
-    const t = T(m), done = answeredCount(m), complete = isComplete(m);
-    const typed = (m.typed || []).slice(-10).join(' ');
-    const mini = t.items.map((it, i) => `<button class="${m.answers[it.n] != null ? 'f' : ''} ${i === m.paperCursor ? 'c' : ''}" data-act="pjump" data-i="${i}" aria-label="Item ${it.n}"></button>`).join('');
     const cols = m._lay ? m._lay.cols : 4;
-    return `<div class="su-card"><h5>Typed so far</h5><div class="su-typed">${typed ? esc(typed) : '<span>Start typing</span>'}<i>_</i></div><div class="su-cardsub">${done} of ${t.items.length} answered</div></div>
-      <div class="su-card"><h5>Whole form</h5><div class="su-mini-map">${mini}</div></div>
-      <div class="su-card su-keys"><h5>Keys</h5><div><span><kbd>1</kbd>–<kbd>${Math.min(cols, 9)}</kbd></span><span>answer and move on</span><span><kbd>⌫</kbd></span><span>step back and clear</span><span><kbd>.</kbd></span><span>leave blank for now</span><span><kbd>↑</kbd> <kbd>↓</kbd></span><span>move between items</span></div></div>
+    return `<div class="su-card" id="suTypedCard">${paperTypedHtml(m)}</div>
+      <div class="su-card" id="suNoteCard">${paperNoteHtml(m)}</div>
+      <div class="su-card" id="suMapCard">${paperMapHtml(m)}</div>
       <p class="su-hintline" id="suPaperHint"></p>
-      <button class="su-btn su-primary su-wide" data-act="finish" ${complete ? '' : 'aria-disabled="true"'}>${complete ? 'Finish and score <kbd>↵</kbd>' : (t.items.length - done) + ' still to answer'}</button>`;
+      <div id="suFinishSlot">${paperFinishHtml(m)}</div>
+      <div class="su-card su-keys"><h5>Keys</h5><div><span><kbd>1</kbd>–<kbd>${Math.min(cols, 9)}</kbd></span><span>answer and move on</span><span><kbd>⌫</kbd></span><span>step back and clear</span><span><kbd>.</kbd></span><span>leave blank for now</span><span><kbd>↑</kbd> <kbd>↓</kbd></span><span>move between items</span><span><kbd>N</kbd></span><span>write a note on this item</span><span><kbd>Esc</kbd></span><span>leave the note</span></div></div>`;
+  }
+  /* refresh the note box for the current item, unless a note is being typed */
+  function paperNoteSync(m){
+    const box = $('#suNoteCard'); if (!box || box.contains(document.activeElement)) return;
+    const ta = $('textarea', box), it = T(m).items[m.paperCursor || 0];
+    if (!ta || !it || ta.dataset.note !== String(it.n)) box.innerHTML = paperNoteHtml(m);
   }
   function paperHtml(m){
     const t = T(m);
@@ -21812,15 +22008,21 @@ const Suite = (() => {
     $$('.su-prow.item', st).forEach(row => {
       const i = +row.dataset.i, it = t.items[i], v = m.answers[it.n];
       row.classList.toggle('cur', i === m.paperCursor);
+      row.classList.toggle('noted', !!(m.notes[it.n] || '').trim());
       $$('.su-bub', row).forEach(b => b.classList.toggle('on', Number(b.dataset.v) === v));
     });
-    $('#suSide').innerHTML = paperSideHtml(m);
+    const tc = $('#suTypedCard'), mc = $('#suMapCard'), fs = $('#suFinishSlot');
+    if (tc) tc.innerHTML = paperTypedHtml(m);
+    if (mc) mc.innerHTML = paperMapHtml(m);
+    if (fs) fs.innerHTML = paperFinishHtml(m);
+    paperNoteSync(m);
     const n = t.items.length, a = answeredCount(m);
     const cnt = $('#suRunCount'); if (cnt) cnt.textContent = a + ' of ' + n + ' answered';
     const pg = $('#suMain .su-prog i'); if (pg) pg.style.width = (n ? a / n * 100 : 0) + '%';
     m._nudge = 0;
     paperPosition(m);
     renderDock();
+    cvSync();
   }
   function paperAnswer(m, i, v, fromKey){
     const t = T(m), item = t.items[i];
@@ -21856,6 +22058,91 @@ const Suite = (() => {
     if (first){ m.paperCursor = first.i; paperUpdate(m); }
   }
 
+  /* ---------- client view: a second window for a shared screen ----------
+     As in the app: a clean window with only the current question, its answers
+     and progress, for a second monitor or a window shared on a video call. No
+     scores, notes, item numbers or controls ever reach it; between tests and at
+     the end it shows a neutral holding card. The client can answer there (click
+     or keys); answers land in the same session as if typed here. This window
+     scripts the other one directly through its handle, which also works from a
+     file:// copy. */
+  const CV = { w:null };
+  const cvIsOpen = () => !!(CV.w && !CV.w.closed);
+  /* the item the client should see: the current one in the clinician's mode */
+  const curItem = m => (!S.clientMode && m.mode === 'paper') ? (m.paperCursor != null ? m.paperCursor : firstBlank(m) % Math.max(1, T(m).items.length)) : m.qIndex;
+  const cvButtonHtml = () => `<button class="su-btn su-line su-cvbtn ${cvIsOpen() ? 'on' : ''}" data-act="cv-toggle" title="Opens a second window with just the question and answers, for a shared screen, a second monitor or a window shared on a video call. Your notes stay on this window.">${ICON.screen}${cvIsOpen() ? 'Close client view' : 'Client view'}</button>`;
+  function cvToggle(){
+    if (cvIsOpen()){ cvClose(); return; }
+    const w = window.open('', 'su_client_view', 'width=1100,height=780,popup=yes');
+    if (!w){ toast('The browser blocked the window. Allow pop-ups for this page and try again.'); return; }
+    CV.w = w;
+    const d = w.document;
+    d.open();
+    d.write('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Questionnaire</title></head><body class="su-on su-client su-cvw"><div id="suite"><header class="su-top"><span class="su-brand">' + ICON.mark + '</span></header><main class="su-main" id="suMain" data-stage="run"></main></div></body></html>');
+    d.close();
+    // the same styles as this window (inline <style> blocks in the built file)
+    $$('style').forEach(el => { const st = d.createElement('style'); st.textContent = el.textContent; d.head.appendChild(st); });
+    d.addEventListener('click', e => { const a = e.target.closest('[data-act]'); if (a && !a.disabled) cvAct(a.dataset.act, a); });
+    d.addEventListener('keydown', cvKey);
+    w.addEventListener('pagehide', () => setTimeout(cvPaintButton, 150));
+    cvSync(); cvPaintButton();
+    toast('Client view open. Move that window to the client\'s screen.');
+  }
+  function cvClose(){ if (cvIsOpen()){ try { CV.w.close(); } catch (_) {} } CV.w = null; cvPaintButton(); }
+  function cvPaintButton(){
+    if (CV.w && CV.w.closed) CV.w = null;
+    const b = $('[data-act="cv-toggle"]'); if (b) b.outerHTML = cvButtonHtml();
+    // notes are always out while the client view is open; refresh the question
+    // view so that shows (unless a note is being typed)
+    if (S.stage === 'run' && !noting()){ const m = cur(); if (m && !m.done && m.mode === 'one' && !S.clientMode) renderRun($('#suMain')); }
+  }
+  const cvHold = (title, line) => `<div class="su-thanks"><h1>${title}</h1><p>${line}</p></div>`;
+  function cvBody(){
+    const m = cur();
+    if (S.handoff || !m || S.stage !== 'run') {
+      const all = S.session.length && S.session.every(x => x.done);
+      return all ? cvHold('All done, thank you.', 'Your answers have been recorded.') : cvHold('Thank you.', 'Your clinician will be with you in a moment.');
+    }
+    const t = T(m);
+    if (m.done){
+      const more = S.session.some(x => !x.done);
+      return more ? cvHold('Thank you.', 'That one is finished. The next one will appear here shortly.') : cvHold('All done, thank you.', 'Your answers have been recorded.');
+    }
+    if (HANDOFF(t)) return cvHold('Thank you.', 'Your clinician will be with you in a moment.');
+    const n = t.items.length, a = answeredCount(m);
+    return `<div class="su-runhead"><div class="su-rt"><b>${esc(clean(t.name))}</b><span>${a} of ${n} answered</span></div></div>
+      <div class="su-prog"><i style="width:${n ? a / n * 100 : 0}%"></i></div>` + oneHtml(m, true);
+  }
+  function cvSync(){
+    if (!cvIsOpen()) return;
+    let d, main;
+    try { d = CV.w.document; main = d.getElementById('suMain'); } catch (_) { return; }
+    if (!main) return;
+    const html = cvBody();
+    if (main._last === html) return;              // nothing changed for the client
+    main._last = html;
+    main.innerHTML = html;
+    const q = d.getElementById('suQ'); if (q) fitQuestion(q);
+  }
+  function cvAct(act, el){
+    const m = cur();
+    if (!m || m.done || S.stage !== 'run' || S.handoff || HANDOFF(T(m))) return;
+    if (act === 'ans'){
+      const v = Number(el.dataset.v);
+      if (!S.clientMode && m.mode === 'paper') paperAnswer(m, curItem(m), v, false);
+      else { flushAdvance(); answerOne(m, v); }
+    } else if (act === 'intro-ok' && m.mode === 'one'){ m.seen[el.dataset.key] = true; renderRunSoft(); }
+  }
+  function cvKey(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const m = cur();
+    if (!m || m.done || S.stage !== 'run' || S.handoff || HANDOFF(T(m))) return;
+    if (e.key === 'Enter'){ const b = CV.w.document.querySelector('[data-act="intro-ok"]'); if (b){ e.preventDefault(); cvAct('intro-ok', b); } return; }
+    const item = T(m).items[curItem(m)];
+    const v = item ? App.keyToVal(T(m), e.key, item) : null;
+    if (v != null){ e.preventDefault(); cvAct('ans', { dataset:{ v } }); }
+  }
+
   /* ---------- app runner hand-off (RMET, ASSIST) ---------- */
   function startHandoff(m){
     S.handoff = { uid:m.uid };
@@ -21864,6 +22151,7 @@ const Suite = (() => {
     App.startRunner();           // reads them back and starts the app's own runner
     document.body.classList.add('su-handoff');
     $('#suHandoffLbl').textContent = clean(T(m).fullName);
+    cvSync();
   }
   function endHandoff(result){
     const h = S.handoff; S.handoff = null;
@@ -22086,10 +22374,13 @@ const Suite = (() => {
     'begin': () => { if (!S.session.length) return; S.cur = firstUndone(); startMeasure(S.session[S.cur]); },
     'chip': el => { flushAdvance(); S.cur = +el.dataset.i; startMeasure(S.session[S.cur]); },
     'client': () => openClientSheet(),
-    'cat': el => { const c = el.dataset.cat; if (!c) S.filters.cats.clear(); else if (S.filters.cats.has(c)) S.filters.cats.delete(c); else S.filters.cats.add(c); renderLibrary($('#suMain')); },
+    'cat': el => { S.carIdx = 0; const c = el.dataset.cat; if (!c) S.filters.cats.clear(); else if (S.filters.cats.has(c)) S.filters.cats.delete(c); else S.filters.cats.add(c); renderLibrary($('#suMain')); },
     'age-step': el => { const a = clientAge(); S.client.dob = ''; S.client.age = Math.max(0, Math.min(110, (a == null ? 18 : a + (+el.dataset.d)))); renderLibrary($('#suMain')); renderDock(); },
     'age-clear': () => { S.client.dob = ''; S.client.age = null; renderLibrary($('#suMain')); renderDock(); },
     'show-all': () => { S.filters.showAll = !S.filters.showAll; renderLibrary($('#suMain')); },
+    'lib-view': el => { if (S.filters.view === el.dataset.view) return; S.filters.view = el.dataset.view; transition(() => renderLibrary($('#suMain'))); },
+    'car-step': el => carStep(+el.dataset.d),
+    'car-card': el => { const k = +el.dataset.k; if (k !== S.carIdx){ S.carIdx = k; carLayout(); return; } openSheet(el.dataset.row); },
     'open': el => openSheet(el.dataset.row),
     'quick-add': (el, e) => { e.stopPropagation(); quickAdd(el.dataset.row); },
     'sheet-close': () => closeSheet(),
@@ -22105,7 +22396,7 @@ const Suite = (() => {
     },
     'new-client': () => {
       if (S.session.some(m => m.done || answeredCount(m)) && !confirm('Start a new client? This clears the details, answers and results on screen.')) return;
-      S.client = blankClient(); S.session = []; S.cur = -1; S.sheet = null; S.stage = 'library'; S.resSel = 0;
+      S.client = blankClient(); S.session = []; S.cur = -1; S.sheet = null; S.stage = 'library'; S.resSel = 0; S.showName = false;
       $('#suitePrint').innerHTML = ''; transition(render);
     },
     'mode': el => { const m = cur(); if (!m) return; flushAdvance(); m.mode = el.dataset.mode; if (m.mode === 'paper'){ m.paperCursor = m.qIndex; m._nudge = 0; } else m.qIndex = m.paperCursor == null ? m.qIndex : m.paperCursor; renderRunSoftFull(); },
@@ -22124,6 +22415,9 @@ const Suite = (() => {
     'handoff-start': () => startHandoff(cur()),
     'handoff-back': () => { if (S.norms){ S.norms = false; endHandoff(null); return; } if (confirm('Leave this test? Its answers so far will not be kept.')) endHandoff(null); },
     'norms': () => openNorms(),
+    'exit-client': () => setClientMode(false),
+    'cv-toggle': () => cvToggle(),
+    'show-name': () => { S.showName = true; renderSheet(true); const n = $('[data-f="name"]', $('#suLayer')); if (n) n.focus(); },
   };
   function onClick(e){
     const a = e.target.closest('[data-act]');
@@ -22134,10 +22428,17 @@ const Suite = (() => {
   }
   function onInput(e){
     const el = e.target;
-    if (el.id === 'suSearch'){ S.filters.q = el.value.trim().toLowerCase(); const pos = el.selectionStart; renderLibrary($('#suMain')); const s = $('#suSearch'); s.focus(); try { s.setSelectionRange(pos, pos); } catch (_) {} return; }
+    if (el.id === 'suSearch'){ S.filters.q = el.value.trim().toLowerCase(); S.carIdx = 0; const pos = el.selectionStart; renderLibrary($('#suMain')); const s = $('#suSearch'); s.focus(); try { s.setSelectionRange(pos, pos); } catch (_) {} return; }
     if (el.id === 'suAgeRange'){ S.client.dob = ''; S.client.age = +el.value; renderLibrary($('#suMain')); renderDock(); const r = $('#suAgeRange'); if (r) r.focus(); return; }
     if (el.dataset && el.dataset.f){ readClientField(el); return; }
-    if (el.dataset && el.dataset.note != null){ const m = cur(); if (m) m.notes[el.dataset.note] = el.value; return; }
+    if (el.dataset && el.dataset.note != null){
+      const m = cur(); if (!m) return;
+      m.notes[el.dataset.note] = el.value;
+      const i = T(m).items.findIndex(it => String(it.n) === el.dataset.note), has = !!el.value.trim();
+      const row = $(`.su-prow.item[data-i="${i}"]`); if (row) row.classList.toggle('noted', has);
+      const dot = $$('#suMapCard .su-mini-map button')[i]; if (dot) dot.classList.toggle('n', has);
+      return;
+    }
     if (el.id === 'suNotesTog'){ S.notesInReport = el.checked; REP.sig = ''; renderReport($('#suMain')); return; }
     if (el.id === 'suClientMode'){ setClientMode(el.checked); }
   }
@@ -22154,7 +22455,7 @@ const Suite = (() => {
     const typing = tag === 'input' || tag === 'textarea' || tag === 'select';
     const k = e.key;
     if (k === 'Escape'){
-      if (S.clientMode){ holdStart(); return; }
+      if (S.clientMode) return;                          // only the button leaves client mode
       if (S.sheet){ closeSheet(); return; }
       if (typing) e.target.blur();
       return;
@@ -22166,7 +22467,8 @@ const Suite = (() => {
     if (S.sheet){ if (k === 'Enter'){ e.preventDefault(); S.sheet.clientOnly ? closeSheet() : addFromSheet(true); } return; }
     if (S.stage === 'library'){
       if (k === '/'){ e.preventDefault(); const s = $('#suSearch'); if (s) s.focus(); return; }
-      if (k === 'Enter'){ const r = e.target.closest && e.target.closest('.su-row[data-row]'); if (r){ openSheet(r.dataset.row); return; } if (S.session.length) ACT.begin(); }
+      if (S.filters.view === 'carousel' && (k === 'ArrowDown' || k === 'ArrowUp')){ e.preventDefault(); carStep(k === 'ArrowDown' ? 1 : -1, true); return; }
+      if (k === 'Enter'){ const r = e.target.closest && e.target.closest('.su-row[data-row], .su-cc[data-row]'); if (r){ openSheet(r.dataset.row); return; } if (S.session.length) ACT.begin(); }
       return;
     }
     if (S.stage === 'results' && k === 'Enter'){ go('report'); return; }
@@ -22181,6 +22483,7 @@ const Suite = (() => {
       if (k === 'ArrowRight'){ e.preventDefault(); moveOne(m, 1); return; }
       if (k === 'ArrowLeft'){ e.preventDefault(); moveOne(m, -1); return; }
       if (k === 'Enter'){ if (isComplete(m)){ e.preventDefault(); finishMeasure(m); } return; }
+      if ((k === 'n' || k === 'N') && !S.clientMode){ e.preventDefault(); ACT['note-open'](); return; }
       flushAdvance();
       const item = T(m).items[m.qIndex];
       const v = App.keyToVal(T(m), k, item);
@@ -22188,12 +22491,9 @@ const Suite = (() => {
       return;
     }
     if (k === 'Enter'){ e.preventDefault(); finishMeasure(m); return; }
+    if (k === 'n' || k === 'N'){ const ta = $('#suNoteCard textarea'); if (ta){ e.preventDefault(); ta.focus(); } return; }
     if (paperKey(m, k)) e.preventDefault();
   }
-  /* client mode: press and hold (button or Esc) to return to the clinician view */
-  let holdT = null;
-  function holdStart(){ const b = $('[data-hold]'); if (b) b.classList.add('holding'); clearTimeout(holdT); holdT = setTimeout(() => { holdEnd(); setClientMode(false); }, 900); }
-  function holdEnd(){ clearTimeout(holdT); const b = $('[data-hold]'); if (b) b.classList.remove('holding'); }
 
   /* ---------- boot ---------- */
   function boot(){
@@ -22206,11 +22506,10 @@ const Suite = (() => {
     document.addEventListener('input', onInput);
     document.addEventListener('change', e => { if (e.target.dataset && (e.target.dataset.f === 'dob' || e.target.dataset.f === 'date')) readClientField(e.target); });
     document.addEventListener('keydown', onKey);
-    document.addEventListener('keyup', e => { if (e.key === 'Escape') holdEnd(); });
-    document.addEventListener('pointerdown', e => { if (e.target.closest('[data-hold]')) holdStart(); });
-    document.addEventListener('pointerup', holdEnd); document.addEventListener('pointercancel', holdEnd);
-    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (S.handoff) return; if (S.stage === 'run'){ const m = cur(); if (m && m.mode === 'paper' && $('#suStack')) paperPosition(m); else renderRunSoftFull(); } else if (S.stage === 'report') reportPosition(); }, 120); });
+    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (S.handoff) return; if (S.stage === 'run'){ const m = cur(); if (m && m.mode === 'paper' && $('#suStack')) paperPosition(m); else renderRunSoftFull(); } else if (S.stage === 'report') reportPosition(); else if (S.stage === 'library') carLayout(); }, 120); });
     window.addEventListener('afterprint', () => { $('#suitePrint').innerHTML = ''; });
+    document.addEventListener('focusout', e => { if (e.target.closest && e.target.closest('#suNoteCard')) setTimeout(() => { const m = cur(); if (m && S.stage === 'run' && $('#suNoteCard')) paperNoteSync(m); }, 0); });
+    window.addEventListener('beforeunload', cvClose);
     render();
     if (DEEP && REGISTRY[DEEP]) openSheet(null, DEEP);
   }
